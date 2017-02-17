@@ -1,6 +1,6 @@
 # Stethoscope: User-Focused Security
 
-![Giraffe logo](https://github.com/Netflix/stethoscope/raw/master/stethoscope/ui/public/static/images/giraffe-small.png)
+![Giraffe logo](stethoscope/ui/public/static/images/giraffe-small.png)
 
 Stethoscope is a web application that collects information for a given user’s devices and gives them
 clear and specific recommendations for securing their systems. An overview is available on the
@@ -9,7 +9,7 @@ clear and specific recommendations for securing their systems. An overview is av
 [![Apache 2.0](https://img.shields.io/github/license/Netflix/stethoscope.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![NetflixOSS Lifecycle](https://img.shields.io/osslifecycle/Netflix/stethoscope.svg)]()
 
-![Stethoscope screenshot](https://github.com/Netflix/stethoscope/raw/master/docs/screenshot.png)
+![Stethoscope screenshot](docs/screenshot.png)
 
 ## What is Stethoscope?
 
