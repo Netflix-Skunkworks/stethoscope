@@ -211,7 +211,7 @@ API endpoints are proxied to port 5001 (to be handled by the API server).
 #### Running
 
 ```sh
-nginx -c nginx.conf -p ${pwd}
+nginx -c nginx.conf -p $(pwd)
 ```
 
 ## Plugins
