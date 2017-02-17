@@ -1,0 +1,30 @@
+{
+  "name": "stethoscope-react",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://localhost:5000/",
+  "devDependencies": {
+    "enzyme": "^2.7.0",
+    "eslint": "^3.15.0",
+    "react-addons-test-utils": "^15.4.2",
+    "react-scripts": "^0.8.5",
+    "standard": "^8.6.0"
+  },
+  "dependencies": {
+    "fecha": "^2.3.0",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "react-router": "^3.0.0",
+    "timeago.js": "^2.0.4",
+    "titlecase": "^1.1.2",
+    "whatwg-fetch": "^2.0.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "rm -r ../static/* ; mkdir -p ../login/templates/ && mkdir -p ../static && react-scripts build && cp -r build/static/* ../static/ && cp -r public/static/* ../static/ && cp build/index.html ../login/templates/layout.html",
+    "test": "standard --fix && react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "analyze": "NODE_ENV=production webpack --json --config node_modules/react-scripts/config/webpack.config.prod.js | webpack-bundle-size-analyzer",
+    "lint": "standard --fix src/*.js src/**/*.js"
+  }
+}

@@ -1,0 +1,18 @@
+@media only screen and (min-width: 600px)  {
+  #device-list {
+    column-count: 2;
+    -moz-column-count: 2;
+  }
+}
+@media only screen and (min-width: 1000px)  {
+  #device-list {
+    column-count: 3;
+    -moz-column-count: 3;
+  }
+}
+@media only screen and (min-width: 2000px)  {
+  #device-list {
+    column-count: 4;
+    -moz-column-count: 4;
+  }
+}

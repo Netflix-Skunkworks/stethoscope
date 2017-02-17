@@ -1,0 +1,227 @@
+{
+   "computer" : {
+      "location" : {
+         "username": "pfry",
+         "real_name": "Phillip J Fry",
+         "email_addres": "fry@planetexpress.com",
+         "position": "Delivery Associate"
+      },
+      "hardware" : {
+         "make" : "Apple",
+         "processor_type" : "Quad-Core Intel Xeon E5",
+         "total_ram_mb" : 12288,
+         "total_ram" : 12288,
+         "mapped_printers" : [],
+         "service_pack" : "",
+         "battery_capacity" : -1,
+         "processor_architecture" : "x86_64",
+         "cache_size" : 10240,
+         "bus_speed_mhz" : 0,
+         "os_version" : "10.10.4",
+         "optical_drive" : "",
+         "model" : "MacPro (Late 2013)",
+         "nic_speed" : "n/a",
+         "number_processors" : 4,
+         "bus_speed" : 0,
+         "boot_rom" : "MP61.0116.B15",
+         "storage" : [
+            {
+               "connection_type": "NO",
+               "disk": "disk0",
+               "drive_capacity_mb": 124242,
+               "model": "APPLE SSD SM0128F",
+               "revision": "UXM2JA1Q",
+               "serial_number": "DECAFBAD",
+               "size": 124242,
+               "smart_status": "Verified"
+            },
+            {
+               "serial_number" : "DEADBEEF",
+               "model" : "APPLE SSD SM0256F",
+               "drive_capacity_mb" : 257024,
+               "connection_type" : "NO",
+               "disk" : "disk0",
+               "partition" : {
+                  "filevault_percent" : 0,
+                  "type" : "boot",
+                  "lvgUUID" : "",
+                  "size" : 238553,
+                  "filevault_status" : "Not Encrypted",
+                  "percentage_full" : 37,
+                  "pvUUID" : "",
+                  "partition_capacity_mb" : 238553,
+                  "lvUUID" : "",
+                  "name" : "Macintosh HD (Boot Partition)",
+                  "filevault2_percent" : 0,
+                  "filevault2_status" : "Not Encrypted"
+               },
+               "smart_status" : "Verified",
+               "size" : 257024,
+               "revision" : "UXM8JA1Q"
+            }
+         ],
+         "processor_speed" : 3700,
+         "available_ram_slots" : 1,
+         "model_identifier" : "MacPro6,1",
+         "os_build" : "14E46",
+         "active_directory_status" : "corp.example.com",
+         "processor_speed_mhz" : 3700,
+         "cache_size_kb" : 10240,
+         "os_name" : "Mac OS X",
+         "smc_version" : "2.20f18"
+      },
+      "software" : {
+         "licensed_software" : [
+            "Microsoft Office for Mac 2011",
+            "Outlook 2011"
+         ],
+         "cached_by_casper" : [],
+         "available_updates" : {
+            "update" : {
+               "package_name" : "OSXUpd10.10.5-10.10.5",
+               "name" : "OS X Update",
+               "version" : "10.10.5"
+            }
+         },
+         "installed_by_casper" : [],
+         "unix_executables" : [],
+         "running_services" : [
+            "com.sentinelone.sentineld",
+            "com.sentinelone.sentineld-guard",
+            "com.sentinelone.sentineld-helper"
+         ],
+         "plugins" : [
+            {
+               "path" : "/Library/Internet Plug-Ins/AdobePDFViewer.plugin",
+               "version" : "11.0.02",
+               "name" : "AdobePDFViewer.plugin"
+            },
+            {
+               "path" : "/Library/Internet Plug-Ins/AdobePDFViewerNPAPI.plugin",
+               "name" : "AdobePDFViewerNPAPI.plugin",
+               "version" : "11.0.02"
+            },
+            {
+               "name" : "Flash Player.plugin",
+               "version" : "19.0.0.185",
+               "path" : "/Library/Internet Plug-Ins/Flash Player.plugin"
+            },
+            {
+               "path" : "/Library/Internet Plug-Ins/flashplayer.xpt",
+               "name" : "flashplayer.xpt",
+               "version" : "n/a"
+            }
+         ],
+         "available_software_updates" : [
+            "Command Line Tools (OS X 10.10) for Xcode-7.2",
+            "OSXUpd10.10.5-10.10.5"
+         ],
+         "fonts" : [],
+         "applications" : [
+         ],
+         "installed_by_installer_swu" : [
+            "com.sentinel-labs.sentinel-trustedbsd.9",
+            "com.sentinel-labs.sentineld.monitor",
+            "com.sentinel-labs.sentineld.plist",
+            "com.sentinelone.pkg.sentinel-agent"
+         ]
+      },
+      "extension_attributes" : [
+         {
+            "id" : 76,
+            "name" : "FileVault 2 Encryption Status",
+            "value" : "FileVault is Off.",
+            "type" : "String"
+         },
+         {
+            "value" : "2",
+            "name" : "Firewall Status",
+            "id" : 77,
+            "type" : "String"
+         },
+         {
+            "type" : "String",
+            "value" : "lgmd-pfry",
+            "id" : 22,
+            "name" : "Hostname"
+         }
+      ],
+      "general" : {
+         "ip_address" : "192.0.2.0",
+         "last_contact_time_utc" : "2016-02-29T11:00:58.034-0800",
+         "sus" : "",
+         "id" : 3062,
+         "serial_number" : "DECAFBAD01",
+         "last_cloud_backup_date_epoch" : 0,
+         "barcode_2" : "",
+         "alt_mac_address" : "DE:CA:FB:AD:00:03",
+         "udid" : "DECAFBAD-DECA-FBAD-DECA-FBAD00000001",
+         "name" : "lgmd-pfry",
+         "report_date" : "2016-02-28 14:54:40",
+         "itunes_store_account_is_active" : true,
+         "initial_entry_date" : "2014-05-07",
+         "platform" : "Mac",
+         "site" : {
+            "name" : "None",
+            "id" : -1
+         },
+         "initial_entry_date_epoch" : 1399503107619,
+         "last_contact_time" : "2016-02-29 11:00:58",
+         "mac_address" : "DE:CA:FB:AD:00:02",
+         "distribution_point" : "",
+         "initial_entry_date_utc" : "2014-05-07T15:51:47.619-0700",
+         "report_date_epoch" : 1456700080788,
+         "last_contact_time_epoch" : 1456772458034,
+         "last_cloud_backup_date_utc" : "",
+         "remote_management" : {
+            "management_username" : "example",
+            "management_password_sha256" : "...",
+            "managed" : true
+         },
+         "jamf_version" : "9.82",
+         "barcode_1" : "",
+         "netboot_server" : "DECAFBAD00",
+         "report_date_utc" : "2016-02-28T14:54:40.788-0800",
+         "mdm_capable_users" : {
+            "mdm_capable_user" : "pfry"
+         },
+         "asset_tag" : "",
+         "mdm_capable" : true
+      },
+      "groups_accounts" : {
+         "computer_group_memberships" : [
+         ],
+         "local_accounts" : [
+            {
+               "home_size" : "-1MB",
+               "administrator" : true,
+               "home_size_mb" : -1,
+               "realname" : "Phillip J. Fry",
+               "home" : "/Users/pfry",
+               "name" : "pfry",
+               "filevault_enabled" : false,
+               "uid" : "1069955761"
+            },
+            {
+               "home_size_mb" : -1,
+               "administrator" : true,
+               "home_size" : "-1MB",
+               "home" : "/Users/test",
+               "name" : "test",
+               "realname" : "Test",
+               "uid" : "502",
+               "filevault_enabled" : false
+            }
+         ]
+      },
+      "peripherals" : [],
+      "configuration_profiles" : [
+         {
+            "name" : "",
+            "id" : -2,
+            "is_removable" : false,
+            "uuid" : ""
+         }
+      ]
+   }
+}

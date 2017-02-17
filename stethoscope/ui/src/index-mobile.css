@@ -1,0 +1,58 @@
+.narrow .panel {
+  max-width: 500px;
+  margin: 10px  auto;
+}
+
+.narrow .panel:first-child, .narrow .panel p:first-child {
+  margin-top: 0;
+}
+
+@media only screen and (max-width: 600px)  {
+  .narrow .panel {
+    font-size: 1.2em;
+    padding: 12px;
+    border-radius: 0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    margin: 0;
+  }
+  .narrow .panel {
+    background: #f8f8f8;
+    border-top: 2px solid #fff !important;
+  }
+
+  .narrow .panel.active {
+    background: #fff;
+    box-shadow: 0 1px 10px rgba(0,0,0, 0.2);
+    position: relative;
+    z-index: 5;
+  }
+}
+
+.narrow .panel {
+  font-size: 16px;
+}
+
+.narrow p {
+  margin-bottom: 0.5em;
+}
+
+.narrow .btn {
+  box-sizing: border-box;
+  min-width: 78px;
+}
+
+.narrow .btn {
+  margin: 5px 8px 5px 0;
+  cursor: pointer;
+}
+
+.narrow .btn:last-child {
+  margin: 5px 0;
+  cursor: pointer;
+}
+
+.narrow a.details {
+  font-size: 0.9em;
+}

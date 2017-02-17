@@ -1,0 +1,238 @@
+# vim: set fileencoding=utf-8 :
+
+from __future__ import absolute_import, print_function, unicode_literals
+
+from apiclient import discovery
+import arrow
+import logbook
+import six
+
+import stethoscope.plugins.sources.google.utils as gutils
+import stethoscope.validation
+
+
+logger = logbook.Logger(__name__)
+
+
+PROPERTIES = {
+  "serial": "serialNumber",
+  "model": "model",
+  "manufacturer": "manufacturer",
+  "os_version": "osVersion",
+  "last_sync": "lastSync",
+  "user_agent": "userAgent",
+}
+
+IDENTIFIERS = {
+  "imei": "imei",
+  "meid": "meid",
+  "serial": "serialNumber",
+}
+
+
+def get_nonempty_value(mapping, key):
+  if mapping.get(key, '').strip() != '':
+    return mapping[key]
+  return None
+
+
+def copy_nonempty_values(dst, src, key_map):
+  for dst_key, src_key in six.iteritems(key_map):
+    value = get_nonempty_value(src, src_key)
+    if value is not None:
+      dst[dst_key] = value
+
+
+class GoogleDataSourceBase(object):
+
+  def get_events_by_email(self, email, max_results=500, batch_size=500):
+    service = discovery.build('admin', 'reports_v1', http=self.connection)
+    resource = service.activities()
+
+    request = resource.list(applicationName='login', userKey=email,
+        maxResults=min([max_results, batch_size]))
+    activities = gutils.execute_batch(resource, request, 'items', max_results=max_results)
+
+    if not activities:
+      logger.warn("no google login events found for user '{:s}'", email)
+      return []
+
+    return [gutils.parse_activity(activity) for activity in activities]
+
+  def get_userinfo_by_email(self, email):
+    directory = discovery.build('admin', 'directory_v1', http=self.connection)
+    return gutils.execute_request(directory.users().get(userKey=email))
+
+  def get_account_by_email(self, email):
+    reports = self.get_userusage(email)['usageReports'][0]
+    usage_parameters = gutils.parse_parameters_list(reports['parameters'])
+    usage_parameters['date'] = reports['date']
+
+    return {
+      'name': email,
+      'type': 'google',
+      'source': 'google',
+      'user_usage': usage_parameters,
+      'last_updated': arrow.utcnow(),
+      # 'authorized_apps': self.get_tokens(email)['items'],
+    }
+
+  def get_userusage(self, email):
+    reports = discovery.build('admin', 'reports_v1', http=self.connection)
+    date = arrow.utcnow().replace(days=-3)
+    reports_request = reports.userUsageReport().get(userKey=email, date=date.format('YYYY-MM-DD'))
+    return gutils.execute_request(reports_request)
+
+  def get_tokens(self, email):
+    directory = discovery.build('admin', 'directory_v1', http=self.connection)
+    return gutils.execute_request(directory.tokens().list(userKey=email))
+
+  def _check_jailed(self, raw, last_updated):
+    value = get_nonempty_value(raw, 'deviceCompromisedStatus')
+    if value is None:
+      return None
+
+    data = {'last_updated': last_updated}
+    if value == 'Compromise detected':
+      data['value'] = False
+    elif value == 'No compromise detected':
+      data['value'] = True
+    return data
+
+  def _check_jailed_chromeos(self, raw, last_updated):
+    value = get_nonempty_value(raw, 'bootMode')
+    if value is None:
+      return None
+
+    return {
+      'last_updated': last_updated,
+      'value': (value == 'validated'),
+    }
+
+  def _check_encrypted(self, raw, last_updated):
+    # TODO: determine what the other possible values are
+    value = get_nonempty_value(raw, 'encryptionStatus')
+    if value is None:
+      return None
+
+    return {
+      'last_updated': last_updated,
+      'value': (value == 'Encrypted'),
+    }
+
+  def _process_mobile_device(self, raw):
+    """
+
+    Identifiers (source_):
+
+    ============ ====== ======================================================================
+      Property    Type                              Description
+    ============ ====== ======================================================================
+    serialNumber string The device's serial number.
+    meid         string The device's MEID number.
+    imei         string The device's IMEI number.
+    deviceId     string The serial number for a Google Sync mobile device. For Android and iOS
+                        devices, this is a software generated unique identifier.
+    resourceId   string The unique ID the API service uses to identify the mobile device.
+    hardwareId   string The IMEI/MEID unique identifier for Android hardware. It is not
+                        applicable to Google Sync devices.
+    ============ ====== ======================================================================
+
+    .. source_: https://developers.google.com/admin-sdk/directory/v1/reference/mobiledevices
+                #resource-representations
+
+    """
+    # logger.debug("processing device:\n{!s}", pprint.pformat(raw))
+    data = {'_raw': raw} if self._debug else {}
+    data['type'] = 'Mobile Device'
+
+    copy_nonempty_values(data, raw, PROPERTIES)
+
+    data['last_sync'] = arrow.get(data['last_sync'])
+
+    os = get_nonempty_value(raw, 'os')
+    if os is not None:
+      data['platform'] = os.split()[0]
+      data['os'] = os.rsplit(None, 2)[0]
+      if raw['type'] in ['ANDROID', 'IOS_SYNC']:
+        # GOOGLE_SYNC doesn't provide the full version string
+        data['os_version'] = os.rsplit(None, 2)[1]
+
+    data['practices'] = dict()
+
+    jailed = self._check_jailed(raw, last_updated=data['last_sync'])
+    if jailed is not None:
+      data['practices']['jailed'] = jailed
+
+    encrypted = self._check_encrypted(raw, last_updated=data['last_sync'])
+    if encrypted is not None:
+      data['practices']['encryption'] = encrypted
+
+    # TODO: check 'devicePasswordStatus'? (what does that represent?)
+
+    # copy all relevant identifiers
+    data['identifiers'] = {}
+    copy_nonempty_values(data['identifiers'], raw, IDENTIFIERS)
+
+    value = get_nonempty_value(raw, 'wifiMacAddress')
+    if value is not None:
+      data['identifiers']['mac_addresses'] = [
+        stethoscope.validation.canonicalize_macaddr(value)
+      ]
+
+    data['source'] = 'google'
+    return data
+
+  def _process_chromeos_device(self, raw):
+    data = {'_raw': raw} if self._debug else {}
+    data['type'] = 'ChromeOS Device'
+
+    copy_nonempty_values(data, raw, PROPERTIES)
+
+    data['last_sync'] = arrow.get(data['last_sync'])
+
+    data['os'] = 'ChromeOS'
+
+    data['practices'] = dict()
+
+    jailed = self._check_jailed_chromeos(raw, last_updated=data['last_sync'])
+    if jailed is not None:
+      data['practices']['jailed'] = jailed
+
+    # copy all relevant identifiers
+    data['identifiers'] = {}
+    copy_nonempty_values(data['identifiers'], raw, IDENTIFIERS)
+
+    macs = []
+    for key in ['macAddress', 'ethernetMacAddress']:
+      value = get_nonempty_value(raw, key)
+      if value is not None:
+        macs.append(stethoscope.validation.canonicalize_macaddr(value))
+    data['identifiers']['mac_addresses'] = macs
+
+    data['source'] = 'google'
+    return data
+
+  def _get_mobile_devices_by_email(self, email, batch_size=1000):
+    service = discovery.build('admin', 'directory_v1', http=self.connection)
+    resource = service.mobiledevices()
+    request = resource.list(customerId='my_customer', query='email:{!s}'.format(email),
+        projection="FULL", maxResults=batch_size)
+    mobile_devices = gutils.execute_batch(resource, request, 'mobiledevices')
+    # logger.debug("found {:d} mobile devices", len(mobile_devices))
+    # logger.debug("mobile devices:\n{!s}", pprint.pformat(mobile_devices))
+    return [self._process_mobile_device(raw) for raw in mobile_devices]
+
+  def _get_chromeos_devices_by_email(self, email, batch_size=1000):
+    service = discovery.build('admin', 'directory_v1', http=self.connection)
+    resource = service.chromeosdevices()
+    request = resource.list(customerId='my_customer', query='user:{!s}'.format(email.split('@')[0]),
+        projection="FULL", maxResults=batch_size)
+    chromeos_devices = gutils.execute_batch(resource, request, 'chromeosdevices')
+    # logger.debug("found {:d} chrome OS devices", len(chromeos_devices))
+    # logger.debug("chrome OS devices:\n{!s}", pprint.pformat(chromeos_devices))
+    return [self._process_chromeos_device(raw) for raw in chromeos_devices]
+
+  def get_devices_by_email(self, email, batch_size=1000):
+    return self._get_mobile_devices_by_email(email, batch_size=batch_size) + \
+      self._get_chromeos_devices_by_email(email, batch_size=batch_size)

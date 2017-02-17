@@ -1,0 +1,16 @@
+*.log
+*.pyc
+*.pyc
+*.pyo
+*.tmp
+.eggs/
+.git/
+.tox/
+.ropeproject/
+.cache/
+Stethoscope.egg-info/
+build/
+htmlcov/
+scratch/
+tmp/
+twistd.pid

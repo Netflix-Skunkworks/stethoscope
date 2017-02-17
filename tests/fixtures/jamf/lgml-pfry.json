@@ -1,0 +1,254 @@
+{
+   "computer" : {
+      "peripherals" : [],
+      "hardware" : {
+         "os_name" : "Mac OS X",
+         "total_ram_mb" : 16384,
+         "model" : "15-inch Retina MacBook Pro (Late 2013)",
+         "number_processors" : 4,
+         "cache_size_kb" : 6144,
+         "mapped_printers" : [],
+         "processor_speed_mhz" : 2500,
+         "service_pack" : "",
+         "bus_speed_mhz" : 0,
+         "total_ram" : 16384,
+         "model_identifier" : "MacBookPro11,3",
+         "processor_type" : "Intel Core i7",
+         "boot_rom" : "MBP112.0138.B15",
+         "processor_architecture" : "x86_64",
+         "make" : "Apple",
+         "os_version" : "10.10.5",
+         "processor_speed" : 2500,
+         "bus_speed" : 0,
+         "active_directory_status" : "corp.example.com",
+         "battery_capacity" : 100,
+         "smc_version" : "2.19f12",
+         "optical_drive" : "",
+         "storage" : [
+            {
+               "serial_number" : "DECAFBAD00",
+               "drive_capacity_mb" : 512287,
+               "model" : "APPLE SSD SM0512F",
+               "disk" : "disk0",
+               "size" : 512287,
+               "partition" : {
+                  "lvUUID" : "DECAFBAD-DECA-FBAD-DECA-FBAD00000000",
+                  "filevault2_percent" : 100,
+                  "size" : 475936,
+                  "filevault2_status" : "Encrypted",
+                  "pvUUID" : "DECAFBAD-DECA-FBAD-DECA-FBAD00000000",
+                  "name" : "Macintosh HD (Boot Partition)",
+                  "percentage_full" : 22,
+                  "filevault_status" : "Encrypted",
+                  "partition_capacity_mb" : 475936,
+                  "lvgUUID" : "DECAFBAD-DECA-FBAD-DECA-FBAD00000000",
+                  "type" : "boot",
+                  "filevault_percent" : 100
+               },
+               "smart_status" : "Verified",
+               "revision" : "UXM2JA1Q",
+               "connection_type" : "NO"
+            }
+         ],
+         "os_build" : "14F27",
+         "available_ram_slots" : 0,
+         "cache_size" : 6144,
+         "nic_speed" : "n/a"
+      },
+      "configuration_profiles" : [
+         {
+            "uuid" : "",
+            "id" : -2,
+            "is_removable" : false,
+            "name" : ""
+         }
+      ],
+      "general" : {
+         "sus" : "",
+         "mac_address" : "DE:CA:FB:AD:00:01",
+         "alt_mac_address" :  "DE:CA:FB:AD:00:00",
+         "mdm_capable" : true,
+         "initial_entry_date_epoch" : 1428429749952,
+         "last_cloud_backup_date_epoch" : 0,
+         "jamf_version" : "9.82",
+         "udid" : "DECAFBAD-DECA-FBAD-DECA-FBAD00000000",
+         "name" : "lgml-pfry",
+         "barcode_1" : "",
+         "id" : 4551,
+         "serial_number" : "DECAFBAD00",
+         "report_date" : "2016-02-26 10:58:57",
+         "remote_management" : {
+            "management_username" : "example",
+            "management_password_sha256" : "...",
+            "managed" : true
+         },
+         "barcode_2" : "",
+         "distribution_point" : "",
+         "itunes_store_account_is_active" : false,
+         "mdm_capable_users" : {},
+         "last_contact_time_utc" : "2016-02-26T14:51:05.406-0800",
+         "site" : {
+            "name" : "None",
+            "id" : -1
+         },
+         "platform" : "Mac",
+         "ip_address" : "192.0.2.0",
+         "initial_entry_date" : "2015-04-07",
+         "last_contact_time_epoch" : 1456527065406,
+         "last_cloud_backup_date_utc" : "",
+         "report_date_utc" : "2016-02-26T10:58:57.853-0800",
+         "report_date_epoch" : 1456513137853,
+         "netboot_server" : "DECAFBAD00",
+         "initial_entry_date_utc" : "2015-04-07T11:02:29.952-0700",
+         "last_contact_time" : "2016-02-26 14:51:05",
+         "asset_tag" : ""
+      },
+      "extension_attributes" : [
+         {
+            "name" : "FileVault 2 Encryption Status",
+            "id" : 76,
+            "value" : "FileVault is On.",
+            "type" : "String"
+         },
+         {
+            "value" : "0",
+            "type" : "String",
+            "name" : "Firewall Status",
+            "id" : 77
+         },
+         {
+            "type" : "String",
+            "value" : "lgml-pfry",
+            "id" : 22,
+            "name" : "Hostname"
+         }
+      ],
+      "groups_accounts" : {
+         "local_accounts" : [
+            {
+               "filevault_enabled" : true,
+               "home_size" : "-1MB",
+               "administrator" : true,
+               "home" : "/Users/pfry",
+               "uid" : "502",
+               "realname" : "Phillip J. Fry",
+               "home_size_mb" : -1,
+               "name" : "pfry"
+            }
+         ],
+         "computer_group_memberships" : [
+         ]
+      },
+      "iphones" : [],
+      "purchasing" : {
+         "purchasing_account" : "",
+         "po_date_epoch" : 0,
+         "vendor" : "",
+         "lease_expires_epoch" : 0,
+         "attachments" : [],
+         "po_date_utc" : "",
+         "purchasing_contact" : "",
+         "is_purchased" : true,
+         "lease_expires" : "",
+         "is_leased" : false,
+         "lease_expires_utc" : "",
+         "po_date" : "",
+         "po_number" : "",
+         "purchase_price" : "",
+         "os_applecare_id" : "",
+         "applecare_id" : "",
+         "warranty_expires_utc" : "",
+         "os_maintenance_expires" : "",
+         "warranty_expires" : "",
+         "warranty_expires_epoch" : 0,
+         "life_expectancy" : 0
+      },
+      "software" : {
+         "unix_executables" : [],
+         "available_updates" : {
+            "update" : {
+               "package_name" : "Security Update 2016-001-10.10.5",
+               "version" : "10.10.5",
+               "name" : "Security Update 2016-001"
+            }
+         },
+         "applications" : [
+            {
+               "version" : "7120.2015.1102.1",
+               "name" : "BIG-IP Edge Client.app",
+               "path" : "/Applications/BIG-IP Edge Client.app"
+            }
+         ],
+         "running_services" : [
+            "com.carbonblack.daemon",
+            "com.openssh.sshd",
+            "com.sentinelone.sentineld",
+            "com.sentinelone.sentineld-guard",
+            "com.sentinelone.sentineld-helper"
+         ],
+         "installed_by_casper" : [
+            "CarbonBlackClientSetup.dmg",
+            "Sentinel_Release_1.6.1_1715.pkg"
+         ],
+         "available_software_updates" : [
+            "Command Line Tools (OS X 10.10) for Xcode-7.2",
+            "Security Update 2016-001-10.10.5"
+         ],
+         "fonts" : [],
+         "installed_by_installer_swu" : [
+            "com.carbonblack.CbOsxSensorService.pkg",
+            "com.carbonblack.daemon.pkg",
+            "com.carbonblack.Kext10.pkg",
+            "com.carbonblack.sensordiag.pkg",
+            "com.carbonblack.sensoruninst.pkg",
+            "com.jamfsoftware.osxenrollment",
+            "com.sentinel-labs.sentinel-trustedbsd.8",
+            "com.sentinel-labs.sentineld.monitor",
+            "com.sentinel-labs.sentineld.plist",
+            "com.sentinelone.pkg.sentinel-agent",
+            "F5EdgeClient",
+            "F5SSLVpnPlugin",
+            "jamfinstaller8.62"
+         ],
+         "cached_by_casper" : [],
+         "licensed_software" : [
+            "Microsoft Office for Mac 2011",
+            "Outlook 2011"
+         ],
+         "plugins" : [
+            {
+               "path" : "/Library/Internet Plug-Ins/F5 SSL VPN Plugin.plugin",
+               "name" : "F5 SSL VPN Plugin.plugin",
+               "version" : "7120.2015.1102.1"
+            },
+            {
+               "path" : "/Library/Internet Plug-Ins/Flash Player.plugin",
+               "version" : "15.0.0.152",
+               "name" : "Flash Player.plugin"
+            },
+            {
+               "path" : "/Library/Internet Plug-Ins/flashplayer.xpt",
+               "name" : "flashplayer.xpt",
+               "version" : "n/a"
+            },
+            {
+               "version" : "Java 8 Update 31",
+               "name" : "JavaAppletPlugin.plugin",
+               "path" : "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin"
+            },
+            {
+               "version" : "5.1.30214.0",
+               "name" : "Silverlight.plugin",
+               "path" : "/Library/Internet Plug-Ins/Silverlight.plugin"
+            }
+         ]
+      },
+      "location" : {
+         "email_address" : "fry@planetexpress.com",
+         "real_name" : "Phillip J. Fry",
+         "building" : "",
+         "username" : "pfry",
+         "position" : "Delivery Associate"
+      }
+   }
+}

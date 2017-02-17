@@ -1,0 +1,20 @@
+{
+  "appName" : "Stethoscope",
+  "orgName" : "SomeCorp",
+  "pages" : ["overview", "devices", "accounts", "faq"],
+  "hiddenPractices" : [],
+  "contactEmail" : "contact@example.com",
+  "sourceLabels" : {
+    "google": "Google Apps",
+    "wirelesslogs": "wireless logs",
+    "bitfit": "the hardware inventory system"
+  },
+  "faq" : {
+    "content" : [
+      {
+        "question": "What is this?",
+        "answer": "This is Stethoscope, a tool for viewing the security state of your devices."
+      }
+    ]
+  }
+}

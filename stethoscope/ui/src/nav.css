@@ -1,0 +1,21 @@
+nav {
+  padding: 0 20px;
+  height: 50px;
+}
+
+a.active {
+  border-top: 4px solid #aaa;
+  position: relative;
+}
+
+nav ul li {
+  padding: 0;
+}
+
+nav ul li a {
+  margin: 0 5px;
+  padding: 10px 15px;
+  box-sizing: content-box;
+  font-weight: 300;
+  font-size: 17px;
+}

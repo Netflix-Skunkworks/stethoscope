@@ -1,0 +1,39 @@
+.small-loader {
+  width: 70px;
+}
+
+.small-loader > div {
+  width: 8px;
+  height: 8px;
+  background-color: #999;
+  margin-right: 3px;
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: loader-bouncedelay 1.4s infinite ease-in-out both;
+  animation: loader-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.small-loader .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.small-loader .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes loader-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes loader-bouncedelay {
+  0%, 80%, 100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% {
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
+}

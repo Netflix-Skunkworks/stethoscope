@@ -1,0 +1,40 @@
+.account-wrapper {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  display: inline-block;
+}
+.panel.account {
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: top;
+  margin-bottom: 15px;
+  width: 100%;
+}
+.account-type {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+.account ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+@media only screen and (min-width: 600px)  {
+  #account-list {
+    column-count: 2;
+    -moz-column-count: 2;
+  }
+}
+@media only screen and (min-width: 1000px)  {
+  #account-list {
+    column-count: 3;
+    -moz-column-count: 3;
+  }
+}
+@media only screen and (min-width: 2000px)  {
+  #account-list {
+    column-count: 4;
+    -moz-column-count: 4;
+  }
+}

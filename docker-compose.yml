@@ -1,0 +1,28 @@
+version: '2'
+services:
+  login:
+    extends:
+      file: docker-compose.base.yml
+      service: login
+  api:
+    extends:
+      file: docker-compose.base.yml
+      service: api
+    links:
+      - login
+  nginx:
+    extends:
+      file: docker-compose.base.yml
+      service: nginx
+    links:
+      - login
+      - api
+  node-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile-node
+    volumes:
+     - ./stethoscope/ui/src:/code/stethoscope/ui/src
+     - ./stethoscope/static:/code/stethoscope/static
+     - ./stethoscope/login:/code/stethoscope/login
+    command: ["npm", "run", "build"]

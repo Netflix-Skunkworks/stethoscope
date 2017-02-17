@@ -1,0 +1,47 @@
+version: '2'
+services:
+  base:
+    build: .
+    volumes:
+     - ./stethoscope:/code/stethoscope
+     - ./instance:/code/instance
+     - ./config:/code/config
+     - ./logs:/logs
+  login:
+    extends:
+      file: docker-compose.base.yml
+      service: base
+    environment:
+      - LOGFILE=/logs/login.log
+      - STETHOSCOPE_LOGIN_INSTANCE_PATH=/code/instance
+    ports:
+     - "5002:5002"
+    command: ["stethoscope-login", "runserver", "-p", "5002", "-h", "0.0.0.0"]
+  api:
+    extends:
+      file: docker-compose.base.yml
+      service: base
+    environment:
+      - LOGFILE=/logs/api.log
+      - STETHOSCOPE_API_INSTANCE_PATH=/code/instance
+      - STETHOSCOPE_LOGIN_HOST=login:5002
+    ports:
+     - "5001:5001"
+    command:
+      - "twistd"
+      - "--nodaemon"
+      - "--pidfile"
+      - ""
+      - "web"
+      - "--port"
+      - "5001"
+      - "--class=stethoscope.api.resource.resource"
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    ports:
+      - "5000:5000"
+    volumes:
+     - ./stethoscope:/code/stethoscope
+     - ./logs:/logs

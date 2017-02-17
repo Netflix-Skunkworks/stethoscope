@@ -1,0 +1,185 @@
+{
+   "labels" : {
+      "type.label_single" : {
+         "is_hidden" : 0,
+         "label" : "Type",
+         "position" : null,
+         "is_show_on_value" : 0
+      },
+      "type_id" : {
+         "is_hidden" : 0,
+         "label" : "Type",
+         "is_show_on_value" : 0,
+         "position" : null
+      },
+      "title" : {
+         "label" : "Title",
+         "position" : null,
+         "is_show_on_value" : 0,
+         "is_hidden" : 0
+      },
+      "contracts" : {
+         "is_hidden" : 0,
+         "is_show_on_value" : 0,
+         "position" : null,
+         "label" : "Contract"
+      },
+      "assigns" : {
+         "is_hidden" : 0,
+         "label" : "Assign",
+         "position" : null,
+         "is_show_on_value" : 0
+      },
+      "assets" : {
+         "is_hidden" : 0,
+         "position" : null,
+         "is_show_on_value" : 0,
+         "label" : "Asset"
+      },
+      "first_name" : {
+         "is_hidden" : 0,
+         "label" : "First Name",
+         "is_show_on_value" : 0,
+         "position" : null
+      },
+      "username" : {
+         "is_hidden" : 0,
+         "position" : null,
+         "is_show_on_value" : 0,
+         "label" : "Username"
+      },
+      "customers" : {
+         "label" : "Customers",
+         "is_show_on_value" : 0,
+         "position" : null,
+         "is_hidden" : 0
+      },
+      "company" : {
+         "is_hidden" : 0,
+         "label" : "Company",
+         "is_show_on_value" : 0,
+         "position" : null
+      },
+      "password" : {
+         "is_hidden" : 0,
+         "is_show_on_value" : 0,
+         "position" : null,
+         "label" : "Password"
+      },
+      "company_id" : {
+         "is_hidden" : 0,
+         "label" : "Company",
+         "is_show_on_value" : 0,
+         "position" : null
+      },
+      "phone" : {
+         "is_hidden" : 0,
+         "is_show_on_value" : 0,
+         "position" : null,
+         "label" : "Phone"
+      },
+      "email" : {
+         "is_hidden" : 0,
+         "label" : "Email",
+         "position" : null,
+         "is_show_on_value" : 0
+      },
+      "last_name" : {
+         "is_hidden" : 0,
+         "label" : "Last Name",
+         "position" : null,
+         "is_show_on_value" : 0
+      },
+      "location" : {
+         "label" : "Location",
+         "is_show_on_value" : 0,
+         "position" : null,
+         "is_hidden" : 0
+      },
+      "requests" : {
+         "position" : null,
+         "is_show_on_value" : 0,
+         "label" : "Request",
+         "is_hidden" : 0
+      },
+      "api_token" : {
+         "is_hidden" : 0,
+         "position" : null,
+         "is_show_on_value" : 0,
+         "label" : "Api Token"
+      },
+      "location_id" : {
+         "label" : "Location",
+         "is_show_on_value" : 0,
+         "position" : null,
+         "is_hidden" : 0
+      },
+      "role" : {
+         "is_hidden" : 0,
+         "is_show_on_value" : 0,
+         "position" : null,
+         "label" : "Role"
+      },
+      "software" : {
+         "is_hidden" : 0,
+         "position" : null,
+         "is_show_on_value" : 0,
+         "label" : "Software"
+      },
+      "location.name" : {
+         "label" : "Location",
+         "is_show_on_value" : 0,
+         "position" : null,
+         "is_hidden" : 0
+      },
+      "invoices" : {
+         "position" : null,
+         "is_show_on_value" : 0,
+         "label" : "Invoice",
+         "is_hidden" : 0
+      },
+      "status" : {
+         "is_hidden" : 0,
+         "is_show_on_value" : 0,
+         "position" : null,
+         "label" : "Status"
+      }
+   },
+   "items" : [
+      {
+         "status" : "ACTIVE",
+         "first_name" : "Phillip",
+         "id" : 12345,
+         "last_name" : "Fry",
+         "_pivot_id" : 12345,
+         "email" : "fry@planetexpress.com",
+         "full_name" : "Phillip J. Fry"
+      }
+   ],
+   "types" : [
+      {
+         "base_type_id" : 12345,
+         "source" : "user",
+         "label_single" : "Employee",
+         "id" : 12345,
+         "label_plural" : "Employee",
+         "customer_id" : 6
+      },
+      {
+         "label_plural" : "Vendor Contact",
+         "id" : 12345,
+         "customer_id" : 6,
+         "base_type_id" : 12345,
+         "source" : "user",
+         "label_single" : "Vendor Contact"
+      },
+      {
+         "base_type_id" : 12345,
+         "source" : "user",
+         "label_single" : "Contingent Worker",
+         "label_plural" : "Contingent Workers",
+         "id" : 12345,
+         "customer_id" : 6
+      }
+   ]
+}

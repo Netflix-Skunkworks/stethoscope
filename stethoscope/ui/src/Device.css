@@ -1,0 +1,101 @@
+.panel {
+  font-size: 16px;
+}
+.device-wrapper {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  display: inline-block;
+}
+.panel.device {
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: top;
+  margin-bottom: 15px;
+  width: 100%;
+}
+.device-name {
+  font-weight: bold;
+}
+.last-updated {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 15px;
+}
+ul.mac-addresses {
+  padding: 0;
+  margin: 0;
+}
+.device-info {
+  font-size: 12px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+}
+.device-info dt, dd {
+  margin-bottom: 0;
+}
+.device-info dd {
+  margin-left: calc(20% + 10px);
+}
+.device-info dt {
+  width: 20%;
+}
+.device-info-toggle {
+  float: right;
+  position: relative;
+  top: -2em;
+  color: rgba(40,40,40, 0.3);
+}
+.toggleLink, .device-info-toggle:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+.possible-match {
+  color: #b99a4b;
+  border-bottom: 1px dotted #ddd;
+  padding-bottom: 10px;
+}
+
+/* device actions */
+
+li {
+  border-bottom: 1px solid #eee;
+  padding: 5px 0;
+}
+
+li.done, a.show-description {
+  color: #aaa;
+}
+
+a.show-description {
+  float: right;
+  text-decoration: none;
+}
+
+.title {
+  cursor: pointer;
+}
+
+a {
+  color: #337ab7;
+}
+
+.action-icon {
+  display: inline-block;
+  margin-right: 7px;
+  position: relative;
+  top: 3px;
+}
+
+pre.description {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 14px;
+  white-space: pre-wrap;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}

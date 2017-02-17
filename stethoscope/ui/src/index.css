@@ -1,0 +1,241 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600);
+
+html, body {
+  height: 100%;
+  font-family: 'Source Sans Pro';
+}
+
+p {
+  margin: 10px 0;
+}
+
+main {
+  min-height: 100%;
+}
+
+nav a.brand {
+  text-transform: none;
+  /*font-size: 23px;*/
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+@media only screen and (max-width: 950px)  {
+  ul.right {
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 675px)  {
+  nav .main, nav .main ul {
+    width: 100%;
+  }
+  nav {
+    padding: 0;
+    text-align: center;
+  }
+  section.padded {
+    margin-top: 20px;
+  }
+  nav .main .brand {
+    display: none;
+  }
+
+  nav .main li a {
+    /*font-size: 0.9em;*/
+    padding: 10px;
+  }
+
+  main {
+    padding: 0;
+  }
+
+}
+
+@media only screen and (max-width: 320px) {
+  nav .main li a {
+    font-size: 0.9em;
+  }
+}
+
+.text-danger {
+  color: #a94442;
+}
+.panel.critical {
+  border-color: #ebccd1;
+}
+.panel.critical header, .notification-status.error {
+  color: #a94442;
+  background-color: #f2dede;
+}
+.notification-status {
+  margin-top: 5px;
+}
+.notification-status.saving {
+  color: #999;
+  font-size: 0.8em;
+}
+.notification-status.error {
+  padding: 5px 10px;
+}
+.panel.warning {
+  color: #666;
+}
+.panel.warning header {
+  color: #90783b;
+  background-color: #fbf3df;
+}
+.panel.unknown, .panel.unknown header {
+  color: #666;
+}
+.panel.ok header, .panel.done header {
+  background-color: #dfe8db;
+  color: #737b73;
+}
+
+
+nav {
+  background-color: #eaeaea;
+  border-bottom: 1px solid #ddd;
+}
+nav li {
+  color: #949494;
+}
+nav ul.main-nav li:hover {
+  background-color: #f9f9f9;
+}
+nav li a {
+  color: #949494;
+}
+nav li.is-selected a {
+  color: #333;
+}
+nav li.is-selected::after {
+  background-color: #999;
+}
+nav ul {
+  display: inline-block;
+}
+
+nav ul.right li:hover {
+  background: none;
+}
+nav .right {
+  color: #949494;
+  padding: 0;
+  right: 15px;
+  height: auto;
+}
+nav .right li {
+  cursor: auto;
+  padding-left: 10px;
+}
+.nf-button.btn-small {
+  font-size: 80%;
+  padding: 0.3em 0.5em;
+}
+#faq iframe {
+  width: 100%;
+  height: 1000px;
+  border: 1px solid #ddd;
+}
+.panel {
+  background-color: #FFFFFF;
+  border: 1px solid #d9d9d9;
+  border-radius: 3px;
+  padding: 20px;
+}
+.panel header {
+  background-color: #f1f1f1;
+  padding: 10px 20px;
+  border-bottom: 1px solid #d9d9d9;
+  margin-left: -20px;
+  margin-right: -20px;
+  margin-top: -20px;
+  margin-bottom: 20px;
+}
+/* buttons */
+button,
+.nf-button {
+  margin: 5px;
+  font-family: inherit;
+  font-size: 100%;
+  padding: 0.5em 1em;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #c4c4c4;
+  text-decoration: none;
+  text-transform: none;
+  border-radius: 4px;
+  overflow: visible;
+  display: inline-block;
+  line-height: normal;
+  white-space: nowrap;
+  vertical-align: baseline;
+  text-align: center;
+  cursor: pointer;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+button:hover,
+button:focus {
+  background-image: linear-gradient(transparent, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.1));
+}
+.nf-button-active,
+.nf-button:active,
+button:active,
+grouped label:active,
+nf-group label:active,
+grouped input[type=radio]:checked + label,
+.nf-group input[type=radio]:checked + label,
+grouped input[type=checkbox]:checked + label,
+.nf-group input[type=checkbox]:checked + label {
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.15) inset, 0 0 6px rgba(0,0,0,0.2) inset;
+}
+.nf-button:focus,
+button:focus {
+  outline: 0;
+}
+.nf-button[disabled],
+button[disabled],
+.is-disabled,
+.is-disabled:hover,
+.is-disabled:focus,
+.is-disabled:active {
+  background-image: none;
+  opacity: 0.4;
+  cursor: default;
+  box-shadow: none;
+  pointer-events: none;
+}
+.btn-primary,
+.btn-success,
+.btn-error {
+  color: #fff !important;
+  border: 1px solid rgba(0,0,0,0.2) !important;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.2) !important;
+}
+.btn-primary nf-icon,
+.btn-success nf-icon,
+.btn-error nf-icon {
+  color: #fff !important;
+}
+.btn-primary {
+  background-color: #478cc8 !important;
+}
+.btn-success {
+  background-color: #8dac71 !important;
+}
+.btn-classic {
+  background-color: #e6e6e6 !important;
+}
+.btn-error {
+  background-color: #b6272b !important;
+}

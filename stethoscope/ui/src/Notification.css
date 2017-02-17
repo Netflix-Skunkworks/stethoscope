@@ -1,0 +1,23 @@
+.notification .additional-comments {
+  margin: 5px 0 10px;
+  width: 100%;
+  height: 5em;
+}
+.notification .help-text {
+  margin: 5px 0 !important;
+  padding: 5px 8px;
+  background: #fbfbe5;
+  border: 1px solid #e8e8ae;
+  line-height: 1.5em;
+  color: #505029;
+}
+.notification .answer-selected .btn {
+  opacity: 0.3;
+}
+.notification .answer-selected .btn.selected {
+  opacity: 1;
+}
+.notification a.toggle-details {
+  color: #666;
+  font-size: 0.8em;
+}
