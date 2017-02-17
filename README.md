@@ -1,11 +1,15 @@
 # Stethoscope: User-Focused Security
 
+![Giraffe logo](https://github.com/Netflix/stethoscope/raw/master/stethoscope/ui/public/static/images/giraffe-small.png)
+
 Stethoscope is a web application that collects information for a given user’s devices and gives them
 clear and specific recommendations for securing their systems. An overview is available on the
 [Netflix Tech Blog](http://techblog.netflix.com/).
 
 [![Apache 2.0](https://img.shields.io/github/license/Netflix/stethoscope.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![NetflixOSS Lifecycle](https://img.shields.io/osslifecycle/Netflix/stethoscope.svg)]()
+
+![Stethoscope screenshot](https://github.com/Netflix/stethoscope/raw/master/docs/screenshot.png)
 
 ## What is Stethoscope?
 
@@ -103,6 +107,7 @@ The Python-based back-end has a few basic prerequisites:
 - A compatible operating system (we develop on OS X and deploy on Ubuntu)
 - CPython 2.7+ or CPython 3.3+ (we develop and deploy with 2.7 but test against 3.3+)
 - [FreeTDS] (if using the LANDESK plugin)
+- libffi (Install with [Homebrew] on Mac with `brew install libffi`)
 
 #### Installation
 
