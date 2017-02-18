@@ -25,4 +25,4 @@ services:
      - ./stethoscope/ui/src:/code/stethoscope/ui/src
      - ./stethoscope/static:/code/stethoscope/static
      - ./stethoscope/login:/code/stethoscope/login
-    command: ["npm", "run", "build"]
+    command: ["npm", "run", "buildonly"]
