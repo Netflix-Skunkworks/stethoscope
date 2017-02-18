@@ -54,7 +54,7 @@ docker-build: Dockerfile Dockerfile-nginx docker-compose.yml docker-compose.base
 react-build:
 	cd stethoscope/ui && npm run build
 
-dev-docker-token:
+dev-token-docker:
 	@echo "--> Generating authentication token for local development using Docker."
 	echo REACT_APP_TOKEN=$(shell docker-compose run -e STETHOSCOPE_API_INSTANCE_PATH="/code/instance/" login stethoscope-token) > stethoscope/ui/.env
 

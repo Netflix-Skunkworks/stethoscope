@@ -11,6 +11,13 @@ clear and specific recommendations for securing their systems. An overview is av
 
 ![Stethoscope screenshot](docs/screenshot.png)
 
+## Quickstart
+
+If you have node and npm already and just want to play around with the front end, run:
+
+`make install-develop-ui`
+
+
 ## What is Stethoscope?
 
 ### Main Features
@@ -61,7 +68,7 @@ You can run (and develop) the front end code without running the backend service
 
 If you would like to develop against real data, you can run the backend (locally or in Docker) and proxy API requests to the backend. This is handled automatically by [create-react-app], and you can change the proxy address in `stethoscope/ui/package.json`.
 
-**Note:** For API authentication to work with the proxy, you'll need to generate a token that will be loaded into your development environment. If you have [Docker] installed, you can do this with `make dev-token`.
+**Note:** For API authentication to work with the proxy, you'll need to generate a token that will be loaded into your development environment. If you have installed the Python dependencies, you can do this with `make dev-token`. If you have [Docker] installed, you can do this with `make dev-token-docker`.
 
 
 #### Prerequisites
