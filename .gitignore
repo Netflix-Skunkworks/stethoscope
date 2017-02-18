@@ -8,10 +8,10 @@
 .eggs/
 .python-version
 .tox/
+venv
 Stethoscope.egg-info/
 build
 htmlcov/
-instance/
 node_modules/
 scratch/
 tmp/
