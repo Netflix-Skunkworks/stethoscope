@@ -7,11 +7,15 @@ import Config from './Config'
 class Accounts extends Component {
   render () {
     if (this.props.store.accounts) {
-      return (
-        <div id='account-list'>
-          {this.props.store.accounts.map((a) => <Account account={a} key={a.source} />)}
-        </div>
-      )
+      if (this.props.store.accounts.length > 0) {
+        return (
+          <div id='account-list'>
+            {this.props.store.accounts.map((a) => <Account account={a} key={a.source} />)}
+          </div>
+        )
+      } else {
+        return <div className='panel'>No accounts found for <strong>{this.props.store.email}</strong>.</div>
+      }
     } else if (this.props.store.accounts === false) {
       return null
     } else {
