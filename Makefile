@@ -80,7 +80,7 @@ test-js-watch:
 	@echo "--> Running JavaScript tests."
 	cd stethoscope/ui && npm run test
 
-test-js:
+test-js: cleanjsbuild
 	@echo "--> Running JavaScript tests."
 	cd stethoscope/ui && CI=true npm run test
 

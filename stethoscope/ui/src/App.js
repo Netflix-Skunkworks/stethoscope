@@ -34,6 +34,7 @@ class App extends Component {
   load (collectionName, loadFn) {
     const self = this
     const newState = {}
+    if (!this.state.email) return
     loadFn(this.state.email).then(function (data) {
       newState[collectionName] = data
       self.setState(newState)
