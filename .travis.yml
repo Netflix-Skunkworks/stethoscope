@@ -7,6 +7,13 @@ addons:
   apt:
     packages:
       - freetds-dev
-cache: pip
-install: "pip install -r requirements.txt"
-script: pytest
+cache:
+  - pip: true
+install:
+  - nvm install 6.9.5
+  - nvm use 6.9.5
+  - make install-node-requirements
+  - make install-python-requirements
+script:
+  - pytest
+  - make test-js
