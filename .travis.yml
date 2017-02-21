@@ -9,6 +9,8 @@ addons:
       - freetds-dev
 cache:
   - pip: true
+  - directories:
+      - ./stethoscope/ui/node_modules
 install:
   - nvm install 6.9.5
   - nvm use 6.9.5
