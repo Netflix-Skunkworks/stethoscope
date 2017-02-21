@@ -6,6 +6,7 @@ Stethoscope is a web application that collects information for a given user’s 
 clear and specific recommendations for securing their systems. An overview is available on the
 [Netflix Tech Blog](http://techblog.netflix.com/).
 
+[![Join the chat at https://gitter.im/Netflix-Stethoscope/Lobby](https://badges.gitter.im/Netflix-Stethoscope/Lobby.svg)](https://gitter.im/Netflix-Stethoscope/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Apache 2.0](https://img.shields.io/github/license/Netflix/stethoscope.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![NetflixOSS Lifecycle](https://img.shields.io/osslifecycle/Netflix/stethoscope.svg)]()
 
