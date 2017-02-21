@@ -1,5 +1,7 @@
 # Stethoscope: User-Focused Security
 
+[![Join the chat at https://gitter.im/Netflix-Stethoscope/Lobby](https://badges.gitter.im/Netflix-Stethoscope/Lobby.svg)](https://gitter.im/Netflix-Stethoscope/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ![Giraffe logo](stethoscope/ui/public/static/images/giraffe-small.png)
 
 Stethoscope is a web application that collects information for a given user’s devices and gives them
