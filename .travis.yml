@@ -9,5 +9,6 @@ addons:
   apt:
     packages:
       - freetds-dev
+cache: pip
 install: "pip install -r requirements.txt"
 script: pytest
