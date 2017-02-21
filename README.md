@@ -1,11 +1,22 @@
 # Stethoscope: User-Focused Security
 
+![Giraffe logo](stethoscope/ui/public/static/images/giraffe-small.png)
+
 Stethoscope is a web application that collects information for a given user’s devices and gives them
 clear and specific recommendations for securing their systems. An overview is available on the
 [Netflix Tech Blog](http://techblog.netflix.com/).
 
 [![Apache 2.0](https://img.shields.io/github/license/Netflix/stethoscope.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![NetflixOSS Lifecycle](https://img.shields.io/osslifecycle/Netflix/stethoscope.svg)]()
+
+![Stethoscope screenshot](docs/screenshot.png)
+
+## Quickstart
+
+If you have node and npm already and just want to play around with the front end, run:
+
+`make install-develop-ui`
+
 
 ## What is Stethoscope?
 
@@ -57,7 +68,7 @@ You can run (and develop) the front end code without running the backend service
 
 If you would like to develop against real data, you can run the backend (locally or in Docker) and proxy API requests to the backend. This is handled automatically by [create-react-app], and you can change the proxy address in `stethoscope/ui/package.json`.
 
-**Note:** For API authentication to work with the proxy, you'll need to generate a token that will be loaded into your development environment. If you have [Docker] installed, you can do this with `make dev-token`.
+**Note:** For API authentication to work with the proxy, you'll need to generate a token that will be loaded into your development environment. If you have installed the Python dependencies, you can do this with `make dev-token`. If you have [Docker] installed, you can do this with `make dev-token-docker`.
 
 
 #### Prerequisites
@@ -103,6 +114,7 @@ The Python-based back-end has a few basic prerequisites:
 - A compatible operating system (we develop on OS X and deploy on Ubuntu)
 - CPython 2.7+ or CPython 3.3+ (we develop and deploy with 2.7 but test against 3.3+)
 - [FreeTDS] (if using the LANDESK plugin)
+- libffi (Install with [Homebrew] on Mac with `brew install libffi`)
 
 #### Installation
 

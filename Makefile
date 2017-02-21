@@ -54,7 +54,7 @@ docker-build: Dockerfile Dockerfile-nginx docker-compose.yml docker-compose.base
 react-build:
 	cd stethoscope/ui && npm run build
 
-dev-docker-token:
+dev-token-docker:
 	@echo "--> Generating authentication token for local development using Docker."
 	echo REACT_APP_TOKEN=$(shell docker-compose run -e STETHOSCOPE_API_INSTANCE_PATH="/code/instance/" login stethoscope-token) > stethoscope/ui/.env
 
@@ -62,13 +62,13 @@ dev-token:
 	@echo "--> Generating authentication token for local development."
 	echo REACT_APP_TOKEN=$(shell stethoscope-token) > stethoscope/ui/.env
 
-lint: lint-python lint-javascript
+lint: lint-python lint-js
 
 lint-python:
 	@echo "--> Linting Python files."
 	pep8 instance config stethoscope tests  # settings in setup.cfg
 
-lint-javascript:
+lint-js:
 	@echo "--> Linting JavaScript files."
 	cd stethoscope/ui && npm run lint
 
@@ -80,7 +80,7 @@ test-js-watch:
 	@echo "--> Running JavaScript tests."
 	cd stethoscope/ui && npm run test
 
-test-js:
+test-js: cleanjsbuild
 	@echo "--> Running JavaScript tests."
 	cd stethoscope/ui && CI=true npm run test
 
@@ -120,18 +120,32 @@ distcleanjs:
 distclean: distcleanpy distcleanjs
 
 .PHONY: \
+	build-ui \
 	check-root \
 	clean \
 	cleanpy \
+	cleanjsbuild \
+	cleanstatic \
 	coverage \
+	dev-token \
+	dev-token-docker \
 	develop \
+	develop-ui \
 	distclean \
 	distcleanjs \
 	distcleanpy \
 	docker-build \
+	docker-build-ui \
+	install-develop-ui \
 	install-requirements \
 	install-editable-package \
+	install-node-requirements \
 	install-python-requirements \
 	lint \
+	lint-python \
+	lint-js \
+	react-build \
 	test \
+	test-js \
+	test-js-watch \
 	tox
