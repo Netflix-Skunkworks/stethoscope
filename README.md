@@ -367,7 +367,7 @@ cluster so they can be formatted and displayed in the Stethoscope UI.
 As with our other Elasticsearch-based plugins, the `es_notifications` plugin requires the following
 configuration variables:
 
-- `ELASTICSEARCH_HOSTS`: List of host specifiers for the Elasticearch cluster (e.g.,
+- `ELASTICSEARCH_HOSTS`: List of host specifiers for the Elasticsearch cluster (e.g.,
   `["http://es.example.com:7104"]`)
 - `ELASTICSEARCH_INDEX`: Name of the index to query.
 - `ELASTICSEARCH_DOCTYPE`: Name of the document type to query.
@@ -393,7 +393,7 @@ exact data returned to an Elasticsearch cluster.
 
 ##### Configuration
 
-- `ELASTICSEARCH_HOSTS`: List of host specifiers for the Elasticearch cluster (e.g.,
+- `ELASTICSEARCH_HOSTS`: List of host specifiers for the Elasticsearch cluster (e.g.,
   `["http://es.example.com:7104"]`)
 - `ELASTICSEARCH_INDEX`: Name of the index to which to write.
 - `ELASTICSEARCH_DOCTYPE`: Type of document to write.
@@ -436,7 +436,7 @@ they are retrieved by the batch process).
 
 ##### Configuration
 
-- `ELASTICSEARCH_HOSTS`: List of host specifiers for the Elasticearch cluster (e.g.,
+- `ELASTICSEARCH_HOSTS`: List of host specifiers for the Elasticsearch cluster (e.g.,
   `["http://es.example.com:7104"]`)
 - `ELASTICSEARCH_INDEX`: Name of the index to which to write.
 - `ELASTICSEARCH_DOCTYPE`: Type of document to write.
