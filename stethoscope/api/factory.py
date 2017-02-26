@@ -448,7 +448,7 @@ def register_device_api_endpoints(app, config, auth, log_hooks=[]):
     device_plugins.map(_add_route, app, auth, 'devices', 'serial', log_hooks=log_hooks)
 
     # 'merged' endpoints which merge device data across all second-stage device plugins
-    # (without the intial ownership-attribution stage) for lookup by mac, email, serial
+    # (without the initial ownership-attribution stage) for lookup by mac, email, serial
     register_merged_device_endpoints(app, config, auth, device_plugins, apply_practices,
         log_hooks=log_hooks)
 
