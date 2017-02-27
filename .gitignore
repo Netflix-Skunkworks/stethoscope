@@ -19,3 +19,4 @@ twistd.pid
 .env
 stethoscope/static/*
 stethoscope/login/templates/layout.html
+docs/_build
