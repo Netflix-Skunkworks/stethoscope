@@ -16,7 +16,7 @@ Blog](http://techblog.netflix.com/).
 
 ## Quickstart
 
-If you have node and npm already and just want to play around with the front end, run:
+If you have [node] (version 6.4+) and npm (included with node) installed already and just want to play around with the front end, run:
 
 `make install-develop-ui`
 
@@ -83,7 +83,7 @@ If you would like to develop against real data, you can run the backend (locally
 
 #### Prerequisites
 
-To run the front end directly, without Docker, you'll need recent versions of [node] and [npm].
+To run the front end directly, without Docker, you'll need recent versions of [node] (version 6.4+) and npm (included with node).
 
 #### Installation
 
@@ -487,3 +487,4 @@ limitations under the License.
 [virtualenv]: https://virtualenv.pypa.io
 [create-react-app]: https://github.com/facebookincubator/create-react-app
 [Docker]: https://www.docker.com/
+[node]: https://nodejs.org/
