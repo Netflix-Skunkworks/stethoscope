@@ -12,7 +12,7 @@ Blog](http://techblog.netflix.com/).
 [![NetflixOSS Lifecycle](https://img.shields.io/osslifecycle/Netflix/stethoscope.svg)]()
 [![Build Status](https://travis-ci.org/Netflix/stethoscope.svg?branch=master)](https://travis-ci.org/Netflix/stethoscope)
 
-![Stethoscope screenshot](docs/screenshot.png)
+![Stethoscope screenshot](docs/images/screenshot.png)
 
 ## Quickstart
 
