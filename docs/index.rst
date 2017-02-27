@@ -1,15 +1,19 @@
-.. Stethoscope documentation master file, created by
-   sphinx-quickstart on Mon Feb 27 09:58:08 2017.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Stethoscope: User-Focused Security
+==================================
 
-Welcome to Stethoscope's documentation!
-=======================================
+Stethoscope is a web application that collects information from existing device data sources (e.g.,
+JAMF or LANDESK) on a given user’s devices and gives them clear and specific recommendations for
+securing their systems.
+
+
+Plugins
+-------
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   plugins
 
 
 Indices and tables
