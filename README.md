@@ -123,7 +123,7 @@ The Python-based back-end has a few basic prerequisites:
 
 - A compatible operating system (we develop on OS X and deploy on Ubuntu)
 - CPython 2.7+ or CPython 3.3+ (we develop and deploy with 2.7 but test against 3.3+)
-- [FreeTDS] (if using the LANDESK plugin)
+- [FreeTDS][] (if using the LANDESK plugin)
 - libffi (Install with [Homebrew] on Mac with `brew install libffi`)
 
 #### Installation
