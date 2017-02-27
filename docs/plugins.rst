@@ -75,8 +75,73 @@ Extension Attributes
 ''''''''''''''''''''
 
 JAMF does not provide enough information out-of-the-box for us to determine the status of all the
-desired security practices. However, we can define Extension Attributes in JAMF to gather the needed
-information.
+default security practices. However, we can define "Extension Attributes" in JAMF to gather the
+needed information.
+
+Auto-Update
++++++++++++
+
+We use six extension attributes to gather information about the auto-update settings on OSX.
+
+
+- ``1 Auto Check For Updates Enabled``: This attribute covers the "Automatically check for updates"
+  setting.
+
+  .. literalinclude:: jamf_extension_attributes/1-auto_check_for_updates.sh
+    :language: bash
+    :caption:
+
+- ``2 Get New Updates in Background Enabled``: Reflects the "Download newly available updates in
+  background" setting.
+
+  .. literalinclude:: jamf_extension_attributes/2-get_new_updates_in_background.sh
+    :language: bash
+    :caption:
+
+- ``3 Install App Updates Enabled``: Covers the "Install app updates" setting.
+
+  .. literalinclude:: jamf_extension_attributes/3-install_app_updates.sh
+    :language: bash
+    :caption:
+
+- ``4 Install OS X Updates Enabled``: Reflects the "Install OS X updates" setting.
+
+  .. literalinclude:: jamf_extension_attributes/4-install_os_x_updates.sh
+    :language: bash
+    :caption:
+
+- ``5 Install Security Updates Enabled``: Reflects the "Install security updates" setting.
+
+  .. literalinclude:: jamf_extension_attributes/5-install_security_updates.sh
+    :language: bash
+    :caption:
+
+- ``6 Install System Data Files Enabled``: Reflects the "Install system data files" setting.
+
+  .. literalinclude:: jamf_extension_attributes/6-install_system_data_files.sh
+    :language: bash
+    :caption:
+
+Firewall
+++++++++
+
+The ``Firewall Status`` extension attribute can be gathered using the following script:
+
+.. literalinclude:: jamf_extension_attributes/firewall_status.sh
+  :language: bash
+  :caption:
+
+
+Screenlock
+++++++++++
+
+The ``Screen Saver Lock Enabled`` extension attribute can be gathered using the following script:
+
+.. literalinclude:: jamf_extension_attributes/screen_saver_lock.sh
+  :language: bash
+  :caption:
+
+
 
 LANDESK
 ^^^^^^^
