@@ -44,8 +44,8 @@ class JAMFDataSourceBase(stethoscope.configurator.Configurator):
           'Download newly available updates in background'),
       ('3 Install App Updates Enabled', 'False', 'Install app updates'),
       ('4 Install OS X Updates Enabled', 'False', 'Install OS X updates'),
-      ('5 Install Security Updates Enabled', 'True', 'Install system data files'),
-      ('6 Install System Data Files Enabled', 'True', 'Install security updates'),
+      ('5 Install Security Updates Enabled', 'True', 'Install security updates'),
+      ('6 Install System Data Files Enabled', 'True', 'Install system data files'),
     ]
 
     values = list()
