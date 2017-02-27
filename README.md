@@ -64,6 +64,13 @@ docker-compose up
 
 Then connect to the main Nginx web server at `http://localhost:5000`.
 
+#### Troubleshooting
+
+If you encounter the following error, you likely need to upgrade `docker-compose` to version 1.10 or
+higher.
+
+> ERROR: In file './docker-compose.yml' service 'version' doesn't have any configuration options.
+> All top level keys in your docker-compose.yml must map to a dictionary of configuration options.
 
 ### Front end
 
