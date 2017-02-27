@@ -78,6 +78,8 @@ JAMF does not provide enough information out-of-the-box for us to determine the 
 default security practices. However, we can define "Extension Attributes" in JAMF to gather the
 needed information.
 
+These scripts are available in :file:`docs/jamf_extension_attributes/`.
+
 Auto-Update
 +++++++++++
 
@@ -91,6 +93,11 @@ We use six extension attributes to gather information about the auto-update sett
     :language: bash
     :caption:
 
+  .. only:: builder_html
+
+    Download :download:`here <./jamf_extension_attributes/1-auto_check_for_updates.sh>`.
+
+
 - ``2 Get New Updates in Background Enabled``: Reflects the "Download newly available updates in
   background" setting.
 
@@ -98,11 +105,21 @@ We use six extension attributes to gather information about the auto-update sett
     :language: bash
     :caption:
 
+  .. only:: builder_html
+
+    Download :download:`here <./jamf_extension_attributes/2-get_new_updates_in_background.sh>`.
+
+
 - ``3 Install App Updates Enabled``: Covers the "Install app updates" setting.
 
   .. literalinclude:: jamf_extension_attributes/3-install_app_updates.sh
     :language: bash
     :caption:
+
+  .. only:: builder_html
+
+    Download :download:`here <./jamf_extension_attributes/3-install_app_updates.sh>`.
+
 
 - ``4 Install OS X Updates Enabled``: Reflects the "Install OS X updates" setting.
 
@@ -110,17 +127,32 @@ We use six extension attributes to gather information about the auto-update sett
     :language: bash
     :caption:
 
+  .. only:: builder_html
+
+    Download :download:`here <./jamf_extension_attributes/4-install_os_x_updates.sh>`.
+
+
 - ``5 Install Security Updates Enabled``: Reflects the "Install security updates" setting.
 
   .. literalinclude:: jamf_extension_attributes/5-install_security_updates.sh
     :language: bash
     :caption:
 
+  .. only:: builder_html
+
+    Download :download:`here <./jamf_extension_attributes/5-install_security_updates.sh>`.
+
+
 - ``6 Install System Data Files Enabled``: Reflects the "Install system data files" setting.
 
   .. literalinclude:: jamf_extension_attributes/6-install_system_data_files.sh
     :language: bash
     :caption:
+
+  .. only:: builder_html
+
+    Download :download:`here <./jamf_extension_attributes/6-install_system_data_files.sh>`.
+
 
 Firewall
 ++++++++
@@ -130,6 +162,10 @@ The ``Firewall Status`` extension attribute can be gathered using the following 
 .. literalinclude:: jamf_extension_attributes/firewall_status.sh
   :language: bash
   :caption:
+
+.. only:: builder_html
+
+  Download :download:`here <./jamf_extension_attributes/firewall_status.sh>`.
 
 
 Screenlock
@@ -141,6 +177,9 @@ The ``Screen Saver Lock Enabled`` extension attribute can be gathered using the 
   :language: bash
   :caption:
 
+.. only:: builder_html
+
+  Download :download:`here <./jamf_extension_attributes/screen_saver_lock.sh>`.
 
 
 LANDESK
