@@ -1,14 +1,14 @@
-Back-end
-========
+Backend
+=======
 
-The back-end itself consists of two major components: a login server and the API server. The login
+The backend itself consists of two major components: a login server and the API server. The login
 server is a `Flask`_ application which handles authentication for the user, generating tokens for
 the browser's use when it hits API endpoints. The API server is a `Klein`_ application.
 
 Prerequisites
 ^^^^^^^^^^^^^
 
-The Python-based back-end has a few basic prerequisites:
+The Python-based backend has a few basic prerequisites:
 
 -  A compatible operating system (we develop on OS X and deploy on Ubuntu)
 -  CPython 2.7+ or CPython 3.3+ (we develop and deploy with 2.7 but test against 3.3+)
@@ -19,7 +19,7 @@ Installation
 ^^^^^^^^^^^^
 
 We recommend using a Python `virtualenv`_. Once you've set up an environment for Stethoscope, you
-can install the back-end and the bundled plugins easily using our :file:`Makefile`:
+can install the backend and the bundled plugins easily using our :file:`Makefile`:
 
 .. code:: sh
 
@@ -108,7 +108,7 @@ install `tox`_, then run:
 Running
 ^^^^^^^
 
-The back-end has two processes which generally need to be running simultaneously: the login server
+The backend has two processes which generally need to be running simultaneously: the login server
 and the API server.
 
 Login
