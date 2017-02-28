@@ -14,6 +14,7 @@ securing their systems. An overview is available on the `Netflix Tech Blog
    :maxdepth: 3
    :caption: Contents:
 
+   frontend
    backend
    nginx
    plugins
