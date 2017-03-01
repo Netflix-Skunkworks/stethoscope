@@ -72,6 +72,10 @@ higher.
 > ERROR: In file './docker-compose.yml' service 'version' doesn't have any configuration options.
 > All top level keys in your docker-compose.yml must map to a dictionary of configuration options.
 
+## Next Steps
+
+Our full documentation is available at [https://stethoscope.readthedocs.org]().
+
 
 ## LICENSE
 
