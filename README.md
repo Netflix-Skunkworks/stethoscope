@@ -279,7 +279,7 @@ Google provides:
 
 ##### Configuration
 
-- `GOOGLE_API_SECRETS`: JSON blob containing service account credentials.
+- `GOOGLE_API_SECRETS`: Service account credentials from Google as a Python dictionary.
 - `GOOGLE_API_USERNAME`: Service account name.
 - `GOOGLE_API_SCOPES`: List of scopes required (depends on what information you're using from
   Google). We use:

@@ -48,7 +48,7 @@ class GoogleAPIConnection(stethoscope.configurator.Configurator):
 
   def get_google_api_credentials(self):
     """Create a credentials object for talking to Google APIs."""
-    secrets = json.loads(self.config['GOOGLE_API_SECRETS'])
+    secrets = self.config['GOOGLE_API_SECRETS']
 
     try:
       # oauth2client < 2.0.0
