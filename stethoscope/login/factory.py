@@ -90,7 +90,7 @@ def create_app():
         flask.request.environ['wsgi.url_scheme'])
 
     if email is None:
-      email = profile['sub']
+      email = profile.get('email', profile['sub'])
     response = flask.redirect(flask.url_for('index', email=email, _scheme=scheme, _external=True))
 
     response.set_cookie('token', auth.create_token(**profile),
