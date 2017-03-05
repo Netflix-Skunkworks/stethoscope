@@ -100,7 +100,7 @@ html_theme = 'alabaster'
 
 # See: https://alabaster.readthedocs.io/en/latest/customization.html#theme-options
 html_theme_options = {
-    'logo': '../_images/giraffe-small.png',
+    'logo': 'images/giraffe-small.png',
     'logo_name': True,
     'description': 'User-focused security from Netflix',
     'github_user': 'Netflix',
@@ -122,7 +122,7 @@ html_sidebars = {
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ['_static', '../stethoscope/ui/public/static']
 
 
 # -- Options for HTMLHelp output ------------------------------------------
