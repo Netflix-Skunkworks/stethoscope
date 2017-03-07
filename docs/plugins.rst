@@ -42,7 +42,23 @@ Google provides:
 Configuration
 '''''''''''''
 
--  ``GOOGLE_API_SECRETS``: JSON blob containing service account credentials.
+-  ``GOOGLE_API_SECRETS``: Service account credentials for Google. For example:
+
+     .. code:: py
+
+       'GOOGLE_API_SECRETS': {
+          "client_id": "<redacted>",
+          "private_key": "-----BEGIN PRIVATE KEY-----<redacted>-----END PRIVATE KEY-----\n",
+          "token_uri": "https://accounts.google.com/o/oauth2/token",
+          "client_email": "<redacted>",
+          "client_x509_cert_url": "<redacted>",
+          "private_key_id": "<redacted>",
+          "type": "service_account",
+          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+          "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+          "project_id": "<redacted>"
+       }
+
 -  ``GOOGLE_API_USERNAME``: Service account name.
 -  ``GOOGLE_API_SCOPES``: List of scopes required (depends on what information you're using from
    Google). We use:
