@@ -74,7 +74,7 @@ higher.
 
 ## Next Steps
 
-Our full documentation is available at [https://stethoscope.readthedocs.org]().
+Our full documentation is available at [https://stethoscope.readthedocs.org].
 
 
 ## LICENSE
