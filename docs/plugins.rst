@@ -39,6 +39,34 @@ Google provides:
    services.
 -  Account information.
 
+Credentials
+'''''''''''
+
+There are a few steps required to set up API access to Google for your domain.
+
+#. Use the `setup tool
+   <https://console.developers.google.com/start/api?id=admin&credential=client_key>`_ to create a
+   Google API Console project and enable `Admin SDK`_ access for that project. At the "Add
+   credentials to your project" stage, click the link for "service account" then "create service
+   account". Check the boxes for "Furnish a new private key" and "Enable G Suite Domain-wide
+   Delegation". Download the service account's credentials as a JSON file; this is what will be used
+   as the content for ``GOOGLE_API_SECRETS`` below.
+
+   .. To enable domain-wide delegation after creating the service account credentials, then from the
+      "Credentials" screen, click "Manage service accounts" on the right-hand side. Find the service
+      account you created and click the three-dots icon on the far right of the row, then "Edit".
+
+#. You should now see row in the table under "Service accounts" for the newly-created service
+   account. Click the corresponding "View Client ID" link and record the numeric client ID from the
+   subsequent dialog.
+#. Follow the instructions `here
+   <https://developers.google.com/admin-sdk/directory/v1/guides/delegation#delegate_domain-wide_authority_to_your_service_account>`_
+   to authorize the service account for the specific APIs needed. Stethoscope's defaults are in
+   ``GOOGLE_API_SCOPES`` below.
+#. You will also need a user account (see ``GOOGLE_API_USERNAME``, below) in your G Suite domain
+   which has API access to the `Admin SDK`_. This can be granted via the normal G Suite Admin
+   Console.
+
 Configuration
 '''''''''''''
 
@@ -59,7 +87,9 @@ Configuration
           "project_id": "<redacted>"
        }
 
--  ``GOOGLE_API_USERNAME``: Service account name.
+-  ``GOOGLE_API_USERNAME``: Name of the account on whose behalf the service account in
+   ``GOOGLE_API_SECRETS`` will act. This account must have permissions to access the APIs from which
+   you're gathering data; currently, this is just the `Admin SDK`_.
 -  ``GOOGLE_API_SCOPES``: List of scopes required (depends on what information you're using from
    Google). We use:
 
@@ -72,6 +102,8 @@ Configuration
            "https://www.googleapis.com/auth/admin.reports.audit.readonly",
            "https://www.googleapis.com/auth/admin.reports.usage.readonly",
         ]
+
+.. _Admin SDK: https://developers.google.com/admin-sdk/
 
 JAMF
 ^^^^
