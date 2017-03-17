@@ -4,7 +4,7 @@ How to Contribute to Stethoscope
 Thanks for considering contributing!
 
 
-PGkjjython Guidelines
+Python Guidelines
 -----------------
 
 ### Code Style
