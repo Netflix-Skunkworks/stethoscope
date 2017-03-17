@@ -12,6 +12,11 @@ import Devices from './Devices'
 import Accounts from './Accounts'
 import Faq from './Faq'
 
+import NotificationHandlers from './notifications/NotificationHandlers'
+import SimpleNotification from './notifications/Simple'
+
+NotificationHandlers.register(SimpleNotification)
+
 ReactDOM.render(
   <Router history={hashHistory}>
     <Route path='/' component={App}>
