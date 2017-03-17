@@ -4,11 +4,11 @@ if (typeof global.stethoscopeNotificationHandlers === 'undefined') {
 
 const components = global.stethoscopeNotificationHandlers
 
-function register(component) {
+function register (component) {
   components.push(component)
 }
 
-function all() {
+function all () {
   return components
 }
 
