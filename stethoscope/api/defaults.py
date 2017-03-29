@@ -8,7 +8,7 @@ import logbook
 import logbook.more
 
 
-LOGFILE = os.environ.get('LOGFILE', 'api.log')
+LOGFILE = os.environ.get('STETHOSCOPE_API_LOGFILE', os.environ.get('LOGFILE', 'api.log'))
 
 LOGBOOK = logbook.NestedSetup([
     logbook.NullHandler(),

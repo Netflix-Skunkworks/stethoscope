@@ -7,8 +7,8 @@ import os
 import logbook
 
 
-LOGLEVEL = os.environ.get('LOGLEVEL', 'INFO').upper()
-LOGFILE = os.environ.get('LOGFILE', 'login.log')
+LOGLEVEL = os.environ.get('STETHOSCOPE_LOGIN_LOGLEVEL', os.environ.get('LOGLEVEL', 'INFO')).upper()
+LOGFILE = os.environ.get('STETHOSCOPE_LOGIN_LOGFILE', os.environ.get('LOGFILE', 'login.log'))
 
 LOGBOOK = logbook.NestedSetup([
     logbook.NullHandler(),
