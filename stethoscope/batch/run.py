@@ -73,6 +73,9 @@ def wrap_hook(func):
 
 
 def work_generator(args, config, emails, results):
+  practices = stethoscope.plugins.utils.instantiate_practices(config,
+      namespace='stethoscope.plugins.practices.devices')
+
   device_plugins = stethoscope.plugins.utils.instantiate_plugins(config,
       namespace='stethoscope.plugins.sources.devices')
   predevice_plugins = stethoscope.plugins.utils.instantiate_plugins(config,
@@ -83,7 +86,9 @@ def work_generator(args, config, emails, results):
   incremental_hooks = [wrap_hook(hook.obj.post) for hook in hook_iter]
 
   def apply_practices(devices):
-    return six.moves.map(stethoscope.api.practices.apply_practices, devices)
+    for device in devices:
+      practices.map_method('inject_status', device)
+    return devices
 
   for email in emails:
     deferred = stethoscope.api.factory.get_devices_by_stages(email, predevice_plugins,
