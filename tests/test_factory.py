@@ -250,8 +250,7 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
 
     # noop = mock.Mock(side_effect=lambda x: x)
     # with mock.patch('stethoscope.api.devices.merge_devices', noop):
-    #   with mock.patch('stethoscope.api.factory.ifilter_devices', noop):
-    #     self.check_result(app, b'/devices/email/user@example.com', [result])
-    #     self.check_result(app, b'/devices/serial/0xDECAFBAD', [result])
-    #     self.check_result(app, b'/devices/staged/user@example.com', [result, result])
-    #     self.check_result(app, b'/devices/merged/user@example.com', [result, result])
+    #   self.check_result(app, b'/devices/email/user@example.com', [result])
+    #   self.check_result(app, b'/devices/serial/0xDECAFBAD', [result])
+    #   self.check_result(app, b'/devices/staged/user@example.com', [result, result])
+    #   self.check_result(app, b'/devices/merged/user@example.com', [result, result])

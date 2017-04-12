@@ -58,35 +58,6 @@ def merge_events(events):
   return sort_events(chain.from_iterable(_events for (status, _events) in events if status))
 
 
-def is_virtual_machine(device):
-  """Return `True` if the device information represents a virtual machine, `False` otherwise.
-
-  >>> is_virtual_machine({'model': "Virtual Machine"})
-  True
-  >>> is_virtual_machine({'model': "Virtual Machine"})
-  True
-  >>> is_virtual_machine({'serial': "VMware-DE CA FB AD"})
-  True
-  >>> is_virtual_machine({'serial': "Parallels-DE CA FB AD"})
-  True
-
-  """
-  model = device.get('model')
-  if model is not None and re.search('(Virtual Machine|VMware|amazon)', model) is not None:
-    return True
-
-  serial = device.get('serial')
-  if serial is not None and re.search('(Parallels|VMware)', serial) is not None:
-    return True
-
-  return False
-
-
-def filter_devices(devices):
-  """Filter out certain devices (e.g., VMs)."""
-  return [device for device in devices if not is_virtual_machine(device)]
-
-
 def serialized_endpoint(*_callbacks):
   """Decorator which wraps an endpoint by applying callbacks to the results then serializing to JSON.
 
@@ -274,7 +245,6 @@ def get_devices_by_stages(email, pre_extensions, extensions, transforms, debug=F
   """
   email_devices_deferred = get_devices_by_email(email, extensions, debug=debug)
   pre_devices = yield get_devices_by_email(email, pre_extensions, debug=debug)
-  pre_devices = filter_devices(pre_devices)
   pre_devices = apply_device_transforms(pre_devices, transforms)
 
   logger.debug("[{!s}] retrieved {:d} pre-devices", email, len(pre_devices))
@@ -371,9 +341,7 @@ def register_merged_device_endpoints(app, config, auth, device_plugins, apply_pr
     userinfo = _kwargs.pop('userinfo')
 
     # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [
-      filter_devices,
-    ] + [transform.obj.augment for transform in transforms] + [
+    _kwargs['callbacks'] = [transform.obj.augment for transform in transforms] + [
       functools.partial(log_response, 'device', 'email'),
       functools.partial(log_access, 'device', userinfo, email),
     ] + [functools.partial(hook.obj.log, 'device', userinfo, email) for hook in log_hooks]
@@ -393,9 +361,7 @@ def register_merged_device_endpoints(app, config, auth, device_plugins, apply_pr
     userinfo = _kwargs.pop('userinfo')
 
     # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [
-      filter_devices,
-    ] + [transform.obj.augment for transform in transforms] + [
+    _kwargs['callbacks'] = [transform.obj.augment for transform in transforms] + [
       functools.partial(log_response, 'device', 'serial'),
       functools.partial(log_access, 'device', userinfo, serial),
     ] + [functools.partial(hook.obj.log, 'device', userinfo, serial) for hook in log_hooks]
@@ -415,9 +381,7 @@ def register_merged_device_endpoints(app, config, auth, device_plugins, apply_pr
     userinfo = _kwargs.pop('userinfo')
 
     # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [
-      filter_devices,
-    ] + [transform.obj.augment for transform in transforms] + [
+    _kwargs['callbacks'] = [transform.obj.augment for transform in transforms] + [
       functools.partial(log_response, 'device', 'macaddr'),
       functools.partial(log_access, 'device', userinfo, macaddr),
     ] + [functools.partial(hook.obj.log, 'device', userinfo, macaddr) for hook in log_hooks]
@@ -480,9 +444,7 @@ def register_device_api_endpoints(app, config, auth, log_hooks=[]):
     userinfo = _kwargs.pop('userinfo')
 
     # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [
-      filter_devices,
-    ] + [transform.obj.augment for transform in transforms] + [
+    _kwargs['callbacks'] = [transform.obj.augment for transform in transforms] + [
       functools.partial(log_response, 'device', 'staged'),
       functools.partial(log_access, 'device', userinfo, email, context='merged'),
     ] + [functools.partial(hook.obj.log, 'device', userinfo, email, context='merged')

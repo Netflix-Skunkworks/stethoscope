@@ -386,7 +386,6 @@ This transform filters out virtual machines (VMs) by searching certain fields in
 data for strings matching common patterns for VMs. The `vm_filter` plugin has no configuration
 variables.
 
-
 Manufacturer from MAC Address
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

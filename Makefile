@@ -26,6 +26,7 @@ install-editable-package:
 	bitfit,\
 	vpnfilter,\
 	mac_manufacturer,\
+	vm_filter,\
 	oidc,\
 	es_logger,\
 	es_notifications,\
