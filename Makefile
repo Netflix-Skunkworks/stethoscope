@@ -24,7 +24,7 @@ install-editable-package:
 	landesk,\
 	duo,\
 	bitfit,\
-	vpnfilter,\
+	vpn_labeler,\
 	mac_manufacturer,\
 	vm_filter,\
 	oidc,\

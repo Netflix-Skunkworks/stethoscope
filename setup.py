@@ -48,7 +48,7 @@ extras_require = {
     'requests[security]',
     'requests-oauthlib',
   ],
-  'vpnfilter': ['netaddr'],
+  'vpn_labeler': ['netaddr'],
   'vm_filter': [],
   'mac_manufacturer': ['netaddr'],
   'atlas': ['requests[security]'],
@@ -184,7 +184,7 @@ setup_params = dict(
     ],
     'stethoscope.plugins.transform.events': [
       # hooks to augment events (e.g., with geolocation data)
-      'vpnfilter = stethoscope.plugins.transform.vpnfilter:VPNFilter [vpnfilter]',
+      'vpn_labeler = stethoscope.plugins.transform.vpnlabeler:VPNLabeler [vpn_labeler]',
     ],
     'stethoscope.plugins.transform.devices': [
       # hooks to augment devices (e.g., by adding manufacturer information from MAC addresses)

@@ -11,14 +11,14 @@ import stethoscope.configurator
 logger = logbook.Logger(__name__)
 
 
-class VPNFilter(stethoscope.configurator.Configurator):
+class VPNLabeler(stethoscope.configurator.Configurator):
 
   config_keys = (
     'VPN_CIDRS',
   )
 
   def __init__(self, *args, **kwargs):
-    super(VPNFilter, self).__init__(*args, **kwargs)
+    super(VPNLabeler, self).__init__(*args, **kwargs)
     self._networks = netaddr.IPSet(self.config['VPN_CIDRS'])
 
   def augment(self, events):
