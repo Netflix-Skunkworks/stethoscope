@@ -371,6 +371,30 @@ following configuration variable:
    passed directly to ``netaddr.IPSet``, so any value accepted by `that method
    <https://netaddr.readthedocs.io/en/latest/tutorial_03.html>`__ will work.)
 
+
+Device Transforms
+-----------------
+
+Similarly to event transforms, device transforms take as input a list of devices and modify that
+list and/or its elements in some way. For instance, one might want to filter out virtual machines
+from one's devices (as below).
+
+VM Filter
+^^^^^^^^^
+
+This transform filters out virtual machines (VMs) by searching certain fields in each device's
+data for strings matching common patterns for VMs. The `vm_filter` plugin has no configuration
+variables.
+
+
+Manufacturer from MAC Address
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This transform attempts to determine a device's manufacturer from its MAC address(es) and injects
+the manufacturer's name into the device data. The `mac_manufacturer` plugin has no configuration
+variables.
+
+
 Batch Plugins
 -------------
 

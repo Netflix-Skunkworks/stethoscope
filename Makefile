@@ -25,6 +25,7 @@ install-editable-package:
 	duo,\
 	bitfit,\
 	vpnfilter,\
+	mac_manufacturer,\
 	oidc,\
 	es_logger,\
 	es_notifications,\

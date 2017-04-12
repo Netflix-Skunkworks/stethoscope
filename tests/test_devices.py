@@ -147,7 +147,7 @@ def test_get_devices_by_macaddr(mock_sources):
 
 def test_get_devices_by_stages(mock_bitfit_ext, mock_jamf_ext):
   deferred = stethoscope.api.factory.get_devices_by_stages(None, [mock_bitfit_ext],
-      [mock_jamf_ext])
+      [mock_jamf_ext], [])
   deferred.addCallback(stethoscope.api.devices.merge_devices)
   deferred.addCallback(check_merge_devices)
   return deferred
