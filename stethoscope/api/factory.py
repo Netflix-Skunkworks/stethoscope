@@ -330,6 +330,17 @@ def register_merged_device_endpoints(app, config, auth, device_plugins, apply_pr
     transforms, log_hooks=[]):
   """Registers endpoints which provide merged devices without the ownership attribution stage."""
 
+  def setup_endpoint_kwargs(endpoint_type, args, kwargs):
+    userinfo = kwargs.pop('userinfo')
+
+    kwargs['callbacks'] = [transform.obj.augment for transform in transforms] + [
+      functools.partial(log_response, 'device', endpoint_type),
+      functools.partial(log_access, 'device', userinfo, *args),
+    ] + [functools.partial(hook.obj.log, 'device', userinfo, *args) for hook in log_hooks]
+
+    kwargs.setdefault('debug', config.get('DEBUG', False))
+    return kwargs
+
   @serialized_endpoint(apply_practices, stethoscope.api.devices.merge_devices)
   def merged_devices_by_email(*args, **kwargs):
     """Endpoint returning (as JSON) all devices for given email after merging."""
@@ -338,14 +349,8 @@ def register_merged_device_endpoints(app, config, auth, device_plugins, apply_pr
   @auth.match_required
   @stethoscope.validation.check_valid_email
   def __get_devices_by_email(request, email, **_kwargs):
-    userinfo = _kwargs.pop('userinfo')
-
-    # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [transform.obj.augment for transform in transforms] + [
-      functools.partial(log_response, 'device', 'email'),
-      functools.partial(log_access, 'device', userinfo, email),
-    ] + [functools.partial(hook.obj.log, 'device', userinfo, email) for hook in log_hooks]
-    _kwargs.setdefault('debug', config.get('DEBUG', False))
+    # actual function is required so that app.route can get a '__name__' attribute
+    _kwargs = setup_endpoint_kwargs('email', (email,), _kwargs)
     return merged_devices_by_email(request, email, device_plugins, **_kwargs)
   app.route('/devices/email/<string:email>', endpoint='devices-email',
       methods=['GET'])(__get_devices_by_email)
@@ -358,14 +363,8 @@ def register_merged_device_endpoints(app, config, auth, device_plugins, apply_pr
   @auth.token_required
   @stethoscope.validation.check_valid_serial
   def __get_devices_by_serial(request, serial, **_kwargs):
-    userinfo = _kwargs.pop('userinfo')
-
-    # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [transform.obj.augment for transform in transforms] + [
-      functools.partial(log_response, 'device', 'serial'),
-      functools.partial(log_access, 'device', userinfo, serial),
-    ] + [functools.partial(hook.obj.log, 'device', userinfo, serial) for hook in log_hooks]
-    _kwargs.setdefault('debug', config.get('DEBUG', False))
+    # actual function is required so that app.route can get a '__name__' attribute
+    _kwargs = setup_endpoint_kwargs('serial', (serial,), _kwargs)
     return merged_devices_by_serial(request, serial, device_plugins, **_kwargs)
   app.route('/devices/serial/<string:serial>', endpoint='devices-serial',
       methods=['GET'])(__get_devices_by_serial)
@@ -378,14 +377,8 @@ def register_merged_device_endpoints(app, config, auth, device_plugins, apply_pr
   @auth.token_required
   @stethoscope.validation.check_valid_macaddr
   def __get_devices_by_macaddr(request, macaddr, **_kwargs):
-    userinfo = _kwargs.pop('userinfo')
-
-    # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [transform.obj.augment for transform in transforms] + [
-      functools.partial(log_response, 'device', 'macaddr'),
-      functools.partial(log_access, 'device', userinfo, macaddr),
-    ] + [functools.partial(hook.obj.log, 'device', userinfo, macaddr) for hook in log_hooks]
-    _kwargs.setdefault('debug', config.get('DEBUG', False))
+    # actual function is required so that app.route can get a '__name__' attribute
+    _kwargs = setup_endpoint_kwargs('macaddr', (macaddr,), _kwargs)
     return merged_devices_by_macaddr(request, macaddr, device_plugins, **_kwargs)
   app.route('/devices/macaddr/<string:macaddr>', endpoint='devices-macaddr',
       methods=['GET'])(__get_devices_by_macaddr)
