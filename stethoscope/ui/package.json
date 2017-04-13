@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "clean": "rm -r build && rm -r ../static/* ; rm ../login/templates/layout.html ; echo \"Building front end...reload when complete.\" > ../login/templates/layout.html",
+    "clean": "rm -r build ; rm -r ../static/* ; rm ../login/templates/layout.html ; echo \"Building front end...reload when complete.\" > ../login/templates/layout.html",
     "build": "npm run clean ; npm run buildonly",
     "buildonly": "mkdir -p ../login/templates/ && mkdir -p ../static && react-scripts build && cp -r build/static/* ../static/ && cp -r public/static/* ../static/ && cp build/index.html ../login/templates/layout.html",
     "test": "npm run clean && standard --fix && react-scripts test --env=jsdom",
