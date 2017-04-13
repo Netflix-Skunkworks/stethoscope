@@ -42,7 +42,8 @@ class AddMACManufacturer(stethoscope.configurator.Configurator):
 
   config_keys = ()
 
-  def augment(self, devices):
+  def transform(self, devices):
+    """For each device, add manufacturer information (derived from MAC addresses)."""
     for device in devices:
       if device.get('manufacturer') is not None:
         continue

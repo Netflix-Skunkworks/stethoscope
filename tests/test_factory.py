@@ -114,7 +114,7 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
     result_bar = [{'_source': {'event_timestamp': 1}}]
 
     mock_hook = mock.Mock()
-    mock_hook.obj.augment.side_effect = lambda x: x
+    mock_hook.obj.transform.side_effect = lambda x: x
     mock_hook_manager = stevedore.ExtensionManager.make_test_instance([mock_hook])
     mock_extension_manager = stevedore.ExtensionManager.make_test_instance(
         [get_mock_ext(result_foo, 'foo'), get_mock_ext(result_bar, 'bar')])
@@ -181,7 +181,7 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
     result_bar = [{'timestamp': 1}]
 
     mock_hook = mock.Mock()
-    mock_hook.obj.augment.side_effect = lambda x: x
+    mock_hook.obj.transform.side_effect = lambda x: x
     mock_hook_manager = stevedore.ExtensionManager.make_test_instance([mock_hook])
     mock_extension_manager = stevedore.ExtensionManager.make_test_instance(
         [get_mock_ext(result_foo, 'foo'), get_mock_ext(result_bar, 'bar')])

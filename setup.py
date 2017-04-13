@@ -183,11 +183,11 @@ setup_params = dict(
       'restful_feedback = stethoscope.plugins.feedback.restful:RESTfulFeedback [restful_feedback]',
     ],
     'stethoscope.plugins.transform.events': [
-      # hooks to augment events (e.g., with geolocation data)
+      # hooks to transform events (e.g., by adding geolocation data)
       'vpn_labeler = stethoscope.plugins.transform.vpnlabeler:VPNLabeler [vpn_labeler]',
     ],
     'stethoscope.plugins.transform.devices': [
-      # hooks to augment devices (e.g., by adding manufacturer information from MAC addresses)
+      # hooks to transform devices (e.g., by adding manufacturer information from MAC addresses)
       'mac_manufacturer = stethoscope.plugins.transform.macmanufacturer:AddMACManufacturer [mac_manufacturer]',  # noqa
       'vm_filter = stethoscope.plugins.transform.vmfilter:FilterVMs [vm_filter]',
     ],

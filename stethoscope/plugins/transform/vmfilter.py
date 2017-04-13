@@ -37,10 +37,10 @@ def is_virtual_machine(device):
 
 
 class FilterVMs(stethoscope.configurator.Configurator):
-  """Device transform which adds manufacturer information based on MAC addresses."""
+  """Device transform which filters out virtual machines."""
 
   config_keys = ()
 
-  def augment(self, devices):
+  def transform(self, devices):
     """Filter out certain devices (e.g., VMs)."""
     return [device for device in devices if not is_virtual_machine(device)]

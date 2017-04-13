@@ -230,7 +230,7 @@ def _get_devices_by_macaddrs(macaddrs, extensions, debug=False):
 
 def apply_device_transforms(devices, transforms):
   for transform in transforms:
-    devices = transform.obj.augment(devices)
+    devices = transform.obj.transform(devices)
   return devices
 
 
@@ -333,7 +333,7 @@ def register_merged_device_endpoints(app, config, auth, device_plugins, apply_pr
   def setup_endpoint_kwargs(endpoint_type, args, kwargs):
     userinfo = kwargs.pop('userinfo')
 
-    kwargs['callbacks'] = [transform.obj.augment for transform in transforms] + [
+    kwargs['callbacks'] = [transform.obj.transform for transform in transforms] + [
       functools.partial(log_response, 'device', endpoint_type),
       functools.partial(log_access, 'device', userinfo, *args),
     ] + [functools.partial(hook.obj.log, 'device', userinfo, *args) for hook in log_hooks]
@@ -437,7 +437,7 @@ def register_device_api_endpoints(app, config, auth, log_hooks=[]):
     userinfo = _kwargs.pop('userinfo')
 
     # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [transform.obj.augment for transform in transforms] + [
+    _kwargs['callbacks'] = [transform.obj.transform for transform in transforms] + [
       functools.partial(log_response, 'device', 'staged'),
       functools.partial(log_access, 'device', userinfo, email, context='merged'),
     ] + [functools.partial(hook.obj.log, 'device', userinfo, email, context='merged')
@@ -460,7 +460,7 @@ def register_event_api_endpoints(app, config, auth, log_hooks=[]):
     event_plugins.map(_add_route, app, auth, 'events', 'email', callbacks=[sort_events],
         log_hooks=log_hooks)
 
-  # gather hooks to augment events (e.g., with geolocation data)
+  # gather hooks to transform events (e.g., by adding geolocation data)
   hooks = stethoscope.plugins.utils.instantiate_plugins(config,
       namespace='stethoscope.plugins.transform.events')
 
@@ -470,7 +470,7 @@ def register_event_api_endpoints(app, config, auth, log_hooks=[]):
     userinfo = _kwargs.pop('userinfo')
 
     # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [hook.obj.augment for hook in hooks] + [
+    _kwargs['callbacks'] = [hook.obj.transform for hook in hooks] + [
       functools.partial(log_response, 'event', 'merged'),
       functools.partial(log_access, 'event', userinfo, email, context='merged'),
     ] + [functools.partial(hook.obj.log, 'event', userinfo, email, context='merged')
