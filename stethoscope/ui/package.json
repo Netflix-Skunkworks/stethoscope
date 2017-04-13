@@ -11,20 +11,20 @@
     "standard": "^8.6.0"
   },
   "dependencies": {
+    "favico.js": "^0.3.10",
     "fecha": "^2.3.0",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-router": "^3.0.0",
     "timeago.js": "^2.0.4",
-    "titlecase": "^1.1.2",
-    "whatwg-fetch": "^2.0.2"
+    "titlecase": "^1.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
-    "clean": "rm -r ../static/* ; rm ../login/templates/layout.html ; echo \"Building front end...reload when complete.\" > ../login/templates/layout.html",
+    "clean": "rm -r build && rm -r ../static/* ; rm ../login/templates/layout.html ; echo \"Building front end...reload when complete.\" > ../login/templates/layout.html",
     "build": "npm run clean ; npm run buildonly",
     "buildonly": "mkdir -p ../login/templates/ && mkdir -p ../static && react-scripts build && cp -r build/static/* ../static/ && cp -r public/static/* ../static/ && cp build/index.html ../login/templates/layout.html",
-    "test": "standard --fix && react-scripts test --env=jsdom",
+    "test": "npm run clean && standard --fix && react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "analyze": "NODE_ENV=production webpack --json --config node_modules/react-scripts/config/webpack.config.prod.js | webpack-bundle-size-analyzer",
     "lint": "standard --fix src/*.js src/**/*.js"

@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import './App.css'
 import Config from './Config.js'
 import DataStore from './DataStore.js'
+import Favico from 'favico.js'
 
 document.title = Config.appName
 
@@ -12,6 +13,10 @@ class App extends Component {
     super(props)
     this.dismiss = this.dismiss.bind(this)
     this.store = new DataStore()
+    this.favicon = new Favico({
+      animation: 'none',
+      position: 'up'
+    })
     this.state = {
       errors: []
     }
@@ -76,12 +81,22 @@ class App extends Component {
   }
 
   render () {
+    const data = this.data()
     const errors = (
       <div>{this.state.errors.map((e) => <div className='callout-danger panel message text-danger' key={e}>{e}</div>)}</div>
     )
 
     const show = function (name) {
       return Config.pages.includes(name.toLowerCase())
+    }
+
+    if (show('overview') && data.notifications) {
+      const count = data.notifications.length
+      if (count > 0) {
+        this.favicon.badge(count)
+      } else {
+        this.favicon.reset()
+      }
     }
 
     return (
@@ -105,7 +120,7 @@ class App extends Component {
           {errors}
 
           {this.props.children && React.cloneElement(this.props.children, {
-            store: this.data()
+            store: data
           })}
 
         </main>
