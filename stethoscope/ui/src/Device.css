@@ -40,6 +40,15 @@ ul.mac-addresses {
 }
 .device-info dt {
   width: 20%;
+  font-weight: bold;
+  text-align: right;
+  box-sizing: border-box;
+  margin-right: 10px;
+  float: left;
+  clear: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .device-info-toggle {
   float: right;
