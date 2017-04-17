@@ -53,11 +53,12 @@ class BaseAuthTestCase(unittest.TestCase):
     self.assertEqual(len(decoded), 0)
 
 
-class DecoratorsTestCase(BaseAuthTestCase):
+class DecoratorsHeaderTestCase(BaseAuthTestCase):
+  """Tests that the auth-related decorators properly wrap decorated functions."""
 
   def setUp(self):
-    """Mock up a provider with a check_token function that just returns a test value."""
-    super(DecoratorsTestCase, self).setUp()
+    """Mock up a provider that just returns a test value for the decoded header value."""
+    super(DecoratorsHeaderTestCase, self).setUp()
     self.auth.decode_header_value = mock.create_autospec(self.auth.decode_header_value)
     self.auth.decode_header_value.return_value = {'sub': 'user@example.com'}
 
@@ -94,7 +95,50 @@ class DecoratorsTestCase(BaseAuthTestCase):
         wrapped(request, email='baduser@example.com')
 
 
+class DecoratorsCookieTestCase(BaseAuthTestCase):
+  """Tests that the auth-related decorators properly wrap decorated functions."""
+
+  def setUp(self):
+    """Mock up a provider that just returns a test value for the decoded header value."""
+    super(DecoratorsCookieTestCase, self).setUp()
+    self.auth.decode_token = mock.create_autospec(self.auth.decode_token)
+    self.auth.decode_token.return_value = {'sub': 'user@example.com'}
+
+  def test_token_required_injects(self):
+    """Tests that the token value is appended to the wrapped function's arguments."""
+    @self.auth.token_required
+    def wrapped(request, userinfo):
+      return userinfo
+
+    request = mock.create_autospec(twisted.web.http.Request)
+    request.getCookie.return_value = mock.sentinel
+    self.assertEqual(wrapped(request), {'sub': 'user@example.com'})
+
+  def test_match_required_injects(self):
+    """Tests both that the token value is injected and that that value matches the given email."""
+    @self.auth.match_required
+    def wrapped(request, userinfo, email=None):
+      return userinfo
+
+    request = mock.create_autospec(twisted.web.http.Request)
+    request.getCookie.return_value = mock.sentinel
+    self.assertEqual(wrapped(request, email='user@example.com'), {'sub': 'user@example.com'})
+
+  def test_match_required_raises(self):
+    """Tests that an exception is raised if the token's value doesn't match the given email."""
+    @self.auth.match_required
+    def wrapped(request, userinfo, email=None):
+      return userinfo
+
+    request = mock.create_autospec(twisted.web.http.Request)
+    request.getCookie.return_value = mock.sentinel
+    with pytest.raises(werkzeug.exceptions.Forbidden):
+      with mock.patch.object(self.auth, '_debug', False):  # ensure check actually happens
+        wrapped(request, email='baduser@example.com')
+
+
 class TokenHeadersTestCase(BaseAuthTestCase):
+  """Tests for error conditions when decoding the value for the Authorization header."""
 
   def check_raises(self, header_value, exc_class):
     with pytest.raises(exc_class) as excinfo:
