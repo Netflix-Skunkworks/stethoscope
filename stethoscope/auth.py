@@ -70,7 +70,7 @@ class KleinAuthProvider(AuthProvider):
   """Provides decorators for use with Klein endpoints."""
 
   def check_token(self, request):
-    token = request.getCookie('token')
+    token = request.getCookie(b'token')
     if token is not None:
       # logger.debug("using cookie token...")
       userinfo = self.decode_token(token)
