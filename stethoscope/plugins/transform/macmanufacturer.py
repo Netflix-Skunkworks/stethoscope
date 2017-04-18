@@ -12,16 +12,7 @@ logger = logbook.Logger(__name__)
 
 
 def get_org(macaddr):
-  """Return the IEEE-registered organization for the given MAC address.
-
-  >>> get_org('00-1B-77-49-54-FD')
-  'Intel Corporate'
-  >>> get_org('00-50-C2-00-0F-01')
-  'T.L.S. Corp.'
-  >>> get_org('ac:cf:85:33:3a:70') is None
-  True
-
-  """
+  """Return the IEEE-registered organization for the given MAC address (or `None` if none)."""
 
   mac = netaddr.EUI(macaddr)
 
