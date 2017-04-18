@@ -53,11 +53,12 @@ class BaseAuthTestCase(unittest.TestCase):
     self.assertEqual(len(decoded), 0)
 
 
-class DecoratorsTestCase(BaseAuthTestCase):
+class DecoratorsHeaderTestCase(BaseAuthTestCase):
+  """Tests that the auth-related decorators properly wrap decorated functions."""
 
   def setUp(self):
-    """Mock up a provider with a check_token function that just returns a test value."""
-    super(DecoratorsTestCase, self).setUp()
+    """Mock up a provider that just returns a test value for the decoded header value."""
+    super(DecoratorsHeaderTestCase, self).setUp()
     self.auth.decode_header_value = mock.create_autospec(self.auth.decode_header_value)
     self.auth.decode_header_value.return_value = {'sub': 'user@example.com'}
 
@@ -94,7 +95,50 @@ class DecoratorsTestCase(BaseAuthTestCase):
         wrapped(request, email='baduser@example.com')
 
 
+class DecoratorsCookieTestCase(BaseAuthTestCase):
+  """Tests that the auth-related decorators properly wrap decorated functions."""
+
+  def setUp(self):
+    """Mock up a provider that just returns a test value for the decoded header value."""
+    super(DecoratorsCookieTestCase, self).setUp()
+    self.auth.decode_token = mock.create_autospec(self.auth.decode_token)
+    self.auth.decode_token.return_value = {'sub': 'user@example.com'}
+
+  def test_token_required_injects(self):
+    """Tests that the token value is appended to the wrapped function's arguments."""
+    @self.auth.token_required
+    def wrapped(request, userinfo):
+      return userinfo
+
+    request = mock.create_autospec(twisted.web.http.Request)
+    request.getCookie.return_value = mock.sentinel
+    self.assertEqual(wrapped(request), {'sub': 'user@example.com'})
+
+  def test_match_required_injects(self):
+    """Tests both that the token value is injected and that that value matches the given email."""
+    @self.auth.match_required
+    def wrapped(request, userinfo, email=None):
+      return userinfo
+
+    request = mock.create_autospec(twisted.web.http.Request)
+    request.getCookie.return_value = mock.sentinel
+    self.assertEqual(wrapped(request, email='user@example.com'), {'sub': 'user@example.com'})
+
+  def test_match_required_raises(self):
+    """Tests that an exception is raised if the token's value doesn't match the given email."""
+    @self.auth.match_required
+    def wrapped(request, userinfo, email=None):
+      return userinfo
+
+    request = mock.create_autospec(twisted.web.http.Request)
+    request.getCookie.return_value = mock.sentinel
+    with pytest.raises(werkzeug.exceptions.Forbidden):
+      with mock.patch.object(self.auth, '_debug', False):  # ensure check actually happens
+        wrapped(request, email='baduser@example.com')
+
+
 class TokenHeadersTestCase(BaseAuthTestCase):
+  """Tests for error conditions when decoding the value for the Authorization header."""
 
   def check_raises(self, header_value, exc_class):
     with pytest.raises(exc_class) as excinfo:
@@ -170,35 +214,71 @@ class AppTestCase(BaseAuthTestCase):
 
   def setUp(self):
     super(AppTestCase, self).setUp()
+
+    self.app = klein.Klein()
+    self.kr = KleinResource(self.app)
+
+    @self.app.route("/")
+    @self.auth.token_required
+    def token_required_endpoint(request, userinfo):
+      return userinfo
+    self.token_required_endpoint = token_required_endpoint
+
+    @self.app.route("/api/<string:email>")
+    @self.auth.match_required
+    def match_required_endpoint(request, userinfo, email):
+      logger.debug("in endpoint: request={!r}, userinfo={!r}, email={!r}", request, userinfo, email)
+      return json.dumps(userinfo)
+    self.match_required_endpoint = match_required_endpoint
+
+
+class AppHeaderTestCase(AppTestCase):
+
+  def setUp(self):
+    super(AppHeaderTestCase, self).setUp()
     self.auth.decode_header_value = mock.create_autospec(self.auth.decode_header_value)
     self.auth.decode_header_value.return_value = self.userinfo = {'sub': 'user@example.com'}
 
   def test_route_token_required(self):
-    app = klein.Klein()
-
-    @app.route("/")
-    @self.auth.token_required
-    def endpoint(request, userinfo):
-      return userinfo
-
-    mock_request = mock.create_autospec(twisted.web.http.Request)
-    mock_request.getCookie.return_value = None
-    returned = app.execute_endpoint("endpoint", mock_request)
+    request = requestMock(b"/", headers={b'Authorization': [str(mock.sentinel)]})
+    returned = self.app.execute_endpoint("token_required_endpoint", request)
     self.assertEqual(returned, self.userinfo)
 
-  def test_route_match_required(self):
-    app = klein.Klein()
-    kr = KleinResource(app)
+    self.auth.decode_header_value.assert_called_once_with(str(mock.sentinel))
 
-    @app.route("/api/<string:email>", endpoint="endpoint")
-    @self.auth.match_required
-    def endpoint(request, userinfo, email):
-      logger.debug("in endpoint: request={!r}, userinfo={!r}, email={!r}", request, userinfo, email)
-      return json.dumps(userinfo)
-
-    request = requestMock(b"/api/user@example.com")
-
-    deferred = _render(kr, request)
+  def test_route_match_required_with_header(self):
+    request = requestMock(b"/api/user@example.com",
+        headers={b'Authorization': [str(mock.sentinel)]})
+    deferred = _render(self.kr, request)
 
     self.assertEqual(self.successResultOf(deferred), None)
     self.assertEqual(request.getWrittenData(), json.dumps(self.userinfo).encode('ascii'))
+
+    self.auth.decode_header_value.assert_called_once_with(str(mock.sentinel))
+
+
+class AppCookieTestCase(AppTestCase):
+
+  def setUp(self):
+    super(AppCookieTestCase, self).setUp()
+    self.auth.decode_token = mock.create_autospec(self.auth.decode_token)
+    self.auth.decode_token.return_value = self.userinfo = {'sub': 'user@example.com'}
+
+  def test_route_token_required_with_cookie(self):
+    request = requestMock(b"/")
+    request.received_cookies = {b'token': mock.sentinel}
+    returned = self.app.execute_endpoint("token_required_endpoint", request)
+
+    self.assertEqual(returned, self.userinfo)
+
+    self.auth.decode_token.assert_called_once_with(mock.sentinel)
+
+  def test_route_match_required_with_cookie(self):
+    request = requestMock(b"/api/user@example.com")
+    request.received_cookies = {b'token': mock.sentinel}
+    deferred = _render(self.kr, request)
+
+    self.assertEqual(self.successResultOf(deferred), None)
+    self.assertEqual(request.getWrittenData(), json.dumps(self.userinfo).encode('ascii'))
+
+    self.auth.decode_token.assert_called_once_with(mock.sentinel)
