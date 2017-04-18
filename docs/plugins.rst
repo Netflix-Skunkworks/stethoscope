@@ -360,16 +360,39 @@ One type of plugins takes as input the merged stream of events from the event-pr
 applies a transformation to each event if desired. For example, an event-transform plugin might
 inject geo-data into each event after looking up the IP for the event with a geo-data service.
 
-VPN Filter
-^^^^^^^^^^
+VPN Labeler
+^^^^^^^^^^^
 
 We provide an example event-transform plugin which tags an event as coming from an IP associated
-with a given IP range, e.g., that of a corporate VPN. The ``vpnfilter`` plugin requires the
+with a given IP range, e.g., that of a corporate VPN. The ``vpn_labeler`` plugin requires the
 following configuration variable:
 
 -  ``VPN_CIDRS``: An iterable of CIDRs, e.g., ``["192.0.2.0/24"]`` (The value of this variable is
    passed directly to ``netaddr.IPSet``, so any value accepted by `that method
    <https://netaddr.readthedocs.io/en/latest/tutorial_03.html>`__ will work.)
+
+
+Device Transforms
+-----------------
+
+Similarly to event transforms, device transforms take as input a list of devices and modify that
+list and/or its elements in some way. For instance, one might want to filter out virtual machines
+from one's devices (as below).
+
+VM Filter
+^^^^^^^^^
+
+This transform filters out virtual machines (VMs) by searching certain fields in each device's
+data for strings matching common patterns for VMs. The `vm_filter` plugin has no configuration
+variables.
+
+Manufacturer from MAC Address
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This transform attempts to determine a device's manufacturer from its MAC address(es) and injects
+the manufacturer's name into the device data. The `mac_manufacturer` plugin has no configuration
+variables.
+
 
 Batch Plugins
 -------------

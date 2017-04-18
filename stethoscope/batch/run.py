@@ -76,6 +76,15 @@ def work_generator(args, config, emails, results):
   practices = stethoscope.plugins.utils.instantiate_practices(config,
       namespace='stethoscope.plugins.practices.devices')
 
+  def apply_practices(devices):
+    for device in devices:
+      practices.map_method('inject_status', device)
+    return devices
+
+  # transforms to apply to device lists
+  transforms = stethoscope.plugins.utils.instantiate_plugins(config,
+      namespace='stethoscope.plugins.transform.devices')
+
   device_plugins = stethoscope.plugins.utils.instantiate_plugins(config,
       namespace='stethoscope.plugins.sources.devices')
   predevice_plugins = stethoscope.plugins.utils.instantiate_plugins(config,
@@ -85,15 +94,10 @@ def work_generator(args, config, emails, results):
       namespace='stethoscope.batch.plugins.incremental')
   incremental_hooks = [wrap_hook(hook.obj.post) for hook in hook_iter]
 
-  def apply_practices(devices):
-    for device in devices:
-      practices.map_method('inject_status', device)
-    return devices
-
   for email in emails:
     deferred = stethoscope.api.factory.get_devices_by_stages(email, predevice_plugins,
-        device_plugins)
-    deferred.addCallback(stethoscope.api.factory.filter_devices)
+        device_plugins, transforms)
+    deferred.addCallback(stethoscope.api.factory.apply_device_transforms, transforms)
     deferred.addCallback(apply_practices)
     deferred.addCallback(stethoscope.api.devices.merge_devices)
 

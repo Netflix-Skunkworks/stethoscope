@@ -114,7 +114,7 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
     result_bar = [{'_source': {'event_timestamp': 1}}]
 
     mock_hook = mock.Mock()
-    mock_hook.obj.augment.side_effect = lambda x: x
+    mock_hook.obj.transform.side_effect = lambda x: x
     mock_hook_manager = stevedore.ExtensionManager.make_test_instance([mock_hook])
     mock_extension_manager = stevedore.ExtensionManager.make_test_instance(
         [get_mock_ext(result_foo, 'foo'), get_mock_ext(result_bar, 'bar')])
@@ -181,7 +181,7 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
     result_bar = [{'timestamp': 1}]
 
     mock_hook = mock.Mock()
-    mock_hook.obj.augment.side_effect = lambda x: x
+    mock_hook.obj.transform.side_effect = lambda x: x
     mock_hook_manager = stevedore.ExtensionManager.make_test_instance([mock_hook])
     mock_extension_manager = stevedore.ExtensionManager.make_test_instance(
         [get_mock_ext(result_foo, 'foo'), get_mock_ext(result_bar, 'bar')])
@@ -250,8 +250,7 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
 
     # noop = mock.Mock(side_effect=lambda x: x)
     # with mock.patch('stethoscope.api.devices.merge_devices', noop):
-    #   with mock.patch('stethoscope.api.factory.ifilter_devices', noop):
-    #     self.check_result(app, b'/devices/email/user@example.com', [result])
-    #     self.check_result(app, b'/devices/serial/0xDECAFBAD', [result])
-    #     self.check_result(app, b'/devices/staged/user@example.com', [result, result])
-    #     self.check_result(app, b'/devices/merged/user@example.com', [result, result])
+    #   self.check_result(app, b'/devices/email/user@example.com', [result])
+    #   self.check_result(app, b'/devices/serial/0xDECAFBAD', [result])
+    #   self.check_result(app, b'/devices/staged/user@example.com', [result, result])
+    #   self.check_result(app, b'/devices/merged/user@example.com', [result, result])

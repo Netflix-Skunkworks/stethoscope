@@ -48,7 +48,9 @@ extras_require = {
     'requests[security]',
     'requests-oauthlib',
   ],
-  'vpnfilter': ['netaddr'],
+  'vpn_labeler': ['netaddr'],
+  'vm_filter': [],
+  'mac_manufacturer': ['netaddr'],
   'atlas': ['requests[security]'],
   'batch_es': ['elasticsearch>=2.0.0,<3.0.0'],
   'batch_restful_summary': ['requests'],
@@ -181,8 +183,13 @@ setup_params = dict(
       'restful_feedback = stethoscope.plugins.feedback.restful:RESTfulFeedback [restful_feedback]',
     ],
     'stethoscope.plugins.transform.events': [
-      # hooks to augment events (e.g., with geolocation data)
-      'vpnfilter = stethoscope.plugins.transform.vpnfilter:VPNFilter [vpnfilter]',
+      # hooks to transform events (e.g., by adding geolocation data)
+      'vpn_labeler = stethoscope.plugins.transform.vpnlabeler:VPNLabeler [vpn_labeler]',
+    ],
+    'stethoscope.plugins.transform.devices': [
+      # hooks to transform devices (e.g., by adding manufacturer information from MAC addresses)
+      'mac_manufacturer = stethoscope.plugins.transform.macmanufacturer:AddMACManufacturer [mac_manufacturer]',  # noqa
+      'vm_filter = stethoscope.plugins.transform.vmfilter:FilterVMs [vm_filter]',
     ],
     'stethoscope.plugins.logging.request': [
       # hooks to log api requests (e.g., accesses) externally

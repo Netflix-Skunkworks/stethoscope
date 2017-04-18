@@ -58,35 +58,6 @@ def merge_events(events):
   return sort_events(chain.from_iterable(_events for (status, _events) in events if status))
 
 
-def is_virtual_machine(device):
-  """Return `True` if the device information represents a virtual machine, `False` otherwise.
-
-  >>> is_virtual_machine({'model': "Virtual Machine"})
-  True
-  >>> is_virtual_machine({'model': "Virtual Machine"})
-  True
-  >>> is_virtual_machine({'serial': "VMware-DE CA FB AD"})
-  True
-  >>> is_virtual_machine({'serial': "Parallels-DE CA FB AD"})
-  True
-
-  """
-  model = device.get('model')
-  if model is not None and re.search('(Virtual Machine|VMware|amazon)', model) is not None:
-    return True
-
-  serial = device.get('serial')
-  if serial is not None and re.search('(Parallels|VMware)', serial) is not None:
-    return True
-
-  return False
-
-
-def filter_devices(devices):
-  """Filter out certain devices (e.g., VMs)."""
-  return [device for device in devices if not is_virtual_machine(device)]
-
-
 def serialized_endpoint(*_callbacks):
   """Decorator which wraps an endpoint by applying callbacks to the results then serializing to JSON.
 
@@ -257,8 +228,14 @@ def _get_devices_by_macaddrs(macaddrs, extensions, debug=False):
   return deferred_list
 
 
+def apply_device_transforms(devices, transforms):
+  for transform in transforms:
+    devices = transform.obj.transform(devices)
+  return devices
+
+
 @defer.inlineCallbacks
-def get_devices_by_stages(email, pre_extensions, extensions, debug=False):
+def get_devices_by_stages(email, pre_extensions, extensions, transforms, debug=False):
   """Return all devices found via two-stage lookup process.
 
   First, lookup the user in `pre_extensions` by email address. Retrieve all relevant devices and
@@ -268,7 +245,8 @@ def get_devices_by_stages(email, pre_extensions, extensions, debug=False):
   """
   email_devices_deferred = get_devices_by_email(email, extensions, debug=debug)
   pre_devices = yield get_devices_by_email(email, pre_extensions, debug=debug)
-  pre_devices = filter_devices(pre_devices)
+  pre_devices = apply_device_transforms(pre_devices, transforms)
+
   logger.debug("[{!s}] retrieved {:d} pre-devices", email, len(pre_devices))
 
   serials = set()
@@ -349,8 +327,19 @@ def _add_route(ext, app, auth, name, argname, **kwargs):
 
 
 def register_merged_device_endpoints(app, config, auth, device_plugins, apply_practices,
-    log_hooks=[]):
+    transforms, log_hooks=[]):
   """Registers endpoints which provide merged devices without the ownership attribution stage."""
+
+  def setup_endpoint_kwargs(endpoint_type, args, kwargs):
+    userinfo = kwargs.pop('userinfo')
+
+    kwargs['callbacks'] = [transform.obj.transform for transform in transforms] + [
+      functools.partial(log_response, 'device', endpoint_type),
+      functools.partial(log_access, 'device', userinfo, *args),
+    ] + [functools.partial(hook.obj.log, 'device', userinfo, *args) for hook in log_hooks]
+
+    kwargs.setdefault('debug', config.get('DEBUG', False))
+    return kwargs
 
   @serialized_endpoint(apply_practices, stethoscope.api.devices.merge_devices)
   def merged_devices_by_email(*args, **kwargs):
@@ -360,15 +349,8 @@ def register_merged_device_endpoints(app, config, auth, device_plugins, apply_pr
   @auth.match_required
   @stethoscope.validation.check_valid_email
   def __get_devices_by_email(request, email, **_kwargs):
-    userinfo = _kwargs.pop('userinfo')
-
-    # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [
-      filter_devices,
-      functools.partial(log_response, 'device', 'email'),
-      functools.partial(log_access, 'device', userinfo, email),
-    ] + [functools.partial(hook.obj.log, 'device', userinfo, email) for hook in log_hooks]
-    _kwargs.setdefault('debug', config.get('DEBUG', False))
+    # actual function is required so that app.route can get a '__name__' attribute
+    _kwargs = setup_endpoint_kwargs('email', (email,), _kwargs)
     return merged_devices_by_email(request, email, device_plugins, **_kwargs)
   app.route('/devices/email/<string:email>', endpoint='devices-email',
       methods=['GET'])(__get_devices_by_email)
@@ -381,15 +363,8 @@ def register_merged_device_endpoints(app, config, auth, device_plugins, apply_pr
   @auth.token_required
   @stethoscope.validation.check_valid_serial
   def __get_devices_by_serial(request, serial, **_kwargs):
-    userinfo = _kwargs.pop('userinfo')
-
-    # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [
-      filter_devices,
-      functools.partial(log_response, 'device', 'serial'),
-      functools.partial(log_access, 'device', userinfo, serial),
-    ] + [functools.partial(hook.obj.log, 'device', userinfo, serial) for hook in log_hooks]
-    _kwargs.setdefault('debug', config.get('DEBUG', False))
+    # actual function is required so that app.route can get a '__name__' attribute
+    _kwargs = setup_endpoint_kwargs('serial', (serial,), _kwargs)
     return merged_devices_by_serial(request, serial, device_plugins, **_kwargs)
   app.route('/devices/serial/<string:serial>', endpoint='devices-serial',
       methods=['GET'])(__get_devices_by_serial)
@@ -402,15 +377,8 @@ def register_merged_device_endpoints(app, config, auth, device_plugins, apply_pr
   @auth.token_required
   @stethoscope.validation.check_valid_macaddr
   def __get_devices_by_macaddr(request, macaddr, **_kwargs):
-    userinfo = _kwargs.pop('userinfo')
-
-    # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [
-      filter_devices,
-      functools.partial(log_response, 'device', 'macaddr'),
-      functools.partial(log_access, 'device', userinfo, macaddr),
-    ] + [functools.partial(hook.obj.log, 'device', userinfo, macaddr) for hook in log_hooks]
-    _kwargs.setdefault('debug', config.get('DEBUG', False))
+    # actual function is required so that app.route can get a '__name__' attribute
+    _kwargs = setup_endpoint_kwargs('macaddr', (macaddr,), _kwargs)
     return merged_devices_by_macaddr(request, macaddr, device_plugins, **_kwargs)
   app.route('/devices/macaddr/<string:macaddr>', endpoint='devices-macaddr',
       methods=['GET'])(__get_devices_by_macaddr)
@@ -425,6 +393,10 @@ def register_device_api_endpoints(app, config, auth, log_hooks=[]):
     for device in devices:
       practices.map_method('inject_status', device)
     return devices
+
+  # transforms to apply to device lists
+  transforms = stethoscope.plugins.utils.instantiate_plugins(config,
+      namespace='stethoscope.plugins.transform.devices')
 
   # initial-stage plugins provide ownership attribution
   predevice_plugins = stethoscope.plugins.utils.instantiate_plugins(config,
@@ -450,7 +422,7 @@ def register_device_api_endpoints(app, config, auth, log_hooks=[]):
     # 'merged' endpoints which merge device data across all second-stage device plugins
     # (without the initial ownership-attribution stage) for lookup by mac, email, serial
     register_merged_device_endpoints(app, config, auth, device_plugins, apply_practices,
-        log_hooks=log_hooks)
+        transforms=transforms, log_hooks=log_hooks)
 
   # primary device api endpoint ('merged' or 'staged') which merges device data across all
   # device plugins (both initial and second-stage)
@@ -465,15 +437,15 @@ def register_device_api_endpoints(app, config, auth, log_hooks=[]):
     userinfo = _kwargs.pop('userinfo')
 
     # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [
-      filter_devices,
+    _kwargs['callbacks'] = [transform.obj.transform for transform in transforms] + [
       functools.partial(log_response, 'device', 'staged'),
       functools.partial(log_access, 'device', userinfo, email, context='merged'),
     ] + [functools.partial(hook.obj.log, 'device', userinfo, email, context='merged')
         for hook in log_hooks]
     logger.debug("callbacks:\n{!s}", pprint.pformat(_kwargs['callbacks']))
     _kwargs.setdefault('debug', config.get('DEBUG', False))
-    return merged_devices_by_stages(request, email, predevice_plugins, device_plugins, **_kwargs)
+    return merged_devices_by_stages(request, email, predevice_plugins, device_plugins, transforms,
+        **_kwargs)
   app.route('/devices/staged/<string:email>', endpoint='devices-staged',
       methods=['GET'])(__get_devices_by_stages)
   app.route('/devices/merged/<string:email>', endpoint='devices-merged',
@@ -488,7 +460,7 @@ def register_event_api_endpoints(app, config, auth, log_hooks=[]):
     event_plugins.map(_add_route, app, auth, 'events', 'email', callbacks=[sort_events],
         log_hooks=log_hooks)
 
-  # gather hooks to augment events (e.g., with geolocation data)
+  # gather hooks to transform events (e.g., by adding geolocation data)
   hooks = stethoscope.plugins.utils.instantiate_plugins(config,
       namespace='stethoscope.plugins.transform.events')
 
@@ -498,7 +470,7 @@ def register_event_api_endpoints(app, config, auth, log_hooks=[]):
     userinfo = _kwargs.pop('userinfo')
 
     # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [hook.obj.augment for hook in hooks] + [
+    _kwargs['callbacks'] = [hook.obj.transform for hook in hooks] + [
       functools.partial(log_response, 'event', 'merged'),
       functools.partial(log_access, 'event', userinfo, email, context='merged'),
     ] + [functools.partial(hook.obj.log, 'event', userinfo, email, context='merged')
