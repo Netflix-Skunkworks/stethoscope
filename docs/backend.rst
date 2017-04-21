@@ -12,8 +12,13 @@ The Python-based backend has a few basic prerequisites:
 
 -  A compatible operating system (we develop on OS X and deploy on Ubuntu)
 -  CPython 2.7+ or CPython 3.3+ (we develop and deploy with 2.7 but test against 3.3+)
--  `FreeTDS`_ (if using the LANDESK plugin)
--  ``libffi`` (Install with `Homebrew`_ on Mac with ``brew install libffi``)
+-  `FreeTDS`_ (if using the LANDESK plugin). Installation:
+    - With `Homebrew`_ on Mac: ``brew install freetds``
+    - On Debian-based systems: ``sudo apt-get install freetds-dev``
+-  Development headers for ``libffi``. Installation:
+    - With `Homebrew`_ on Mac: ``brew install libffi``
+    - On Debian-based systems: ``sudo apt-get install libffi-dev``
+
 
 Installation
 ^^^^^^^^^^^^
@@ -25,15 +30,6 @@ can install the backend and the bundled plugins easily using our :file:`Makefile
 
     make develop
 
-LANDESK Plugin
-''''''''''''''
-
-The LANDESK plugin has `pymssql`_ as a dependency, which in turn requires `FreeTDS`_. On OS X,
-`FreeTDS`_ can be installed via `Homebrew`_:
-
-.. code:: sh
-
-    brew install freetds
 
 Troubleshooting
 '''''''''''''''
