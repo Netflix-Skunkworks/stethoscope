@@ -89,12 +89,16 @@ def test_process_basic_information_lgml_pfry(device):
   for key, value in six.iteritems({
     'serial': 'DECAFBAD00',
     'udid': 'DECAFBAD-DECA-FBAD-DECA-FBAD00000000',
-    'mac_addresses': [
-      'DE:CA:FB:AD:00:01',
-      'DE:CA:FB:AD:00:00',
-    ]
   }):
     assert device['identifiers'][key] == value
+
+  mac_addresses = [
+    'DE:CA:FB:AD:00:01',
+    'DE:CA:FB:AD:00:00',
+  ]
+  assert set(device['identifiers']['mac_addresses']) == set(mac_addresses)
+
+  assert device['source'] == 'jamf'
 
 
 @pytest.mark.parametrize(['device'], [('lgmd-pfry',)], indirect=['device'])
@@ -110,11 +114,13 @@ def test_process_basic_information_lgmd_pfry(device):
   for key, value in six.iteritems({
     'serial': 'DECAFBAD01',
     'udid': 'DECAFBAD-DECA-FBAD-DECA-FBAD00000001',
-    'mac_addresses': [
-      'DE:CA:FB:AD:00:02',
-      'DE:CA:FB:AD:00:03',
-    ]
   }):
     assert device['identifiers'][key] == value
+
+  mac_addresses = [
+    'DE:CA:FB:AD:00:02',
+    'DE:CA:FB:AD:00:03',
+  ]
+  assert set(device['identifiers']['mac_addresses']) == set(mac_addresses)
 
   assert device['source'] == 'jamf'
