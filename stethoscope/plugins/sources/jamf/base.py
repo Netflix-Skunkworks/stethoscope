@@ -147,6 +147,7 @@ class JAMFDataSourceBase(stethoscope.configurator.Configurator):
 
     for key, attr, ok_value in [
       ('screenlock', 'Screen Saver Lock Enabled', 'Enabled'),
+      ('remotelogin', 'Remote Login', 'Off'),
     ]:
       practice = {} if attr not in attributes else {'value': attributes[attr] == ok_value}
       data['practices'][key] = inject_last_updated(practice, last_updated)

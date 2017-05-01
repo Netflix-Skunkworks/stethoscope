@@ -215,6 +215,19 @@ The ``Firewall Status`` extension attribute can be gathered using the following 
 
   Download :download:`here <./jamf_extension_attributes/firewall_status.sh>`.
 
+Remote Login
+++++++++
+
+The ``Remote Login`` extension attribute can be gathered using the following script:
+
+.. literalinclude:: jamf_extension_attributes/remote_login.sh
+  :language: bash
+  :caption:
+
+.. only:: builder_html
+
+  Download :download:`here <./jamf_extension_attributes/remote_login.sh>`.
+
 
 Screenlock
 ++++++++++

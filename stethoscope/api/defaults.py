@@ -113,6 +113,19 @@ PRACTICES = {
     'NA_PLATFORMS': MOBILE_PLATFORMS,
   },
 
+  'remotelogin': {
+    'KEY': 'remotelogin',
+    'DISPLAY_TITLE': 'Remote Login',
+    'DESCRIPTION': (
+      "The 'Remote Login' setting on your Mac controls whether users can login remotely "
+      "to the system using SSH. If you don't know what this is or why you would want it, "
+      "you should disable 'Remote Login'."
+    ),
+    'LINK': '#',
+    'PLATFORM_REQUIRED': True,
+    'NA_PLATFORMS': MOBILE_PLATFORMS + ["Windows"],
+  },
+
   'screenlock': {
     'KEY': 'screenlock',
     'DISPLAY_TITLE': 'Screen Lock',

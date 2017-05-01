@@ -172,6 +172,7 @@ setup_params = dict(
       'autoupdate = stethoscope.plugins.practices:KeyExistencePractice',
       'encryption = stethoscope.plugins.practices:KeyExistencePractice',
       'firewall = stethoscope.plugins.practices:KeyExistencePractice',
+      'remotelogin = stethoscope.plugins.practices:KeyExistencePractice',
       'jailed = stethoscope.plugins.practices:KeyExistencePractice',
       'screenlock = stethoscope.plugins.practices:KeyExistencePractice',
       'uptodate = stethoscope.plugins.practices:UptodatePractice',
