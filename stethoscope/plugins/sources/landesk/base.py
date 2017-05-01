@@ -2,7 +2,9 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+import collections
 import pprint
+import re
 
 import _mssql
 import arrow
@@ -69,6 +71,76 @@ def row_to_dict(row):
   return retval
 
 
+# regular expressions for the _reformat_screenlock_reason function below
+SCREENLOCK_PATTERNS_RAW = {
+  'enabled': ur"""The screen saver is not enabled for user (.*)""",
+  'timeout': ur"""The screen saver time out value for user (.*) is longer than ([0-9]+) minutes""",
+  'password': ur"""The screen saver password protection setting is not enabled for user (.*)""",
+}
+
+SCREENLOCK_PATTERNS = {name: re.compile(pattern, re.UNICODE) for name, pattern in
+    six.iteritems(SCREENLOCK_PATTERNS_RAW)}
+
+
+def _reformat_screenlock_reason(reason_string):
+  """Reformat the 'reason' string for screenlock (`ST000202`, which is missing line breaks/spaces).
+
+  >>> print(_reformat_screenlock_reason('''The screen saver is not enabled for user foo.'''))
+    • The screen saver is not enabled for user: foo.
+
+  >>> print(_reformat_screenlock_reason(
+  ... '''The screen saver is not enabled for user foo.The screen saver password '''
+  ... '''protection setting is not enabled for user foo.The screen saver time '''
+  ... '''out value for user foo is longer than 10 minutes.The screen saver is '''
+  ... '''not enabled for user bar.The screen saver password protection setting is '''
+  ... '''not enabled for user bar.The screen saver time out value for user bar is '''
+  ... '''longer than 10 minutes.The screen saver is not enabled for user baz.The '''
+  ... '''screen saver time out value for user baz is longer than 10 minutes.The '''
+  ... '''screen saver is not enabled for user qux.The screen saver password '''
+  ... '''protection setting is not enabled for user qux.The screen saver time '''
+  ... '''out value for user qux is longer than 10 minutes.'''
+  ... ))
+    • The screen saver is not enabled for users: bar, baz, foo, qux.
+    • The screen saver timeout value is longer than 10 minutes for users: bar, baz, foo, qux.
+    • The screen saver password is not enabled for users: bar, foo, qux.
+
+  """
+
+  sentences = reason_string.split('.')
+
+  violators = collections.defaultdict(set)
+  for sentence in sentences:
+    for name, pattern in six.iteritems(SCREENLOCK_PATTERNS):
+      match = pattern.match(sentence)
+      if match is not None:
+        violators[name].add(match.group(1))
+
+  def __format_user_list(users):
+    """Helper that returns a formatted string similar to: 'for users: foo, bar'."""
+    return "for user{:s}: {:s}".format("s" if len(users) > 1 else "", ", ".join(sorted(users)))
+
+  reasons = list()
+  if len(violators['enabled']) > 0:
+    reasons.append("The screen saver is not enabled {:s}."
+                   "".format(__format_user_list(violators['enabled'])))
+
+  if len(violators['timeout']) > 0:
+    # find the timeout's value (assume it's the same for every user)
+    try:
+      timeout_value = int(SCREENLOCK_PATTERNS['timeout'].search(reason_string).group(2))
+    except IndexError, ValueError:
+      raise ValueError("Failed to find screensaver timeout timeout value.")
+
+    reasons.append("The screen saver timeout value is longer than {:d} minutes {:s}."
+                   "".format(timeout_value, __format_user_list(violators['timeout'])))
+
+  if len(violators['password']) > 0:
+    reasons.append("The screen saver password is not enabled {!s}."
+                   "".format(__format_user_list(violators['password'])))
+
+  return "\n".join("  • " + reason for reason in reasons)
+
+
 class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
 
   config_keys = (
@@ -123,7 +195,8 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
     for vuln in raw['vulns']:
       if vuln['Vul_ID'] == 'ST000202':
         data['value'] = False
-        data['details'] = vuln['Reason']
+        data['details'] = _reformat_screenlock_reason(vuln['Reason'])
+        logger.debug("screenlock reason:\n{!r}", data['details'])
 
     if raw.get('sw_last_scan_date') is not None:
       data['last_updated'] = arrow.get(raw['sw_last_scan_date'], 'US/Pacific')
