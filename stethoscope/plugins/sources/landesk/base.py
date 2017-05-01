@@ -73,9 +73,9 @@ def row_to_dict(row):
 
 # regular expressions for the _reformat_screenlock_reason function below
 SCREENLOCK_PATTERNS_RAW = {
-  'enabled': ur"""The screen saver is not enabled for user (.*)""",
-  'timeout': ur"""The screen saver time out value for user (.*) is longer than ([0-9]+) minutes""",
-  'password': ur"""The screen saver password protection setting is not enabled for user (.*)""",
+  'enabled': r"""The screen saver is not enabled for user (.*)""",
+  'timeout': r"""The screen saver time out value for user (.*) is longer than ([0-9]+) minutes""",
+  'password': r"""The screen saver password protection setting is not enabled for user (.*)""",
 }
 
 SCREENLOCK_PATTERNS = {name: re.compile(pattern, re.UNICODE) for name, pattern in
@@ -128,7 +128,7 @@ def _reformat_screenlock_reason(reason_string):
     # find the timeout's value (assume it's the same for every user)
     try:
       timeout_value = int(SCREENLOCK_PATTERNS['timeout'].search(reason_string).group(2))
-    except IndexError, ValueError:
+    except (IndexError, ValueError):
       raise ValueError("Failed to find screensaver timeout timeout value.")
 
     reasons.append("The screen saver timeout value is longer than {:d} minutes {:s}."
