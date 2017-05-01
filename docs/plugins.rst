@@ -243,6 +243,22 @@ The ``Screen Saver Lock Enabled`` extension attribute can be gathered using the 
   Download :download:`here <./jamf_extension_attributes/screen_saver_lock.sh>`.
 
 
+Wireless MAC Address
+++++++++++++++++++++
+
+By default, JAMF only stores two MAC addresses for each device. However, some systems (e.g., Mac
+Pros) can have additional MAC addresses. Since we use the wireless MAC address to tie users to
+devices, we collect it with an additional extension attribute (``Wireless Mac Address``):
+
+.. literalinclude:: jamf_extension_attributes/wireless_mac_address.sh
+  :language: bash
+  :caption:
+
+.. only:: builder_html
+
+  Download :download:`here <./jamf_extension_attributes/wireless_mac_address.sh>`.
+
+
 LANDESK
 ^^^^^^^
 

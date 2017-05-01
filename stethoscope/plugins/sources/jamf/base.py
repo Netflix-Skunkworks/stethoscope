@@ -153,17 +153,17 @@ class JAMFDataSourceBase(stethoscope.configurator.Configurator):
       data['practices'][key] = inject_last_updated(practice, last_updated)
 
     # IDENTIFIERS
-    mac_addresses = list()
-    if computer['general'].get('mac_address', '') != '':
-      mac_addresses.append(
-          stethoscope.validation.canonicalize_macaddr(computer['general']['mac_address']))
-    if computer['general'].get('alt_mac_address', '') != '':
-      mac_addresses.append(
-          stethoscope.validation.canonicalize_macaddr(computer['general']['alt_mac_address']))
+    possible_macs = [
+      computer['general'].get('mac_address', ''),
+      computer['general'].get('alt_mac_address', ''),
+      attributes.get('Wireless Mac Address', ''),
+    ]
+    mac_addresses = set(stethoscope.validation.canonicalize_macaddr(addr)
+        for addr in possible_macs if addr != '')
 
     data['identifiers'] = {
         'serial': computer['general']['serial_number'],
-        'mac_addresses': mac_addresses,
+        'mac_addresses': list(mac_addresses),
         'udid': computer['general']['udid'],
     }
 
