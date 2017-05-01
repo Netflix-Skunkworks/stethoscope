@@ -11,7 +11,7 @@ Prerequisites
 The Python-based backend has a few basic prerequisites:
 
 -  A compatible operating system (we develop on OS X and deploy on Ubuntu)
--  CPython 2.7+ or CPython 3.3+ (we develop and deploy with 2.7 but test against 3.3+)
+-  CPython 2.7+ or CPython 3.4+ (we develop and deploy with 2.7 but test against 3.4+)
 -  `FreeTDS`_ (if using the LANDESK plugin). Installation:
     - With `Homebrew`_ on Mac: ``brew install freetds``
     - On Debian-based systems: ``sudo apt-get install freetds-dev``
