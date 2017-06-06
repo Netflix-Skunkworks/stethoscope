@@ -45,7 +45,7 @@ def test_process_device_ios(raw_device, mock_datasource):
   }
 
   assert device['practices']['unknownsources'] == {
-    'value': False,
+    'value': True,
     'last_updated': last_updated,
   }
 
@@ -76,7 +76,7 @@ def test_process_device_android(raw_device, mock_datasource):
   }
 
   assert device['practices']['unknownsources'] == {
-    'value': False,
+    'value': True,
     'last_updated': last_updated,
   }
 
