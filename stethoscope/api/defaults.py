@@ -170,4 +170,16 @@ PRACTICES = {
     'PLATFORM_REQUIRED': True,
     'NA_PLATFORMS': MOBILE_PLATFORMS,
   },
+
+  'unknownsources': {
+    'KEY': 'unknownsources',
+    'DISPLAY_TITLE': 'Unknown Sources',
+    'DESCRIPTION': (
+      "Apps from unknown sources are more likely to contain malware than apps "
+      "downloaded from the Play Store. Keeping this setting disabled prevents "
+      "the installation of these apps."
+    ),
+    'PLATFORM_REQUIRED': True,
+    'NA_PLATFORMS': ['iOS'] + NONMOBILE_PLATFORMS,
+  },
 }

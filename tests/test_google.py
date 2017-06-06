@@ -37,8 +37,16 @@ def mock_datasource():
 def test_process_device_ios(raw_device, mock_datasource):
   device = mock_datasource._process_mobile_device(raw_device)
   pprint.pprint(device)
+
+  last_updated = arrow.get('2016-03-24T01:42:02.702000+00:00')
+
   assert device['practices']['jailed'] == {
-    'last_updated': arrow.get('2016-03-24T01:42:02.702000+00:00'),
+    'last_updated': last_updated,
+  }
+
+  assert device['practices']['unknownsources'] == {
+    'value': False,
+    'last_updated': last_updated,
   }
 
   assert device['source'] == 'google'
@@ -54,14 +62,22 @@ def test_process_device_ios(raw_device, mock_datasource):
 def test_process_device_android(raw_device, mock_datasource):
   device = mock_datasource._process_mobile_device(raw_device)
   pprint.pprint(device)
+
+  last_updated = arrow.get('2016-02-23T21:49:14.719000+00:00')
+
   assert device['practices']['jailed'] == {
     'value': True,
-    'last_updated': arrow.get('2016-02-23T21:49:14.719000+00:00'),
+    'last_updated': last_updated,
   }
 
   assert device['practices']['encryption'] == {
     'value': True,
-    'last_updated': arrow.get('2016-02-23T21:49:14.719000+00:00'),
+    'last_updated': last_updated,
+  }
+
+  assert device['practices']['unknownsources'] == {
+    'value': False,
+    'last_updated': last_updated,
   }
 
   assert device['source'] == 'google'
