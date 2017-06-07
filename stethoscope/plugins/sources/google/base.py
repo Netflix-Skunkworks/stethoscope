@@ -168,6 +168,11 @@ class GoogleDataSourceBase(object):
     if encrypted is not None:
       data['practices']['encryption'] = encrypted
 
+    data['practices']['unknownsources'] = {
+      'last_updated': data['last_sync'],
+      'value': not raw['unknownSourcesStatus'],
+    }
+
     # TODO: check 'devicePasswordStatus'? (what does that represent?)
 
     # copy all relevant identifiers
