@@ -130,7 +130,7 @@ class Device extends Component {
           <header>
             <div className='device-name'>{device.friendlyName}</div>
             <div className='device-identifier'>{device.identifier}&nbsp;</div>
-            <a className='device-info-toggle' onClick={() => this.toggleInfo()}>?</a>
+            <a className={`device-info-toggle ${this.state.showInfo ? 'open' : 'closed'}`} onClick={() => this.toggleInfo()}>&#9660;</a>
           </header>
 
           {deviceInfo}
