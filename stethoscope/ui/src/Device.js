@@ -69,12 +69,11 @@ class Device extends Component {
             <dd>
               <ul className='mac-addresses'>
                 {
-                  device.identifiers.mac_addresses ?
+                  device.identifiers.mac_addresses &&
                     device.identifiers.mac_addresses.map((mac, i) =>
                       <li key={i}>{mac}</li>
                     )
-                    : null
-                  }
+                }
               </ul>
             </dd>
             <dt>Serial</dt><dd>{device.identifiers.serial}&nbsp;</dd>
