@@ -189,7 +189,9 @@ button::-moz-focus-inner {
   border: 0;
 }
 button:hover,
-button:focus {
+button:focus,
+.nf-button:hover,
+.nf-button:focus {
   background-image: linear-gradient(transparent, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.1));
 }
 .nf-button-active,
@@ -242,4 +244,7 @@ button[disabled],
 }
 .btn-error {
   background-color: #b6272b !important;
+}
+a.nf-button:hover {
+  text-decoration: none
 }
