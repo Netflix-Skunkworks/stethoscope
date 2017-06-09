@@ -19,5 +19,4 @@ export function criticalDeviceSummary (devices) {
       devicesList
     }
   }
-
 }
