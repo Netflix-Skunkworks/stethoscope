@@ -30,8 +30,9 @@ SELECT DISTINCT A0.DISPLAYNAME AS name,
                 A0.SWLASTSCANDATE AS sw_last_scan_date,
                 A0.Computer_Idn,
                 A0.TYPE AS type,
+                A2.MODEL AS model,
+                A2.MANUFACTURER AS manufacturer,
                 A2.SERIALNUM AS serial,
-                A2.SYSTEMVERSION AS model,
                 A3.PROTECTIONSTATUS,
                 A3.CONVERSIONSTATUS,
                 A3.GENENCRYPT,
@@ -48,8 +49,9 @@ ORDER BY A0.LASTUPDINVSVR DESC
 
 
 ATTRIBUTES_TO_COPY = [
-    'name',
+    'manufacturer',
     'model',
+    'name',
     'os',
     'serial',
     'type',
