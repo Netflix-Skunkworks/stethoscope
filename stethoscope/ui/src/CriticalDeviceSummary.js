@@ -7,13 +7,13 @@ export default (props) => {
   const summary = criticalDeviceSummary(devices)
 
   if (summary) {
-    return <div>
+    return <p>
       You have <span className='text-danger'>{summary.count}</span> {summary.pluralizedDevices} that {summary.pluralizedRequires} attention:
       &nbsp;
       <span className='text-danger'>
         {summary.devicesList}
       </span>
-    </div>
+    </p>
   } else {
     return null
   }

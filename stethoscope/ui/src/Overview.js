@@ -25,7 +25,7 @@ class Overview extends Component {
       if (notifications.length > 0 || criticalDevicesSummary) {
         return <div className='narrow'>
           {criticalDevices.length > 0 && <div className='panel active notification'>
-            <p>{criticalDevicesSummary}</p>
+            {criticalDevicesSummary}
             <a className='nf-button btn btn-error' href='#/devices'>View devices</a>
           </div>}
           {notifications.map((n) => <Notification data={n} key={n._id || n.id || n.key} onDismiss={this.dismiss} />)}
