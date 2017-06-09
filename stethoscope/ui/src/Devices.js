@@ -18,7 +18,7 @@ class Devices extends Component {
       const pluralizedDevices = 'device' + (count !== 1 ? 's' : '')
       const pluralizedRequires = 'require' + (count === 1 ? 's' : '')
       const devicesList = criticalDevices.map(function (d) {
-        return [d.manufacturer, d.model].join(' ')
+        return d.model || d.manufacturer
       }).join(', ')
 
       deviceSummary = (
