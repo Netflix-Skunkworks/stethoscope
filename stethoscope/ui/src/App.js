@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import './App.css'
 import Config from './Config.js'
+import { criticalOnly } from './utils/device-filter'
 import DataStore from './DataStore.js'
 import Favico from 'favico.js'
 
@@ -91,7 +92,7 @@ class App extends Component {
     }
 
     if (show('overview') && data.notifications) {
-      const count = data.notifications.length
+      const count = data.notifications.length + criticalOnly(data.devices).length
       if (count > 0) {
         this.favicon.badge(count)
       } else {

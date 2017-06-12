@@ -74,7 +74,9 @@ class Action extends Component {
               {action.description}
               {this.props.children}
             </p>
-            <pre className='description'>{action.details}</pre>
+            { action.details &&
+              <pre className='description'>{action.details}</pre>
+            }
             { action.link &&
               <a href={action.link} target='_blank'>More info</a>
             }
@@ -88,7 +90,7 @@ class Action extends Component {
           <ActionIcon className='action-icon' name={this.iconName(type)} color={this.iconColor(type)} title={this.hoverText(type)} width='18px' height='18px' />
           {action.title}
         </span>
-        <a className='toggleLink show-description' onClick={() => this.toggleDescription()}>?</a>
+        <a className={`toggleLink show-description ${this.state.showDescription ? 'open' : 'closed'}`} onClick={() => this.toggleDescription()}>&#9660;</a>
         {description}
       </li>
     )

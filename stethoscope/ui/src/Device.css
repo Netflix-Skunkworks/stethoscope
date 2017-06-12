@@ -55,6 +55,13 @@ ul.mac-addresses {
   position: relative;
   top: -2em;
   color: rgba(40,40,40, 0.3);
+  opacity: 0.3;
+}
+
+.device-info-toggle.closed {
+  -ms-transform: rotate(-90deg); /* IE 9 */
+  -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+  transform: rotate(90deg);
 }
 .toggleLink, .device-info-toggle:hover {
   text-decoration: none;

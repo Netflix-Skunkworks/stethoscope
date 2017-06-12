@@ -1,3 +1,14 @@
+.action-list a.toggleLink {
+  font-size: 0.8em;
+  color: #ddd;
+}
+
+a.toggleLink.closed {
+  -ms-transform: rotate(-90deg); /* IE 9 */
+  -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+  transform: rotate(90deg);
+}
+
 @media only screen and (min-width: 600px)  {
   #device-list {
     column-count: 2;

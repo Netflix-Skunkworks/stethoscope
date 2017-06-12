@@ -33,7 +33,7 @@ class Device extends Component {
   process (device) {
     let d = Object.assign({}, device)
 
-    d.friendlyName = [d.manufacturer, d.model || 'Unknown device'].join(' ')
+    d.friendlyName = d.model || d.manufacturer || 'Unknown device'
     d.identifier = d.name || d.identifiers.serial || (d.identifiers.mac_addresses || []).join(' ')
 
     return d
@@ -69,10 +69,11 @@ class Device extends Component {
             <dd>
               <ul className='mac-addresses'>
                 {
+                  device.identifiers.mac_addresses &&
                     device.identifiers.mac_addresses.map((mac, i) =>
                       <li key={i}>{mac}</li>
                     )
-                  }
+                }
               </ul>
             </dd>
             <dt>Serial</dt><dd>{device.identifiers.serial}&nbsp;</dd>
@@ -128,7 +129,7 @@ class Device extends Component {
           <header>
             <div className='device-name'>{device.friendlyName}</div>
             <div className='device-identifier'>{device.identifier}&nbsp;</div>
-            <a className='device-info-toggle' onClick={() => this.toggleInfo()}>?</a>
+            <a className={`device-info-toggle ${this.state.showInfo ? 'open' : 'closed'}`} onClick={() => this.toggleInfo()}>&#9660;</a>
           </header>
 
           {deviceInfo}

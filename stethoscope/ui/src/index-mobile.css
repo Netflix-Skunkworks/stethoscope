@@ -3,7 +3,7 @@
   margin: 10px  auto;
 }
 
-.narrow .panel:first-child, .narrow .panel p:first-child {
+.panel:first-child, .panel p:first-child {
   margin-top: 0;
 }
 

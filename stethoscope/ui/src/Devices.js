@@ -1,42 +1,25 @@
 import React, { Component } from 'react'
 import Device from './Device'
 import Spinner from './Spinner'
+import { criticalOnly } from './utils/device-filter'
+import CriticalDeviceSummary from './CriticalDeviceSummary'
 import './Devices.css'
 
 class Devices extends Component {
 
   render () {
     if (!this.props.store) return null
-
     const devices = this.props.store.devices
-    const criticalDevices = devices ? devices.filter((d) => d.deviceRating === 'critical') : []
-
-    let deviceSummary = null
-
-    if (criticalDevices.length > 0) {
-      const count = criticalDevices.length
-      const pluralizedDevices = 'device' + (count !== 1 ? 's' : '')
-      const pluralizedRequires = 'require' + (count === 1 ? 's' : '')
-      const devicesList = criticalDevices.map(function (d) {
-        return [d.manufacturer, d.model].join(' ')
-      }).join(', ')
-
-      deviceSummary = (
-        <div className='panel callout callout-danger'>
-          You have <span className='text-danger'>{count}</span> {pluralizedDevices} that {pluralizedRequires} attention:
-          &nbsp;
-          <span className='text-danger'>
-            {devicesList}
-          </span>
-        </div>
-      )
-    }
-
+    const criticalDevices = criticalOnly(devices)
     if (devices) {
       if (devices.length > 0) {
         return (
           <div>
-            {deviceSummary}
+            { criticalDevices.length > 0 &&
+              <div className='panel callout callout-danger'>
+                <CriticalDeviceSummary store={this.props.store} />
+              </div>
+            }
             <div id='device-list'>
               { devices.map((d) => <Device device={d} key={JSON.stringify([d.identifiers, d.last_sync])} />)}
             </div>
