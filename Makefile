@@ -5,6 +5,8 @@ ifeq ($(USER), root)
 	@echo "WARNING: Installing as root should be avoided at all costs. Use a virtualenv."
 endif
 
+### REQUIREMENTS
+
 install-python-requirements: setup.py check-root
 	@echo "--> Installing Python development dependencies."
 	pip install setuptools
@@ -15,6 +17,8 @@ install-node-requirements:
 	cd stethoscope/ui && npm install
 
 install-requirements: install-python-requirements install-node-requirements
+
+### INSTALL/DEVELOP/BUILD
 
 install-editable-package:
 	@echo "--> Installing editable package."
@@ -37,24 +41,28 @@ install-editable-package:
 	batch_restful_summary\
 	]
 
+react-build:
+	cd stethoscope/ui && npm run build
+
 develop: install-requirements install-editable-package react-build
+
+build-ui: install-node-requirements react-build
+
+develop-ui:
+	cd stethoscope/ui && npm start
 
 install-develop-ui: install-node-requirements develop-ui
 
-build-ui: install-node-requirements react-build
+### DOCKER
 
 docker-build-ui:
 	@echo "--> Building UI code in a Docker container."
 	docker-compose up node-builder
 
-develop-ui:
-	cd stethoscope/ui && npm start
-
 docker-build: Dockerfile Dockerfile-nginx docker-compose.yml docker-compose.base.yml
 	docker-compose build
 
-react-build:
-	cd stethoscope/ui && npm run build
+### TOKENS
 
 dev-token-docker:
 	@echo "--> Generating authentication token for local development using Docker."
@@ -64,9 +72,9 @@ dev-token:
 	@echo "--> Generating authentication token for local development."
 	echo REACT_APP_TOKEN=$(shell stethoscope-token) > stethoscope/ui/.env
 
-lint: lint-python lint-js
+### LINT
 
-lint-python:
+lint-py:
 	@echo "--> Linting Python files."
 	pep8 instance config stethoscope tests  # settings in setup.cfg
 
@@ -74,7 +82,11 @@ lint-js:
 	@echo "--> Linting JavaScript files."
 	cd stethoscope/ui && npm run lint
 
-test: cleanpy
+lint: lint-py lint-js
+
+### TEST
+
+test-py: clean-py
 	@echo "--> Running Python tests (see test.log for output)."
 	py.test | tee test.log  # settings in pytest.ini
 
@@ -82,72 +94,79 @@ test-js-watch:
 	@echo "--> Running JavaScript tests."
 	cd stethoscope/ui && npm run test
 
-test-js: cleanjsbuild
+test-js:
 	@echo "--> Running JavaScript tests."
 	cd stethoscope/ui && CI=true npm run test
 
-tox: cleanpy
+test: test-py test-js
+
+tox: clean-py
 	@echo "--> Running tox."
 	./tox.sh
 
-coverage: cleanpy
+coverage-py: clean-py
 	@echo "--> Running Python tests with coverage (see test.log and htmlcov/ for output)."
 	py.test --cov-report html --cov=stethoscope | tee test.log  # settings in pytest.ini
 
-cleanpy:
+### CLEAN
+
+clean-py:
 	@echo "--> Removing Python bytecode files."
 	find . -name '__pycache__' -delete  # Python 3
 	find . -name '*.py[co]' -delete  # Python 2
 
-cleanjs: cleanjsbuild distcleanjs cleanstatic
-
-cleanjsbuild:
+clean-js:
 	@echo "--> Removing JavaScript build output."
-	rm -r stethoscope/ui/build ; true
+	rm -rf stethoscope/ui/build
 
-cleanstatic:
+clean-static:
 	@echo "--> Removing generated static content."
-	rm -r stethoscope/static ; rm stethoscope/login/templates/layout.html ; true
+	rm -rf stethoscope/static && rm -f stethoscope/login/templates/layout.html
 
-clean: cleanpy cleanjs cleanstatic
+clean: clean-py clean-js clean-static
 
-distcleanpy: cleanpy
+### DISTCLEAN
+
+distclean-py: clean-py
 	@echo "--> Removing egg-info directory."
 	rm -rf Stethoscope.egg-info
 
-distcleanjs:
+distclean-js: clean-js
 	@echo "--> Removing node modules."
-	rm -rf stethoscope/ui/node_modules ; true
+	rm -rf stethoscope/ui/node_modules
 
-distclean: distcleanpy distcleanjs
+distclean: distclean-py distclean-js clean-static
+
+### PHONY
 
 .PHONY: \
-	build-ui \
 	check-root \
-	clean \
-	cleanpy \
-	cleanjsbuild \
-	cleanstatic \
-	coverage \
-	dev-token \
-	dev-token-docker \
-	develop \
-	develop-ui \
-	distclean \
-	distcleanjs \
-	distcleanpy \
-	docker-build \
-	docker-build-ui \
-	install-develop-ui \
+	install-python-requirements \
+	install-node-requirements \
 	install-requirements \
 	install-editable-package \
-	install-node-requirements \
-	install-python-requirements \
-	lint \
-	lint-python \
-	lint-js \
+	develop \
+	install-develop-ui \
+	build-ui \
+	docker-build-ui \
+	develop-ui \
+	docker-build \
 	react-build \
+	dev-token-docker \
+	dev-token \
+	lint \
+	lint-py \
+	lint-js \
 	test \
-	test-js \
+	test-py \
 	test-js-watch \
-	tox
+	test-js \
+	tox \
+	coverage-py \
+	clean-py \
+	clean-js \
+	clean-static \
+	clean \
+	distclean-py \
+	distclean-js \
+	distclean
