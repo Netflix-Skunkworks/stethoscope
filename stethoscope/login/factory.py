@@ -9,6 +9,7 @@ import flask
 import logbook
 import stevedore.driver
 import validate_email
+import werkzeug.exceptions
 
 import stethoscope.auth
 import stethoscope.csrf
@@ -109,9 +110,16 @@ def create_app():
   @app.route('/<string:email>')
   def index(email=None):
     token = flask.request.cookies.get('token')
-    if token is None or email is None:
-      query_kwargs = {'email': email} if email is not None else {}
-      return flask.redirect(login_manager.authorization_url(**query_kwargs))
+
+    try:
+      userinfo = auth.decode_token(token)
+    except werkzeug.exceptions.Unauthorized as exc:
+      if token is not None:
+        logger.exception("Invalid token in auth flow:")
+      return flask.redirect(login_manager.authorization_url())
+
+    if email is None:
+      email = userinfo.get('email', userinfo['sub'])
 
     if not validate_email.validate_email(email):
       flask.abort(400)
