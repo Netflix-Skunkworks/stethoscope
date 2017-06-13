@@ -30,8 +30,10 @@ SELECT DISTINCT A0.DISPLAYNAME AS name,
                 A0.SWLASTSCANDATE AS sw_last_scan_date,
                 A0.Computer_Idn,
                 A0.TYPE AS type,
+                A2.MODEL AS model,
+                A2.MANUFACTURER AS manufacturer,
                 A2.SERIALNUM AS serial,
-                A2.SYSTEMVERSION AS model,
+                A2.SYSTEMVERSION AS systemversion,
                 A3.PROTECTIONSTATUS,
                 A3.CONVERSIONSTATUS,
                 A3.GENENCRYPT,
@@ -48,8 +50,9 @@ ORDER BY A0.LASTUPDINVSVR DESC
 
 
 ATTRIBUTES_TO_COPY = [
-    'name',
+    'manufacturer',
     'model',
+    'name',
     'os',
     'serial',
     'type',
@@ -280,6 +283,10 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
 
     if raw.get('last_seen') is not None:
       device['last_sync'] = arrow.get(raw['last_seen'], 'US/Pacific')
+
+    # hack to get a readable model string for Lenovo machines
+    if device.get('manufacturer') == "LENOVO" and raw.get('systemversion') is not None:
+      device['model'] = raw['systemversion']
 
     # SOFTWARE
     device['software'] = {'installed': raw['software']}
