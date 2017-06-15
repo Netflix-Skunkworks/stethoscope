@@ -62,7 +62,7 @@ install_requires = [
   'arrow',
   'klein',
   'logbook',
-  'PyJWT',
+  'PyJWT>=1.4.2',  # 1.4.2 contains a bugfix for a parsing issue in JWT decoding
   'PyOpenSSL',
   'six',
   'setuptools',
