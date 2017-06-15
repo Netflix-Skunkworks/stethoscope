@@ -120,6 +120,7 @@ def create_app():
 
     if email is None:
       email = userinfo.get('email', userinfo['sub'])
+      return flask.redirect(flask.url_for('index', email=email))
 
     if not validate_email.validate_email(email):
       flask.abort(400)
