@@ -14,6 +14,7 @@ import yaml
 
 import stethoscope.api.factory
 import stethoscope.plugins.utils
+import stethoscope.utils
 
 
 logger = logbook.Logger(__name__)
@@ -180,15 +181,7 @@ def main():
   for plugin in ['BITFIT', 'JAMF']:
     config[plugin + '_TIMEOUT'] = args.timeout
 
-  config['LOGBOOK'] = logbook.NestedSetup([
-    logbook.NullHandler(),
-    logbook.more.ColorizedStderrHandler(level='INFO', bubble=False,
-      format_string='[{record.level_name:<8s} {record.channel:s}] {record.message:s}'),
-    logbook.MonitoringFileHandler(args.logfile, mode='w', level='DEBUG', bubble=True,
-      format_string=('--------------------------------------------------------------------------\n'
-                     '[{record.time} {record.level_name:<8s} {record.channel:>10s}]'
-                     ' {record.filename:s}:{record.lineno:d}\n{record.message:s}')),
-  ])
+  config['LOGBOOK'] = stethoscope.utils.setup_logbook(args.logfile)
   config['LOGBOOK'].push_application()
 
   config['DEBUG'] = args.debug

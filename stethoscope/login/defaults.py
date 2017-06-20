@@ -7,17 +7,12 @@ import os
 import logbook
 import logbook.more
 
+import stethoscope.utils
+
 
 LOGFILE = os.environ.get('STETHOSCOPE_LOGIN_LOGFILE', os.environ.get('LOGFILE', 'login.log'))
 
-LOGBOOK = logbook.NestedSetup([
-    logbook.NullHandler(),
-    logbook.more.ColorizedStderrHandler(level='INFO'),
-    logbook.FileHandler(LOGFILE, mode='w', level='DEBUG', delay=True, bubble=True,
-      format_string=('--------------------------------------------------------------------------\n'
-                     '[{record.time} {record.level_name:<8s} {record.channel:>10s}]'
-                     ' {record.filename:s}:{record.lineno:d}\n{record.message:s}')),
-])
+LOGBOOK = stethoscope.utils.setup_logbook(LOGFILE, logfile_kwargs={'delay': True})
 
 DEBUG = True
 TESTING = True

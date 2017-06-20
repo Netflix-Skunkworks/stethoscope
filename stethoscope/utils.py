@@ -5,6 +5,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 import datetime
 
 import arrow
+import logbook
 import six
 import six.moves
 
@@ -60,3 +61,26 @@ def grouper(iterable, n, fillvalue=None):
   # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx
   args = [iter(iterable)] * n
   return six.moves.zip_longest(fillvalue=fillvalue, *args)
+
+def setup_logbook(logfile, logfile_kwargs=None):
+  """Return a basic `logbook` setup which logs to `stderr` and to file."""
+
+  if logfile_kwargs is None:
+    logfile_kwargs = {}
+
+  logfile_kwargs.setdefault('level', 'DEBUG')
+  logfile_kwargs.setdefault('mode', 'w')
+  logfile_kwargs.setdefault('bubble', True)
+  logfile_kwargs.setdefault('format_string',
+      ('--------------------------------------------------------------------------\n'
+       '[{record.time} {record.level_name:<8s} {record.channel:>10s}]'
+       ' {record.filename:s}:{record.lineno:d}\n{record.message:s}'))
+
+  logbook_setup = logbook.NestedSetup([
+    logbook.NullHandler(),
+    logbook.more.ColorizedStderrHandler(level='INFO', bubble=False,
+      format_string='[{record.level_name:<8s} {record.channel:s}] {record.message:s}'),
+    logbook.FileHandler(logfile, **logfile_kwargs),
+  ])
+
+  return logbook_setup
