@@ -35,18 +35,13 @@ DEFAULT_NAMESPACES = (
 
 def initialize_plugins(args, config):
   """Instantiate configured plugins and return a list of those with a `test_connectivity` method."""
-  plugin_iterator = chain.from_iterable([
-    stethoscope.plugins.utils.instantiate_plugins(config, namespace=namespace)
-    for namespace in args.namespaces
-  ])
-
   plugins = list()
-  for plugin in plugin_iterator:
-    if hasattr(plugin.obj, 'test_connectivity'):
-      plugins.append(plugin)
-    else:
-      logger.warning("Plugin has no connectivity test: '{!s}'.", plugin.name)
-
+  for namespace in args.namespaces:
+    for plugin in stethoscope.plugins.utils.instantiate_plugins(config, namespace=namespace):
+      if hasattr(plugin.obj, 'test_connectivity'):
+        plugins.append(plugin)
+      else:
+        logger.warning("Plugin has no connectivity test: '{!s}'.", plugin.name)
   return plugins
 
 
