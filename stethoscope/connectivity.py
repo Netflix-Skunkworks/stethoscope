@@ -82,9 +82,6 @@ def main():
   parser.add_argument('--log-file', dest='logfile', default='connectivity.log')
   parser.add_argument('--debug', dest="debug", action="store_true", default=False)
 
-  parser.add_argument('--limit', dest="limit", type=int, default=10,
-      help="""Run tests for at most this many plugins concurrently.""")
-
   parser.add_argument('--namespaces', dest='namespaces', type=str, nargs='+',
                       default=DEFAULT_NAMESPACES,
                       help='Namespaces containing plugins to instantiate and test.')
