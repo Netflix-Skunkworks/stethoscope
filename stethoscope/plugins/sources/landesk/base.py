@@ -356,3 +356,8 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
     with _mssql.connect(**self._conn_kwargs) as conn:
       conn.execute_query(DEVICES_FOR_USER.format("WHERE A1.EMAILADDR = %s"), email)
       return self._get_devices_by_email(conn)
+
+  def test_connectivity(self):
+    with _mssql.connect(**self._conn_kwargs) as conn:
+      if not conn.connected:
+        raise Exception("Failed to connect to LANDESK's MSSQL server.")
