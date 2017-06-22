@@ -166,7 +166,7 @@ def main():
   )
   parser.add_argument('--timeout', dest="timeout", type=int, default=10)
   parser.add_argument('--limit', dest="limit", type=int, default=10,
-      help="""Retrieve data for at most this many users simultaneously.""")
+      help="""Retrieve data for at most this many users concurrently.""")
 
   parser.add_argument('--log-file', dest='logfile', default='batch.log')
 
