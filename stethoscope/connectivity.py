@@ -50,22 +50,21 @@ def work_generator(args, config):
 
   for plugin in plugins:
     deferred = plugin.obj.test_connectivity()
-    deferred.addCallback(logger.debug)
     deferred.addErrback(logger.exception)
 
-    logger.info("[{!s}] task generated".format(plugin))
+    logger.debug("[{:s}] task generated".format(plugin.name))
     yield deferred
 
 
 def tabulate_results(results):
-  successes = len(filter(operator.itemgetter(0), results))
+  successes = len([success for (success, _) in results if success])
   logger.info("{:d} of {:d} tests concluded successfully.", successes, len(results))
 
 
 def _main(reactor, args, config):
   deferreds = [deferred for deferred in work_generator(args, config)]
-  deferred_list = defer.gatherResults(deferreds)
-  deferred_list.addBoth(tabulate_results)
+  deferred_list = defer.DeferredList(deferreds)
+  deferred_list.addCallback(tabulate_results)
   return deferred_list
 
 
