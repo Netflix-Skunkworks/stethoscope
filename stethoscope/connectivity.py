@@ -45,12 +45,17 @@ def initialize_plugins(args, config):
   return plugins
 
 
+def handle_failure(failure):
+  logger.error("Failure:\n{!s}", failure.value)
+  return failure
+
+
 def work_generator(args, config):
   plugins = initialize_plugins(args, config)
 
   for plugin in plugins:
     deferred = plugin.obj.test_connectivity()
-    deferred.addErrback(logger.exception)
+    deferred.addErrback(handle_failure)
 
     logger.debug("[{:s}] task generated".format(plugin.name))
     yield deferred
