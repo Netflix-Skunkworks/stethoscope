@@ -29,7 +29,7 @@ DEFAULT_NAMESPACES = (
     'stethoscope.plugins.sources.accounts',
     'stethoscope.plugins.sources.notifications',
     # 'stethoscope.plugins.feedback',
-    # 'stethoscope.plugins.logging.failure',
+    'stethoscope.plugins.logging.failure',
     'stethoscope.plugins.logging.request',
   )
 
@@ -61,7 +61,7 @@ def work_generator(args, config):
 
   for namespace, plugins in six.iteritems(namespaced_plugins):
     for plugin in plugins:
-      deferred = plugin.obj.test_connectivity()
+      deferred = defer.maybeDeferred(plugin.obj.test_connectivity)
 
       callback_args = (namespace, plugin.name)
 
