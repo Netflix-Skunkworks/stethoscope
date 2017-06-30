@@ -10,14 +10,14 @@ import logbook
 import elasticsearch.exceptions
 from twisted.internet import threads
 
-import stethoscope.plugins.mixins.deferred_es
+import stethoscope.plugins.mixins.es
 import stethoscope.utils
 
 
 logger = logbook.Logger(__name__)
 
 
-class ElasticSearchAccessLogger(stethoscope.plugins.mixins.deferred_es.DeferredElasticSearchMixin):
+class ElasticSearchAccessLogger(stethoscope.plugins.mixins.es.ElasticSearchMixin):
 
   config_keys = (
     'ELASTICSEARCH_HOSTS',

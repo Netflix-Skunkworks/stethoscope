@@ -9,13 +9,13 @@ import elasticsearch_dsl
 import logbook
 from twisted.internet import threads
 
-import stethoscope.plugins.mixins.deferred_es
+import stethoscope.plugins.mixins.es
 
 
 logger = logbook.Logger(__name__)
 
 
-class ElasticSearchNotifications(stethoscope.plugins.mixins.deferred_es.DeferredElasticSearchMixin):
+class ElasticSearchNotifications(stethoscope.plugins.mixins.es.ElasticSearchMixin):
   """Example of a notifications plugin which queries an Elasticsearch cluster."""
 
   def create_query_for_email(self, search, email):
