@@ -27,7 +27,7 @@ DEFAULT_NAMESPACES = (
     # 'stethoscope.plugins.transform.events',
     # 'stethoscope.plugins.sources.userinfo',
     'stethoscope.plugins.sources.accounts',
-    # 'stethoscope.plugins.sources.notifications',
+    'stethoscope.plugins.sources.notifications',
     # 'stethoscope.plugins.feedback',
     # 'stethoscope.plugins.logging.failure',
     # 'stethoscope.plugins.logging.request',
