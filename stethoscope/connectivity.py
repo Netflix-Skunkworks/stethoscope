@@ -20,17 +20,16 @@ import stethoscope.utils
 logger = logbook.Logger(__name__)
 
 DEFAULT_NAMESPACES = (
-    # 'stethoscope.plugins.transform.devices',
     'stethoscope.plugins.sources.predevices',
     'stethoscope.plugins.sources.devices',
     'stethoscope.plugins.sources.events',
-    # 'stethoscope.plugins.transform.events',
-    # 'stethoscope.plugins.sources.userinfo',
     'stethoscope.plugins.sources.accounts',
     'stethoscope.plugins.sources.notifications',
     # 'stethoscope.plugins.feedback',
     'stethoscope.plugins.logging.failure',
     'stethoscope.plugins.logging.request',
+    # 'stethoscope.batch.plugins.incremental',
+    # 'stethoscope.batch.plugins.summary',
   )
 
 
