@@ -30,7 +30,7 @@ DEFAULT_NAMESPACES = (
     'stethoscope.plugins.sources.notifications',
     # 'stethoscope.plugins.feedback',
     # 'stethoscope.plugins.logging.failure',
-    # 'stethoscope.plugins.logging.request',
+    'stethoscope.plugins.logging.request',
   )
 
 
