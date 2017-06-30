@@ -4,6 +4,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from itertools import chain
 import argparse
+import collections
 import operator
 
 from twisted.internet import defer
@@ -35,30 +36,40 @@ DEFAULT_NAMESPACES = (
 
 def initialize_plugins(args, config):
   """Instantiate configured plugins and return a list of those with a `test_connectivity` method."""
-  plugins = list()
+  plugins = collections.defaultdict(list)
   for namespace in args.namespaces:
     for plugin in stethoscope.plugins.utils.instantiate_plugins(config, namespace=namespace):
       if hasattr(plugin.obj, 'test_connectivity'):
-        plugins.append(plugin)
+        plugins[namespace].append(plugin)
       else:
         logger.warning("Plugin has no connectivity test: '{!s}'.", plugin.name)
   return plugins
 
 
-def handle_failure(failure):
-  logger.error("Failure:\n{!s}", failure.value)
+def handle_success(chain_arg, namespace, plugin_name):
+  logger.info("Successful test for {!s}::{!s}.", namespace, plugin_name)
+  return chain_arg
+
+
+def handle_failure(failure, namespace, plugin_name):
+  logger.error("Failure in {!s}::{!s}:\n{!s}", namespace, plugin_name, failure.value)
   return failure
 
 
 def work_generator(args, config):
-  plugins = initialize_plugins(args, config)
+  namespaced_plugins = initialize_plugins(args, config)
 
-  for plugin in plugins:
-    deferred = plugin.obj.test_connectivity()
-    deferred.addErrback(handle_failure)
+  for namespace, plugins in six.iteritems(namespaced_plugins):
+    for plugin in plugins:
+      deferred = plugin.obj.test_connectivity()
 
-    logger.debug("[{:s}] task generated".format(plugin.name))
-    yield deferred
+      callback_args = (namespace, plugin.name)
+
+      deferred.addCallbacks(handle_success, callbackArgs=callback_args,
+          errback=handle_failure, errbackArgs=callback_args)
+
+      logger.debug("[{:s}] task generated".format(plugin.name))
+      yield deferred
 
 
 def tabulate_results(results):
