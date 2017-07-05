@@ -48,6 +48,11 @@ for the defaults. You can customize things like the application name,
 the name of your organization, and your contact email address without
 changing any of the javascript source files.
 
+Alternatively, you can provide a JSON string via the `REACT_APP_CONFIG`
+environment variable. This is handy if you want to have build-specific
+overrides, or if you want to add configuration options without forking the main
+repo.
+
 Testing
 ^^^^^^^
 
