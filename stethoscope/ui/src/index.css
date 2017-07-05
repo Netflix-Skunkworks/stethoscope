@@ -134,6 +134,9 @@ nav .right li {
   cursor: auto;
   padding-left: 10px;
 }
+nav .right li.close {
+  padding-left: 0;
+}
 .nf-button.btn-small {
   font-size: 80%;
   padding: 0.3em 0.5em;
@@ -240,7 +243,7 @@ button[disabled],
   background-color: #8dac71 !important;
 }
 .btn-classic {
-  background-color: #e6e6e6 !important;
+  background-color: #d9d9d9 !important;
 }
 .btn-error {
   background-color: #b6272b !important;

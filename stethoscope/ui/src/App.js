@@ -113,6 +113,10 @@ class App extends Component {
             </ul>
           </div>
           <ul className='right'>
+            <li><a href={`mailto:${Config.contactEmail}`} className="nf-button btn-small btn-classic">Email us</a></li>
+            { Config.slackLink &&
+              <li className="close"><a href={Config.slackLink} className="nf-button btn-small btn-classic">Talk to us on Slack</a></li>
+            }
             <li>{this.state.email}</li>
           </ul>
         </nav>
