@@ -19,7 +19,7 @@ class Overview extends Component {
     const notifications = this.props.store.notifications
 
     const criticalDevices = criticalOnly(this.props.store.devices)
-    const criticalDevicesSummary = <CriticalDeviceSummary devices={criticalDevices} />
+    const criticalDevicesSummary = criticalDevices.length > 0 ? <CriticalDeviceSummary devices={criticalDevices} /> : null
 
     if (notifications && this.props.store.devices !== undefined) {
       if (notifications.length > 0 || criticalDevicesSummary) {
