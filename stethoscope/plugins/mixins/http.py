@@ -49,9 +49,11 @@ class HTTPMixin(BaseHTTPMixin):
     """Execute a POST request to the object's URL returning the response body."""
     url, content, kwargs = self._process_arguments(payload, **kwargs)
     response = requests.post(url, data=content, **kwargs)
+
     try:
       response.raise_for_status()
     except:
       logger.exception("request to {!s} returned {:d}", url, response.status_code)
       logger.debug("response text:\n{!s}", response.text)
-    return response.status_code, response.text
+
+    return response
