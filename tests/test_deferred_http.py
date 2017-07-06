@@ -5,14 +5,10 @@ from __future__ import absolute_import, print_function, unicode_literals
 import mock
 
 import stethoscope.plugins.mixins.deferred_http
-import stethoscope.configurator
 import stethoscope.utils
 
 
-class HTTPMixinStub(
-    stethoscope.plugins.mixins.deferred_http.DeferredHTTPMixin,
-    stethoscope.configurator.Configurator
-  ):
+class HTTPMixinStub(stethoscope.plugins.mixins.deferred_http.DeferredHTTPMixin):
   pass
 
 

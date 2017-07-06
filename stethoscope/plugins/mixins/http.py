@@ -9,6 +9,7 @@ import logbook
 import requests
 import six
 
+import stethoscope.configurator
 import stethoscope.utils
 
 
@@ -16,7 +17,7 @@ logger = logbook.Logger(__name__)
 
 
 @six.add_metaclass(abc.ABCMeta)
-class BaseHTTPMixin(object):
+class BaseHTTPMixin(stethoscope.configurator.Configurator):
   """Abstract plugin base class for implementing methods to POST to arbitrary HTTP endpoints."""
 
   config_keys = (

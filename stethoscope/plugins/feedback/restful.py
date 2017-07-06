@@ -10,17 +10,13 @@ import werkzeug.exceptions
 
 import stethoscope.plugins.mixins.deferred_http
 import stethoscope.validation
-import stethoscope.configurator
 import stethoscope.exceptions
 
 
 logger = logbook.Logger(__name__)
 
 
-class RESTfulFeedback(
-    stethoscope.plugins.mixins.deferred_http.DeferredHTTPMixin,
-    stethoscope.configurator.Configurator
-  ):
+class RESTfulFeedback(stethoscope.plugins.mixins.deferred_http.DeferredHTTPMixin):
   """Example of a feedback plugin which posts feedback via RESTful HTTP(S) to an external server."""
 
   def validate(self, payload):
