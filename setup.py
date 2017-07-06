@@ -51,7 +51,7 @@ extras_require = {
   'vpn_labeler': ['netaddr'],
   'vm_filter': [],
   'mac_manufacturer': ['netaddr'],
-  'atlas': ['requests[security]'],
+  'atlas': [],
   'batch_es': ['elasticsearch>=2.0.0,<3.0.0'],
   'batch_restful_summary': ['requests'],
 }

@@ -6,15 +6,13 @@ import time
 
 import logbook
 
-import stethoscope.plugins.mixins.http
+import stethoscope.plugins.mixins.deferred_http
 
 
 logger = logbook.Logger(__name__)
 
 
-class AtlasLogger(
-    stethoscope.plugins.mixins.http.HTTPMixin,
-  ):
+class AtlasLogger(stethoscope.plugins.mixins.deferred_http.DeferredHTTPMixin):
   """Log metrics to Atlas via REST API."""
 
   def post_counter(self, name, tags, value=1):
@@ -33,3 +31,7 @@ class AtlasLogger(
       # 'endpoint': '-'.join(request.prepath),
     }
     return self.post_counter('stethoscope.api.numExceptions', tags)
+
+  def test_connectivity(self):
+    # send an empty set of metrics to test connectivity
+    return self.post([])
