@@ -9,6 +9,7 @@ import logbook
 import requests
 import six
 
+import stethoscope.configurator
 import stethoscope.utils
 
 
@@ -16,7 +17,7 @@ logger = logbook.Logger(__name__)
 
 
 @six.add_metaclass(abc.ABCMeta)
-class BaseHTTPMixin(object):
+class BaseHTTPMixin(stethoscope.configurator.Configurator):
   """Abstract plugin base class for implementing methods to POST to arbitrary HTTP endpoints."""
 
   config_keys = (
@@ -48,9 +49,11 @@ class HTTPMixin(BaseHTTPMixin):
     """Execute a POST request to the object's URL returning the response body."""
     url, content, kwargs = self._process_arguments(payload, **kwargs)
     response = requests.post(url, data=content, **kwargs)
+
     try:
       response.raise_for_status()
     except:
       logger.exception("request to {!s} returned {:d}", url, response.status_code)
       logger.debug("response text:\n{!s}", response.text)
-    return response.status_code, response.text
+
+    return response

@@ -7,7 +7,6 @@ import time
 import logbook
 
 import stethoscope.plugins.mixins.http
-import stethoscope.configurator
 
 
 logger = logbook.Logger(__name__)
@@ -15,7 +14,6 @@ logger = logbook.Logger(__name__)
 
 class AtlasLogger(
     stethoscope.plugins.mixins.http.HTTPMixin,
-    stethoscope.configurator.Configurator
   ):
   """Log metrics to Atlas via REST API."""
 
