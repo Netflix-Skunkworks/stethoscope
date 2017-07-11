@@ -78,7 +78,7 @@ def tabulate_results(results):
 
 def _main(reactor, args, config):
   deferreds = [deferred for deferred in work_generator(args, config)]
-  deferred_list = defer.DeferredList(deferreds)
+  deferred_list = defer.DeferredList(deferreds, consumeErrors=True)
   deferred_list.addCallback(tabulate_results)
   return deferred_list
 
