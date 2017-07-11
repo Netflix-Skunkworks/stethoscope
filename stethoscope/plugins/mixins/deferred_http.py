@@ -3,6 +3,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import abc
+import types
 
 import logbook
 import six
@@ -16,8 +17,27 @@ import stethoscope.plugins.mixins.http
 logger = logbook.Logger(__name__)
 
 
+def _check_healthcheck_response(response):
+  if response.code != 200:
+    raise Exception("Healthcheck endpoint returned {!d}".format(response.code))
+  return response
+
+
+def _test_connectivity(self):
+  """Method to bind to `DeferredHTTPMixin` instances with a configured `HEALTHCHECK_URL`."""
+  deferred = treq.get(self.config['HEALTHCHECK_URL'])
+  deferred.addCallback(_check_healthcheck_response)
+  return deferred
+
+
 @six.add_metaclass(abc.ABCMeta)
 class DeferredHTTPMixin(stethoscope.plugins.mixins.http.BaseHTTPMixin):
+
+  def __init__(self, config):
+    if 'HEALTHCHECK_URL' in config:
+      # bind the connectivity test method to this instance if a healthcheck URL is configured
+      self.test_connectivity = types.MethodType(_test_connectivity, self)
+    super(DeferredHTTPMixin, self).__init__(config)
 
   def check_response(self, response):
     return stethoscope.api.utils.check_response(response, service=self.plugin_name, resource='post')
