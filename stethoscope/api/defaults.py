@@ -177,4 +177,16 @@ PRACTICES = {
     'PLATFORM_REQUIRED': True,
     'NA_PLATFORMS': ['iOS'] + NONMOBILE_PLATFORMS,
   },
+
+  'adbstatus': {
+    'KEY': 'adbstatus',
+    'DISPLAY_TITLE': 'Android Debug Bridge',
+    'DESCRIPTION': (
+      "The Android Debug Bridge (ADB) is a debugging tool intended for use by Android developers. "
+      "Enabling ADB provides enhanced access to a device via both USB and wireless interfaces, "
+      "which presents a security risk (one that has been exploited in the past)."
+    ),
+    'PLATFORM_REQUIRED': True,
+    'NA_PLATFORMS': ['iOS'] + NONMOBILE_PLATFORMS,
+  },
 }

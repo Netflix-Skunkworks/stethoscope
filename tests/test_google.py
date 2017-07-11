@@ -49,6 +49,11 @@ def test_process_device_ios(raw_device, mock_datasource):
     'last_updated': last_updated,
   }
 
+  assert device['practices']['adbstatus'] == {
+    'value': True,
+    'last_updated': last_updated,
+  }
+
   assert device['source'] == 'google'
   assert device['type'] == 'Mobile Device'
   assert device['platform'] == 'iOS'
@@ -76,7 +81,12 @@ def test_process_device_android(raw_device, mock_datasource):
   }
 
   assert device['practices']['unknownsources'] == {
-    'value': True,
+    'value': False,
+    'last_updated': last_updated,
+  }
+
+  assert device['practices']['adbstatus'] == {
+    'value': False,
     'last_updated': last_updated,
   }
 

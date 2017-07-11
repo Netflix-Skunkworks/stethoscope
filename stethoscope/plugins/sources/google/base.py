@@ -173,6 +173,11 @@ class GoogleDataSourceBase(object):
       'value': not raw['unknownSourcesStatus'],
     }
 
+    data['practices']['adbstatus'] = {
+      'last_updated': data['last_sync'],
+      'value': not raw['adbStatus'],
+    }
+
     # TODO: check 'devicePasswordStatus'? (what does that represent?)
 
     # copy all relevant identifiers
