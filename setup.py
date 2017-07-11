@@ -177,6 +177,7 @@ setup_params = dict(
       'jailed = stethoscope.plugins.practices:KeyExistencePractice',
       'screenlock = stethoscope.plugins.practices:KeyExistencePractice',
       'unknownsources = stethoscope.plugins.practices:KeyExistencePractice',
+      'adbstatus = stethoscope.plugins.practices:KeyExistencePractice',
       'uptodate = stethoscope.plugins.practices:UptodatePractice',
       # installed software
       'carbonblack = stethoscope.plugins.practices:InstalledSoftwarePractice',
