@@ -102,3 +102,6 @@ class DeferredJAMFDataSource(stethoscope.plugins.sources.jamf.base.JAMFDataSourc
     deferred.addCallback(self._extract_device_ids_from_userinfo)
     deferred.addCallback(self._get_devices_by_id)
     return deferred
+
+  def test_connectivity(self):
+    return self.get('activationcode')

@@ -4,6 +4,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import abc
 import json
+import types
 
 import logbook
 import requests
@@ -42,8 +43,22 @@ class BaseHTTPMixin(stethoscope.configurator.Configurator):
     return url, content, kwargs
 
 
+def _test_connectivity(self):
+  """Method to bind to `HTTPMixin` instances with a configured `HEALTHCHECK_URL`."""
+  response = requests.get(self.config['HEALTHCHECK_URL'])
+  if response.status_code != 200:
+    raise Exception("Healthcheck endpoint returned {!d}".format(response.status_code))
+  return response
+
+
 @six.add_metaclass(abc.ABCMeta)
 class HTTPMixin(BaseHTTPMixin):
+
+  def __init__(self, config):
+    if 'HEALTHCHECK_URL' in config:
+      # bind the connectivity test method to this instance if a healthcheck URL is configured
+      self.test_connectivity = types.MethodType(_test_connectivity, self)
+    super(HTTPMixin, self).__init__(config)
 
   def post(self, payload, **kwargs):
     """Execute a POST request to the object's URL returning the response body."""
