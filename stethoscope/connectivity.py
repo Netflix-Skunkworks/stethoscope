@@ -28,7 +28,7 @@ DEFAULT_NAMESPACES = (
     'stethoscope.plugins.feedback',
     'stethoscope.plugins.logging.failure',
     'stethoscope.plugins.logging.request',
-    # 'stethoscope.batch.plugins.incremental',
+    'stethoscope.batch.plugins.incremental',
     # 'stethoscope.batch.plugins.summary',
   )
 
