@@ -4,19 +4,21 @@ python:
   - 3.4
   - 3.5
   - 3.6
+env: TEST_SUITE=py
+matrix:
+  include:
+    env: TEST_SUITE=js
 addons:
   apt:
     packages:
       - freetds-dev
 cache:
-  - pip: true
-  - directories:
-      - ./stethoscope/ui/node_modules
-install:
+  pip: true
+  directories:
+    - ./stethoscope/ui/node_modules
+before_install:
   - nvm install 6.9.5
-  - nvm use 6.9.5
-  - make install-node-requirements
-  - make install-python-requirements
+install:
+  - ./.travis/install.sh
 script:
-  - pytest
-  - make test-js
+  - make test-$TEST_SUITE
