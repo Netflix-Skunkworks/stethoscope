@@ -29,3 +29,7 @@ class ElasticSearchMixin(stethoscope.configurator.Configurator):
     }
     kwargs.update(self.config.get('ELASTICSEARCH_KWARGS', {}))
     self.client = elasticsearch.Elasticsearch(self.config['ELASTICSEARCH_HOSTS'], **kwargs)
+
+  def test_connectivity(self):
+    if not self.client.ping():
+      raise Exception("Ping to Elasticsearch cluster failed.")

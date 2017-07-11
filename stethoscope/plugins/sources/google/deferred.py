@@ -92,3 +92,6 @@ class DeferredGoogleDataSource(
     deferred_list.addCallback(chain.from_iterable)
     deferred_list.addCallback(list)
     return deferred_list
+
+  def test_connectivity(self):
+    return threads.deferToThread(super(DeferredGoogleDataSource, self).test_connectivity)

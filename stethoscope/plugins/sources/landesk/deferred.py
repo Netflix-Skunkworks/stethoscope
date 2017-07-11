@@ -26,3 +26,6 @@ class DeferredLandeskSQLDataSource(
   def get_devices_by_macaddr(self, macaddr):
     return threads.deferToThread(super(DeferredLandeskSQLDataSource, self).get_devices_by_macaddr,
         macaddr)
+
+  def test_connectivity(self):
+    return threads.deferToThread(super(DeferredLandeskSQLDataSource, self).test_connectivity)

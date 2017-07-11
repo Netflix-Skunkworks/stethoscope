@@ -241,3 +241,11 @@ class GoogleDataSourceBase(object):
   def get_devices_by_email(self, email, batch_size=1000):
     return self._get_mobile_devices_by_email(email, batch_size=batch_size) + \
       self._get_chromeos_devices_by_email(email, batch_size=batch_size)
+
+  def test_connectivity(self):
+    """Executes a basic API call with no side-effects to ensure we can talk to Google."""
+    service = discovery.build('discovery', 'v1', http=self.connection)
+    request = service.apis().list(name="discovery", preferred=True)
+    response = gutils.execute_request(request)
+    # logger.debug("connectivity test response:\n{:s}", pprint.pformat(response))
+    return response

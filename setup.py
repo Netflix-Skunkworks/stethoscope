@@ -133,6 +133,7 @@ setup_params = dict(
       'stethoscope-login = stethoscope.login.manage:main',
       'stethoscope-batch = stethoscope.batch.run:main [batch]',
       'stethoscope-token = stethoscope.token:main',
+      'stethoscope-connectivity = stethoscope.connectivity:main',
     ],
     'stethoscope.plugins.login': [
       # authentication drivers
