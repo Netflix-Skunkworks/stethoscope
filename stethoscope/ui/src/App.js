@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import './App.css'
-import Config from './Config.js'
+import Config from './Config'
 import { criticalOnly } from './utils/device-filter'
-import DataStore from './DataStore.js'
+import DataStore from './DataStore'
+import Tracker from './Tracker'
 import Favico from 'favico.js'
 
 document.title = Config.appName
@@ -102,14 +103,15 @@ class App extends Component {
 
     return (
       <div>
+        <Tracker />
         <nav>
           <div className='main'>
             <a className='brand' href='#'>{Config.appName}</a>
             <ul>
-              { show('overview') && <li><Link to='overview' activeClassName='active'>Overview</Link></li> }
-              { show('devices') && <li><Link to='devices' activeClassName='active'>Devices</Link></li> }
-              { show('accounts') && <li><Link to='accounts' activeClassName='active'>Accounts</Link></li> }
-              { show('faq') && <li><Link to='faq' activeClassName='active'>FAQ</Link></li> }
+              { show('overview') && <li><Link to='/overview' activeClassName='active'>Overview</Link></li> }
+              { show('devices') && <li><Link to='/devices' activeClassName='active'>Devices</Link></li> }
+              { show('accounts') && <li><Link to='/accounts' activeClassName='active'>Accounts</Link></li> }
+              { show('faq') && <li><Link to='/faq' activeClassName='active'>FAQ</Link></li> }
             </ul>
           </div>
           <ul className='right'>

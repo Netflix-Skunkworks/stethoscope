@@ -53,6 +53,13 @@ environment variable. This is handy if you want to have build-specific
 overrides, or if you want to add configuration options without forking the main
 repo.
 
+In addition to the values in `config.defaults.json`, you can set the following:
+
+- contactEmail
+- slackLink
+- GATrackingId (for Google Analytics tracking)
+
+
 Testing
 ^^^^^^^
 
