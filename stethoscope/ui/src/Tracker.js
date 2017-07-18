@@ -4,7 +4,6 @@ import Config from './Config.js'
 import ReactGA from 'react-ga'
 
 if (Config.GATrackingId) {
-  console.log("!! set GA tracking id:", Config.GATrackingId)
   ReactGA.initialize(Config.GATrackingId)
 }
 
@@ -21,7 +20,6 @@ class Tracker extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.location && this.props.location.action !== 'POP') return
     if (this.props.location !== prevProps.location) {
-      console.log("new location:", this.props.location)
       logPageView(window.location)
     }
   }
