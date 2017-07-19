@@ -8,7 +8,9 @@ if (Config.GATrackingId) {
 }
 
 function logPageView(location) {
-  const locationString = location.pathname + location.search + location.hash
+  // remove userid from location string
+  const locationString = (location.pathname + location.search + location.hash).replace(/\/\w+(%40|@)[^/]+/,'')
+  console.log("location:", locationString)
   ReactGA.set({ page: locationString });
   ReactGA.pageview(locationString);
 }
