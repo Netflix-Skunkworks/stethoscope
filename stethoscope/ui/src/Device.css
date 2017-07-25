@@ -70,7 +70,7 @@ ul.mac-addresses {
 .possible-match {
   color: #b99a4b;
   border-bottom: 1px dotted #ddd;
-  padding-bottom: 10px;
+  padding: 10px 0;
 }
 
 /* device actions */
