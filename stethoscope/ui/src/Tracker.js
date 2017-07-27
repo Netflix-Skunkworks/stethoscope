@@ -7,24 +7,24 @@ if (Config.GATrackingId) {
   ReactGA.initialize(Config.GATrackingId)
 }
 
-function logPageView(location) {
+function logPageView (location) {
   // remove userid from location string
-  const locationString = (location.pathname + location.search + location.hash).replace(/\/\w+(%40|@)[^/]+/,'')
-  ReactGA.set({ page: locationString });
-  ReactGA.pageview(locationString);
+  const locationString = (location.pathname + location.search + location.hash).replace(/\/\w+(%40|@)[^/]+/, '')
+  ReactGA.set({ page: locationString })
+  ReactGA.pageview(locationString)
 }
 
 class Tracker extends Component {
-  componentDidMount() {
+  componentDidMount () {
     logPageView(window.location)
   }
-  componentDidUpdate(prevProps) {
+  componentDidUpdate (prevProps) {
     if (this.props.location && this.props.location.action !== 'POP') return
     if (this.props.location !== prevProps.location) {
       logPageView(window.location)
     }
   }
-  render() {
+  render () {
     return null
   }
 }
