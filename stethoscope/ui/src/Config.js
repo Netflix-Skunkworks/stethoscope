@@ -7,7 +7,7 @@ if (process.env.REACT_APP_CONFIG && process.env.REACT_APP_CONFIG.trim() !== '') 
     const moreConfig = JSON.parse(process.env.REACT_APP_CONFIG)
     config = Object.assign(config, moreConfig)
   } catch (e) {
-    console.log("Error applying more config from environment variables:", e)
+    console.log('Error applying more config from environment variables:', e)
   }
 }
 
