@@ -190,7 +190,7 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
     conn.execute_query("""SELECT DISTINCT InstallDate, Publisher, SuiteName, Version
                           FROM AppSoftwareSuites (nolock)
                           WHERE Computer_Idn = %d""", computer_id)
-    return dict((row['SuiteName'], self._normalize_software_row(row)) for row in conn)
+    return [self._normalize_software_row(row) for row in conn]
 
   def _check_screenlock(self, raw):
     data = {'value': True}
@@ -348,7 +348,7 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
       raw['vulns'] = self._get_vulnerabilities(conn, row['Computer_Idn'])
       raw['adapters'] = self._get_adapters(conn, row['Computer_Idn'])
       raw['software'] = self._get_software(conn, row['Computer_Idn'])
-      logger.debug("software:\n{!s}", pprint.pformat(raw['software']))
+      # logger.debug("software:\n{!s}", pprint.pformat(raw['software']))
       devices.append(self._process_device(raw))
     return devices
 
