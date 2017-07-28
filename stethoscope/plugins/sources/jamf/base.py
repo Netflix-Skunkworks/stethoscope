@@ -134,10 +134,10 @@ class JAMFDataSourceBase(stethoscope.configurator.Configurator):
         last_updated)
 
     data['software'] = {'last_scan_date': last_updated}
-    data['software']['installed'] = dict((entry['name'], self._normalize_software_entry(entry))
-        for entry in raw['computer']['software']['applications'])
-    data['software']['services'] = dict((service, {'name': service}) for service in
-        raw['computer']['software']['running_services'])
+    data['software']['installed'] = [self._normalize_software_entry(entry) for entry in
+        raw['computer']['software']['applications']]
+    data['software']['services'] = [{'name': service} for service in
+        raw['computer']['software']['running_services']]
 
     try:
       practice = {'value': int(attributes['Firewall Status']) > 0}

@@ -194,16 +194,18 @@ class InstalledSoftwarePractice(PracticeBase, PlatformOverrideMixin):
       if 'last_scan_date' in device:
         attrs['last_updated'] = software['last_scan_date']
 
+      installed = dict((entry['name'], entry) for entry in software.get('installed', []))
       for name in self.config.get('SOFTWARE_NAMES', []):
-        details = software.get('installed', {}).get(name)
+        details = installed.get(name)
         if details is not None:
           status = 'ok'
           if 'version' in details:
             attrs['version'] = details['version']
             attrs['details'] = "Version: {!s}".format(details['version'])
 
+      services = dict((entry['name'], entry) for entry in software.get('services', []))
       for name in self.config.get('SERVICE_NAMES', []):
-        details = software.get('services', {}).get(name)
+        details = services.get(name)
         if details is not None:
           status = 'ok'
           if 'version' in details:
