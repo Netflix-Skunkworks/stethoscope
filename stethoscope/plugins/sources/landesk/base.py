@@ -241,10 +241,10 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
 
     if raw['ENCRYPTIONPERCENTAGE'] is not None:
       data['details'] = (
-        "  Protection Status: {PROTECTIONSTATUS!s}\n"
-        "  Encryption Percentage: {ENCRYPTIONPERCENTAGE!s}\n"
-        "  Conversion Status: {CONVERSIONSTATUS!s}\n"
-        "  Encryption Method: {GENENCRYPT!s}\n"
+        # "Protection Status: {PROTECTIONSTATUS!s}\n"
+        "Encryption Percentage: {ENCRYPTIONPERCENTAGE!s}\n"
+        # "Conversion Status: {CONVERSIONSTATUS!s}\n"
+        # "Encryption Method: {GENENCRYPT!s}\n"
       ).format(**raw)
 
     if raw.get('hw_last_scan_date') is not None:
