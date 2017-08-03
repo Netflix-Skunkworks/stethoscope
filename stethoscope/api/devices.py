@@ -26,7 +26,9 @@ def merge_practices(*args, **kwargs):
   Treats practices with no `status` as 'na'.
   """
   order = kwargs.pop('order', ['unknown', 'na', 'nudge', 'warn', 'ok'])
-  assert len(kwargs) == 0
+  if len(kwargs) > 0:
+    raise TypeError("merge_practices() got unexpected keyword argument(s) {:s}"
+                    "".format(', '.join("'{:s}'".format(kw) for kw in six.iterkeys(kwargs))))
 
   practices = dict()
   for practice in set(itertools.chain.from_iterable(arg.keys() for arg in args)):

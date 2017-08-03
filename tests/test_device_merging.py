@@ -3,6 +3,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import arrow
+import pytest
 
 import stethoscope.api.devices
 
@@ -171,6 +172,12 @@ def test_merge_practices():
       {'practice': {'status': 'nudge'}}
   assert stethoscope.api.devices.merge_practices(unknown, nudge, warn) == \
       {'practice': {'status': 'warn'}}
+
+
+def test_merge_practices_raises_on_extra_kwargs():
+  with pytest.raises(TypeError) as excinfo:
+    stethoscope.api.devices.merge_practices(foo='bar', baz='qux')
+  assert str(excinfo.value) == "merge_practices() got unexpected keyword argument(s) 'foo', 'baz'"
 
 
 def test_merge_multiple_practices():
