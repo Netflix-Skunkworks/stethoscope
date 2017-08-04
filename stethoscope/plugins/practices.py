@@ -52,6 +52,7 @@ class PracticeBase(stethoscope.configurator.Configurator):
 
     practice_data.update({
       'title': self.config['DISPLAY_TITLE'],
+      'display': self.config.get('DISPLAY', True),
       'status': status,
       'description': self.config['DESCRIPTION'],
     })
