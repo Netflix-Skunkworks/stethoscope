@@ -39,14 +39,32 @@ def test_key_existence_practice():
   }
 
 
-def test_installed_software_practice():
-  practice = stethoscope.plugins.practices.InstalledSoftwarePractice({
+@pytest.fixture(scope='function')
+def software_practice():
+  return stethoscope.plugins.practices.InstalledSoftwarePractice({
     'KEY': 'foo',
     'DISPLAY_TITLE': 'The display title',
     'DESCRIPTION': 'The description',
     'SOFTWARE_NAMES': ['Foobar.app'],
+    'SERVICE_NAMES': ['com.foo.bar'],
   })
 
+
+@pytest.fixture(scope='function')
+def expected_device_practices():
+  return {
+    'foo': {
+      'display': True,
+      'status': 'ok',
+      'title': 'The display title',
+      'version': '0.0.1',
+      'details': 'Version: 0.0.1',
+      'description': 'The description',
+    },
+  }
+
+
+def test_installed_software_practice(software_practice, expected_device_practices):
   device = {
     'software': {
       'installed': [
@@ -58,25 +76,46 @@ def test_installed_software_practice():
     },
   }
 
-  practice.inject_status(device)
+  software_practice.inject_status(device)
 
-  assert device == {
+  assert device['practices'] == expected_device_practices
+
+def test_running_service_practice(software_practice, expected_device_practices):
+  device = {
     'software': {
-      'installed': [
+      'services': [
         {
-          'name': 'Foobar.app',
+          'name': 'com.foo.bar',
           'version': '0.0.1',
         },
       ],
     },
-    'practices': {
-      'foo': {
-        'display': True,
-        'status': 'ok',
-        'title': 'The display title',
-        'version': '0.0.1',
-        'details': 'Version: 0.0.1',
-        'description': 'The description',
-      },
+  }
+
+  software_practice.inject_status(device)
+
+  assert device['practices'] == expected_device_practices
+
+
+def test_software_practice_nudge(software_practice, expected_device_practices):
+  device = {
+    'software': {
+      'services': [
+        {
+          'name': 'not the service',
+          'version': '0.0.1',
+        },
+      ],
+    },
+  }
+
+  software_practice.inject_status(device)
+
+  assert device['practices'] == {
+    'foo': {
+      'display': True,
+      'status': 'nudge',
+      'title': 'The display title',
+      'description': 'The description',
     },
   }
