@@ -115,6 +115,8 @@ def check_os_version(os, os_version, required_versions, recommended_versions):
   True
   >>> check_os_version("Mac OS X", "10.11.6", REQUIRED, RECOMMENDED)
   'ok'
+  >>> check_os_version("Mac OS X", "10.11.5", REQUIRED, RECOMMENDED)
+  'nudge'
   >>> check_os_version("Mac OS X", "10.10.5", REQUIRED, RECOMMENDED)
   'warn'
   >>> check_os_version("Android", "5.0", REQUIRED, RECOMMENDED)
