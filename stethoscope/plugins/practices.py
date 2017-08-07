@@ -160,6 +160,8 @@ class UptodatePractice(PracticeBase):
     )
 
   def check_uptodate(self, data):
+    data.setdefault('practices', {})
+
     os = data.get('os')
     if os is not None:
       match = re.match('Microsoft Windows [78]', os)
