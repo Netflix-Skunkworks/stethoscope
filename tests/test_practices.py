@@ -80,6 +80,7 @@ def test_installed_software_practice(software_practice, expected_device_practice
 
   assert device['practices'] == expected_device_practices
 
+
 def test_running_service_practice(software_practice, expected_device_practices):
   device = {
     'software': {
@@ -97,7 +98,7 @@ def test_running_service_practice(software_practice, expected_device_practices):
   assert device['practices'] == expected_device_practices
 
 
-def test_software_practice_nudge(software_practice, expected_device_practices):
+def test_software_practice_nudge(software_practice):
   device = {
     'software': {
       'services': [
