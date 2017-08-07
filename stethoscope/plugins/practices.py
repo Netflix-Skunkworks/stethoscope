@@ -149,7 +149,7 @@ class UptodatePractice(PracticeBase):
 
   def __init__(self, *args, **kwargs):
     super(PracticeBase, self).__init__(*args, **kwargs)
-    self.config.setdefault('UNSUPPORTED_MSG', '{!s} is no longer suppported.')
+    self.config.setdefault('UNSUPPORTED_MSG', '{!s} is no longer supported.')
     self.config.setdefault('RECOMMENDED_MSG', 'The recommended version of {!s} is {!s}.')
 
   @property
