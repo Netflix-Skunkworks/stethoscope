@@ -93,31 +93,25 @@ class GoogleDataSourceBase(object):
       return None
 
     data = {'last_updated': last_updated}
-    if value == 'Compromise detected':
+    if value.lower() == 'compromise detected':
       data['value'] = False
-    elif value == 'No compromise detected':
+    elif value.lower() == 'no compromise detected':
       data['value'] = True
     return data
 
   def _check_jailed_chromeos(self, raw, last_updated):
     value = get_nonempty_value(raw, 'bootMode')
-    if value is None:
-      return None
-
-    return {
+    return None if value is None else {
       'last_updated': last_updated,
-      'value': (value == 'validated'),
+      'value': (value.lower() == 'validated'),
     }
 
   def _check_encrypted(self, raw, last_updated):
     # TODO: determine what the other possible values are
     value = get_nonempty_value(raw, 'encryptionStatus')
-    if value is None:
-      return None
-
-    return {
+    return None if value is None else {
       'last_updated': last_updated,
-      'value': (value == 'Encrypted'),
+      'value': (value.lower() == 'encrypted'),
     }
 
   def _process_mobile_device(self, raw):
