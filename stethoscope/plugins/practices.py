@@ -172,19 +172,19 @@ class UptodatePractice(PracticeBase):
         return 'warn'
 
       os_version = data.get('os_version')
-      rv = check_os_version(os, os_version, self.config['REQUIRED_VERSIONS'],
+      status = check_os_version(os, os_version, self.config['REQUIRED_VERSIONS'],
           self.config['RECOMMENDED_VERSIONS'])
 
-      if rv is not None:
+      if status is not None:
         details = []
-        if rv == 'warn':
+        if status == 'warn':
           details.append(self.config['UNSUPPORTED_MSG'].format(os + ' ' + os_version))
         details.append(self.config['RECOMMENDED_MSG'].format(os,
           self.config['RECOMMENDED_VERSIONS'][os]))
         uptodate = data['practices'].setdefault('uptodate', {})
         uptodate['details'] = ' '.join(details)
 
-        return rv
+        return status
 
     return _check_exists(data, 'uptodate', false_value='warn')
 
