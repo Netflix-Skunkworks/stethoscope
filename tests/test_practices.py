@@ -5,6 +5,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 import pprint
 
 import pytest
+import six
 
 import stethoscope.plugins.practices
 
@@ -120,3 +121,72 @@ def test_software_practice_nudge(software_practice):
       'description': 'The description',
     },
   }
+
+
+@pytest.fixture(scope='function')
+def uptodate_practice():
+  return stethoscope.plugins.practices.UptodatePractice({
+    'KEY': 'uptodate',
+    'DISPLAY_TITLE': 'The display title',
+    'DESCRIPTION': 'The description',
+    'RECOMMENDED_VERSIONS': {'iOS': '11.1.1'},
+    'REQUIRED_VERSIONS': {'iOS': '11.1.0'},
+  })
+
+
+def test_uptodate_practice_windows_7(uptodate_practice):
+  device = {
+    'os': 'Microsoft Windows 7'
+  }
+
+  uptodate_practice.inject_status(device)
+
+  for key, value in six.iteritems({
+    'status': 'warn',
+    'details': 'Microsoft Windows 7 is no longer supported.',
+  }):
+    assert device['practices']['uptodate'][key] == value
+
+
+def test_uptodate_practice_ios_warn(uptodate_practice):
+  device = {
+    'os': 'iOS',
+    'os_version': '7.0.0',
+  }
+
+  uptodate_practice.inject_status(device)
+
+  for key, value in six.iteritems({
+    'status': 'warn',
+    'details': 'iOS 7.0.0 is no longer supported. The recommended version of iOS is 11.1.1.',
+  }):
+    assert device['practices']['uptodate'][key] == value
+
+
+def test_uptodate_practice_ios_nudge(uptodate_practice):
+  device = {
+    'os': 'iOS',
+    'os_version': '11.1.0',
+  }
+
+  uptodate_practice.inject_status(device)
+
+  for key, value in six.iteritems({
+    'status': 'nudge',
+    'details': 'The recommended version of iOS is 11.1.1.',
+  }):
+    assert device['practices']['uptodate'][key] == value
+
+
+def test_uptodate_practice_ios_ok(uptodate_practice):
+  device = {
+    'os': 'iOS',
+    'os_version': '11.1.1',
+  }
+
+  uptodate_practice.inject_status(device)
+
+  for key, value in six.iteritems({
+    'status': 'ok',
+  }):
+    assert device['practices']['uptodate'][key] == value
