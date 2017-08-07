@@ -43,7 +43,7 @@ class PracticeBase(stethoscope.configurator.Configurator):
 
   @abc.abstractmethod
   def inject_status(self, device):
-    pass
+    pass  # pragma: nocover
 
   def _inject_status(self, device, status, **kwargs):
     device.setdefault('practices', {})
