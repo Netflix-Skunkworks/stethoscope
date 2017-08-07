@@ -147,6 +147,11 @@ def check_os_version(os, os_version, required_versions, recommended_versions):
 class UptodatePractice(PracticeBase):
   """Checks OS versions against configured values for recommended and unsupported versions."""
 
+  def __init__(self, *args, **kwargs):
+    super(PracticeBase, self).__init__(*args, **kwargs)
+    self.config.setdefault('UNSUPPORTED_MSG', '{!s} is no longer suppported.')
+    self.config.setdefault('RECOMMENDED_MSG', 'The recommended version of {!s} is {!s}.')
+
   @property
   def config_keys(self):
     return super(UptodatePractice, self).config_keys + (

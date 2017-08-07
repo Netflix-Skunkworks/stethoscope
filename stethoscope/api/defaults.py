@@ -63,8 +63,6 @@ PRACTICES = {
       "your device(s) include the latest fixes and preventative measures."
     ),
     'LINK': '#',
-    'UNSUPPORTED_MSG': '{!s} is no longer supported.',
-    'RECOMMENDED_MSG': 'The recommended version of {!s} is {!s}.',
     'REQUIRED_VERSIONS': {
         'Mac OS X': '10.11.0',
         'iOS': '9.3.5',
