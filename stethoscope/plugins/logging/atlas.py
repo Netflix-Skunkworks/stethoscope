@@ -23,7 +23,7 @@ class AtlasLogger(stethoscope.plugins.mixins.deferred_http.DeferredHTTPMixin):
       'tags': tags,
       'value': value,
     }
-    return self.post(payload)
+    return self.post([payload])
 
   def log_failure(self, request, failure):
     tags = {
