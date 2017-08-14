@@ -40,8 +40,8 @@ class DataStore {
       const practices = Object.values(d.practices)
       // group by severity
       practices.forEach(function (p) {
-        // hide SentinelOne in the UI
-        if (p.title === 'SentinelOne') return
+        // hide practices with display = false
+        if (p.display === false) return
         if (p.status === 'warn') {
           d.critical.push(p)
         } else if (p.status === 'nudge') {

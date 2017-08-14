@@ -62,7 +62,8 @@
         "status": "na",
         "link": "#",
         "description": "SentinelOne is part of Netflix's approach to preventing and detecting malware\n    infections. Installing SentinelOne helps protect your system and helps Netflix detect when a\n    system has been compromised, and how, so we can respond quickly and effectively.",
-        "title": "SentinelOne"
+        "title": "SentinelOne",
+        "display": false
       },
       "jailed": {
         "status": "unknown",
@@ -165,7 +166,8 @@
         "description": "SentinelOne is part of Netflix's approach to preventing and detecting malware\n    infections. Installing SentinelOne helps protect your system and helps Netflix detect when a\n    system has been compromised, and how, so we can respond quickly and effectively.",
         "title": "SentinelOne",
         "value": false,
-        "link": "#"
+        "link": "#",
+        "display": false
       },
       "jailed": {
         "status": "na",
@@ -249,7 +251,8 @@
         "status": "na",
         "link": "#",
         "description": "SentinelOne is part of Netflix's approach to preventing and detecting malware\n    infections. Installing SentinelOne helps protect your system and helps Netflix detect when a\n    system has been compromised, and how, so we can respond quickly and effectively.",
-        "title": "SentinelOne"
+        "title": "SentinelOne",
+        "display": false
       },
       "jailed": {
         "status": "unknown",
