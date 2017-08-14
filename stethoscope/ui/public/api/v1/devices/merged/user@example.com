@@ -56,7 +56,8 @@
         "title": "SentinelOne",
         "value": true,
         "link": "#",
-        "details": "Version: 1.8.0.1998"
+        "details": "Version: 1.8.0.1998",
+        "display": false
       },
       "screenlock": {
         "status": "ok",
