@@ -43,7 +43,7 @@ class PracticeBase(stethoscope.configurator.Configurator):
 
   @abc.abstractmethod
   def inject_status(self, device):
-    pass
+    pass  # pragma: nocover
 
   def _inject_status(self, device, status, **kwargs):
     device.setdefault('practices', {})
@@ -52,6 +52,7 @@ class PracticeBase(stethoscope.configurator.Configurator):
 
     practice_data.update({
       'title': self.config['DISPLAY_TITLE'],
+      'display': self.config.get('DISPLAY', True),
       'status': status,
       'description': self.config['DESCRIPTION'],
     })
@@ -114,6 +115,8 @@ def check_os_version(os, os_version, required_versions, recommended_versions):
   True
   >>> check_os_version("Mac OS X", "10.11.6", REQUIRED, RECOMMENDED)
   'ok'
+  >>> check_os_version("Mac OS X", "10.11.5", REQUIRED, RECOMMENDED)
+  'nudge'
   >>> check_os_version("Mac OS X", "10.10.5", REQUIRED, RECOMMENDED)
   'warn'
   >>> check_os_version("Android", "5.0", REQUIRED, RECOMMENDED)
@@ -144,6 +147,11 @@ def check_os_version(os, os_version, required_versions, recommended_versions):
 class UptodatePractice(PracticeBase):
   """Checks OS versions against configured values for recommended and unsupported versions."""
 
+  def __init__(self, *args, **kwargs):
+    super(PracticeBase, self).__init__(*args, **kwargs)
+    self.config.setdefault('UNSUPPORTED_MSG', '{!s} is no longer supported.')
+    self.config.setdefault('RECOMMENDED_MSG', 'The recommended version of {!s} is {!s}.')
+
   @property
   def config_keys(self):
     return super(UptodatePractice, self).config_keys + (
@@ -152,6 +160,8 @@ class UptodatePractice(PracticeBase):
     )
 
   def check_uptodate(self, data):
+    data.setdefault('practices', {})
+
     os = data.get('os')
     if os is not None:
       match = re.match('Microsoft Windows [78]', os)
@@ -162,19 +172,19 @@ class UptodatePractice(PracticeBase):
         return 'warn'
 
       os_version = data.get('os_version')
-      rv = check_os_version(os, os_version, self.config['REQUIRED_VERSIONS'],
+      status = check_os_version(os, os_version, self.config['REQUIRED_VERSIONS'],
           self.config['RECOMMENDED_VERSIONS'])
 
-      if rv is not None:
+      if status is not None:
         details = []
-        if rv == 'warn':
+        if status == 'warn':
           details.append(self.config['UNSUPPORTED_MSG'].format(os + ' ' + os_version))
         details.append(self.config['RECOMMENDED_MSG'].format(os,
           self.config['RECOMMENDED_VERSIONS'][os]))
         uptodate = data['practices'].setdefault('uptodate', {})
         uptodate['details'] = ' '.join(details)
 
-        return rv
+        return status
 
     return _check_exists(data, 'uptodate', false_value='warn')
 
