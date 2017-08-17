@@ -62,7 +62,7 @@ class DeferredJAMFDataSource(stethoscope.plugins.sources.jamf.base.JAMFDataSourc
     }
 
   def get(self, path, **_kwargs):
-    url = self.config['JAMF_API_HOSTADDR'] + path
+    url = self.config['JAMF_API_HOSTADDR'].rstrip('/') + path
 
     kwargs = copy.deepcopy(self.kwargs)
     kwargs.update(_kwargs)
