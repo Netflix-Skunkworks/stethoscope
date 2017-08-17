@@ -447,3 +447,12 @@ The ``batch_restful_summary`` plugin collects all of the data from a run of the 
 POSTs that data to an external server via HTTP(S).
 
 -  ``URL``: The URL to which to POST summary data.
+
+
+Troubleshooting
+---------------
+
+Stethoscope includes a script to check connectivity between itself and any configured plugins which
+support connectivity tests. Running :command:`stethoscope-connectivity` will attempt to verify
+network connectivity and, in many cases, successful authentication with all configured plugins.
+Any errors will be printed on the command-line and debug logs written to :file:`connectivity.log`.
