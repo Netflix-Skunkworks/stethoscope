@@ -3,6 +3,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import datetime
+import json
 
 import arrow
 import logbook
@@ -47,6 +48,11 @@ def json_serialize_datetime(obj):
   if isinstance(obj, (datetime.datetime, arrow.Arrow)):
     return obj.isoformat(b'T' if six.PY2 else 'T')
   raise TypeError("{!r} is not JSON serializable".format(obj))
+
+
+def json_pp(obj):
+  """Encodes the given object as pretty-printed JSON and returns the resulting string."""
+  return json.dumps(obj, sort_keys=True, indent=4, separators=(',', ': '))
 
 
 def grouper(iterable, n, fillvalue=None):
