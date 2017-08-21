@@ -36,8 +36,14 @@ DEFAULT_NAMESPACES = (
 def initialize_plugins(args, config):
   """Instantiate configured plugins and return a list of those with a `test_connectivity` method."""
   plugins = collections.defaultdict(list)
+
+  instantiate_kwargs = {}
+  if args.plugin_names is not None:
+    instantiate_kwargs['names'] = args.plugin_names
+
   for namespace in args.namespaces:
-    for plugin in stethoscope.plugins.utils.instantiate_plugins(config, namespace=namespace):
+    for plugin in stethoscope.plugins.utils.instantiate_plugins(config, namespace=namespace,
+        **instantiate_kwargs):
       if hasattr(plugin.obj, 'test_connectivity'):
         plugins[namespace].append(plugin)
       else:
@@ -93,7 +99,10 @@ def main():
 
   parser.add_argument('--namespaces', dest='namespaces', type=str, nargs='+',
                       default=DEFAULT_NAMESPACES,
-                      help='Namespaces containing plugins to instantiate and test.')
+                      help='Namespaces for plugins to test.')
+  parser.add_argument('--plugins', dest='plugin_names', type=str, nargs='+',
+                      default=None,
+                      help='Names of plugins to test.')
 
   config = stethoscope.api.factory.get_config()
   args = parser.parse_args()
