@@ -576,3 +576,14 @@ Stethoscope includes a script to check connectivity between itself and any confi
 support connectivity tests. Running :program:`stethoscope-connectivity` will attempt to verify
 network connectivity and, in many cases, successful authentication with all configured plugins.
 Any errors will be printed on the command-line and debug logs written to :file:`connectivity.log`.
+
+.. program:: stethoscope-connectivity
+
+.. option:: --plugins [<plugin name>]+
+
+   Restrict connectivity tests to plugins specified by name (the key used in your ``config.py``).
+
+.. option:: --namespaces [<plugin namespace>]+
+
+   Restrict connectivity tests to plugins in one of the given namespaces (as defined in
+   ``setup.py``).
