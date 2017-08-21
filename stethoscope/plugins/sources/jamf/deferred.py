@@ -11,9 +11,10 @@ import treq
 from twisted.internet import defer
 import txwebretry
 
-import stethoscope.plugins.sources.jamf.base
-import stethoscope.api.utils
 import stethoscope.api.exceptions
+import stethoscope.api.utils
+import stethoscope.plugins.sources.jamf.base
+import stethoscope.utils
 
 
 logger = logbook.Logger(__name__)
@@ -35,6 +36,20 @@ def check_userinfo_response(response, email):
   return check_response(response, resource='userinfo')
 
 
+def _check_connectivity_response(response):
+  logger.debug("connectivity response code: {:d}", response.code)
+  if response.code == 401:
+    raise Exception("JAMF authentication failure; check credentials.")
+  if response.code != 200:
+    raise Exception("JAMF connection failure; response code: {:d}.".format(response.code))
+  return response
+
+
+def _log_server_information(data):
+  logger.debug("connectivity response data:\n{!s}", stethoscope.utils.json_pp(data))
+  return data
+
+
 class DeferredJAMFDataSource(stethoscope.plugins.sources.jamf.base.JAMFDataSourceBase):
 
   def __init__(self, *args, **kwargs):
@@ -47,11 +62,12 @@ class DeferredJAMFDataSource(stethoscope.plugins.sources.jamf.base.JAMFDataSourc
     }
 
   def get(self, path, **_kwargs):
-    url = self.config['JAMF_API_HOSTADDR'] + path
+    url = self.config['JAMF_API_HOSTADDR'].rstrip('/') + path
 
     kwargs = copy.deepcopy(self.kwargs)
     kwargs.update(_kwargs)
 
+    logger.debug("GET '{:s}'", url)
     return txwebretry.ExponentialBackoffRetry(3)(treq.get, url, **kwargs)
 
   def get_userinfo_by_email(self, email):
@@ -104,4 +120,9 @@ class DeferredJAMFDataSource(stethoscope.plugins.sources.jamf.base.JAMFDataSourc
     return deferred
 
   def test_connectivity(self):
-    return self.get('activationcode')
+    deferred = self.get('/jssuser')
+    deferred.addCallback(_check_connectivity_response)
+    deferred.addCallback(treq.content)
+    deferred.addCallback(json.loads)
+    deferred.addCallback(_log_server_information)
+    return deferred
