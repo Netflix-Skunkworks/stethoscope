@@ -5,17 +5,17 @@ Plugins provide much of the functionality of Stethoscope and make it easy to add
 for your environment and to pick-and-choose what data sources, outputs, etc. make sense for your
 organization.
 
-Configuration for each plugin is provided in your ``instance/config.py`` file by defining a
+Configuration for each plugin is provided in your :file:`instance/config.py` file by defining a
 top-level ``PLUGINS`` dictionary. Each key in the dictionary must be the name of a plugin (as given
-in ``setup.py``, e.g., ``es_notifications``) and the corresponding value must itself be a dictionary
-with keys and values as described in the sections below for each individual plugin. For example,
-your ``config.py`` might contain:
+in :file:`setup.py`, e.g., ``es_notifications``) and the corresponding value must itself be a
+dictionary with keys and values as described in the sections below for each individual plugin. For
+example, your :file:`config.py` might contain:
 
 .. code:: py
 
     PLUGINS = {
       'bitfit': {
-        'BITFIT_API_TOKEN': 'super secret API token',
+        'BITFIT_API_TOKEN': '...',
         'BITFIT_BASE_URL': 'https://api.bitfit.com/',
       },
     }
@@ -70,38 +70,40 @@ There are a few steps required to set up API access to Google for your domain.
 Configuration
 '''''''''''''
 
--  ``GOOGLE_API_SECRETS``: Service account credentials for Google. For example:
-
-     .. code:: py
-
-       'GOOGLE_API_SECRETS': {
-          "client_id": "<redacted>",
-          "private_key": "-----BEGIN PRIVATE KEY-----<redacted>-----END PRIVATE KEY-----\n",
-          "token_uri": "https://accounts.google.com/o/oauth2/token",
-          "client_email": "<redacted>",
-          "client_x509_cert_url": "<redacted>",
-          "private_key_id": "<redacted>",
-          "type": "service_account",
-          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-          "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-          "project_id": "<redacted>"
-       }
-
+-  ``GOOGLE_API_SECRETS``: Service account credentials for Google.
 -  ``GOOGLE_API_USERNAME``: Name of the account on whose behalf the service account in
    ``GOOGLE_API_SECRETS`` will act. This account must have permissions to access the APIs from which
    you're gathering data; currently, this is just the `Admin SDK`_.
 -  ``GOOGLE_API_SCOPES``: List of scopes required (depends on what information you're using from
-   Google). We use:
+   Google). The list in the example below covers the scopes we use.
 
-     .. code:: py
+Example
+'''''''
 
-        [
-           "https://www.googleapis.com/auth/admin.directory.device.chromeos.readonly",
-           "https://www.googleapis.com/auth/admin.directory.device.mobile.readonly",
-           "https://www.googleapis.com/auth/admin.directory.user.readonly",
-           "https://www.googleapis.com/auth/admin.reports.audit.readonly",
-           "https://www.googleapis.com/auth/admin.reports.usage.readonly",
-        ]
+.. code:: py
+
+   'google' : {
+     'GOOGLE_API_SECRETS': {
+       "client_id": "<redacted>",
+       "private_key": "-----BEGIN PRIVATE KEY-----<redacted>-----END PRIVATE KEY-----\n",
+       "token_uri": "https://accounts.google.com/o/oauth2/token",
+       "client_email": "<redacted>",
+       "client_x509_cert_url": "<redacted>",
+       "private_key_id": "<redacted>",
+       "type": "service_account",
+       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+       "project_id": "<redacted>"
+     },
+     'GOOGLE_API_USERNAME': "my-service-account@example.com",
+     'GOOGLE_API_SCOPES': [
+       "https://www.googleapis.com/auth/admin.directory.device.chromeos.readonly",
+       "https://www.googleapis.com/auth/admin.directory.device.mobile.readonly",
+       "https://www.googleapis.com/auth/admin.directory.user.readonly",
+       "https://www.googleapis.com/auth/admin.reports.audit.readonly",
+       "https://www.googleapis.com/auth/admin.reports.usage.readonly",
+     ],
+   }
 
 .. _Admin SDK: https://developers.google.com/admin-sdk/
 
@@ -117,7 +119,18 @@ The JAMF plugin requires the following configuration variables:
 
 -  ``JAMF_API_USERNAME``: Username for interacting with JAMF's API.
 -  ``JAMF_API_PASSWORD``: Password for interacting with JAMF's API.
--  ``JAMF_API_HOSTADDR``: JAMF API URL (e.g., ``https://example.jamfcloud.com/JSSResource``).
+-  ``JAMF_API_HOSTADDR``: JAMF API URL (probably ends with ``JSSResource``).
+
+Example
+'''''''
+
+.. code:: py
+
+   'jamf': {
+     'JAMF_API_USERNAME': "...",
+     'JAMF_API_PASSWORD': "...",
+     'JAMF_API_HOSTADDR': "https://example.jamfcloud.com/JSSResource",
+   }
 
 Extension Attributes
 ''''''''''''''''''''
@@ -267,7 +280,7 @@ LANDESK provides detailed device information for Windows systems.
 Configuration
 '''''''''''''
 
-Our LANDESK plugin communicates directly with the LANDESK SQL server. It requires the following
+Our LANDESK plugin communicates directly with the LANDESK MSSQL server. It requires the following
 configuration variables:
 
 -  ``LANDESK_SQL_HOSTNAME``
@@ -275,6 +288,20 @@ configuration variables:
 -  ``LANDESK_SQL_USERNAME``
 -  ``LANDESK_SQL_PASSWORD``
 -  ``LANDESK_SQL_DATABASE``
+
+Example
+'''''''
+
+.. code:: py
+
+  'landesk': {
+    'LANDESK_SQL_HOSTNAME': '...',
+    'LANDESK_SQL_HOSTPORT': 1433,
+    'LANDESK_SQL_USERNAME': '...',
+    'LANDESK_SQL_PASSWORD': '...',
+    'LANDESK_SQL_DATABASE': '...',
+  },
+
 
 bitFit
 ^^^^^^
@@ -286,6 +313,16 @@ Configuration
 
 -  ``BITFIT_API_TOKEN``: API token from bitFit.
 -  ``BITFIT_BASE_URL``: URL for bitFit's API (e.g., ``https://api.bitfit.com/``).
+
+Example
+'''''''
+
+.. code:: py
+
+   'bitfit': {
+     'BITFIT_API_TOKEN': '...',
+     'BITFIT_BASE_URL': 'https://api.bitfit.com/',
+   },
 
 Duo
 ^^^
@@ -313,6 +350,18 @@ The ``duo`` plugin requires the following:
 Values for the above can be found using `these instructions
 <https://duo.com/docs/adminapi#first-steps>`__.
 
+Example
+'''''''
+
+.. code:: py
+
+   'duo': {
+     'DUO_INTEGRATION_KEY': '...',
+     'DUO_SECRET_KEY': '...',
+     'DUO_API_HOSTNAME': 'api-xxxxxxx.duosecurity.com',
+   },
+
+
 Notifications and Feedback
 --------------------------
 
@@ -337,6 +386,17 @@ following configuration variables:
 -  ``ELASTICSEARCH_INDEX``: Name of the index to query.
 -  ``ELASTICSEARCH_DOCTYPE``: Name of the document type to query.
 
+Example
+'''''''
+
+.. code:: py
+
+  'es_notifications': {
+    'ELASTICSEARCH_HOSTS': ['http://es.example.com:7104'],
+    'ELASTICSEARCH_INDEX': 'stethoscope_notifications',
+    'ELASTICSEARCH_DOCTYPE': 'default',
+  }
+
 Feedback via REST API
 ^^^^^^^^^^^^^^^^^^^^^
 
@@ -349,6 +409,15 @@ Configuration
 The only configuration required for the ``restful_feedback`` plugin is:
 
 -  ``URL``: The URL to which to POST the feedback JSON.
+
+Example
+'''''''
+
+.. code:: py
+
+  'restful_feedback': {
+    'URL': 'https://feedback.example.com/path/to/feedback/endpoint',
+  }
 
 Logging and Metrics
 -------------------
@@ -367,6 +436,17 @@ Configuration
 -  ``ELASTICSEARCH_INDEX``: Name of the index to which to write.
 -  ``ELASTICSEARCH_DOCTYPE``: Type of document to write.
 
+Example
+'''''''
+
+.. code:: py
+
+  'es_logger': {
+    'ELASTICSEARCH_HOSTS': ['http://es.example.com:7104'],
+    'ELASTICSEARCH_INDEX': 'stethoscope_accesses',
+    'ELASTICSEARCH_DOCTYPE': 'default',
+  }
+
 Logging Metrics to Atlas
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -381,6 +461,15 @@ Configuration
 The ``atlas`` plugin requires:
 
 -  ``URL``: The URL to which to POST metrics.
+
+Example
+'''''''
+
+.. code:: py
+
+  'atlas': {
+    'URL': 'https://logging.example.com/path/to/logging/endpoint',
+  }
 
 Event Transforms
 ----------------
@@ -399,6 +488,17 @@ following configuration variable:
 -  ``VPN_CIDRS``: An iterable of CIDRs, e.g., ``["192.0.2.0/24"]`` (The value of this variable is
    passed directly to ``netaddr.IPSet``, so any value accepted by `that method
    <https://netaddr.readthedocs.io/en/latest/tutorial_03.html>`__ will work.)
+
+Example
+'''''''
+
+.. code:: py
+
+  'vpn_labeler': {
+    'VPN_CIDRS': [
+      '192.0.2.0/24',
+    ],
+  }
 
 
 Device Transforms
@@ -440,6 +540,17 @@ Configuration
 -  ``ELASTICSEARCH_INDEX``: Name of the index to which to write.
 -  ``ELASTICSEARCH_DOCTYPE``: Type of document to write.
 
+Example
+'''''''
+
+.. code:: py
+
+  'batch_es': {
+    'ELASTICSEARCH_HOSTS': ['http://es.example.com:7104'],
+    'ELASTICSEARCH_INDEX': 'stethoscope_devices',
+    'ELASTICSEARCH_DOCTYPE': 'default',
+  }
+
 POSTing a Summary via REST Endpoint
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -448,11 +559,20 @@ POSTs that data to an external server via HTTP(S).
 
 -  ``URL``: The URL to which to POST summary data.
 
+Example
+'''''''
+
+.. code:: py
+
+  'batch_restful_summary': {
+    'URL': 'https://batch.example.com/path/to/endpoint',
+  }
+
 
 Troubleshooting
 ---------------
 
 Stethoscope includes a script to check connectivity between itself and any configured plugins which
-support connectivity tests. Running :command:`stethoscope-connectivity` will attempt to verify
+support connectivity tests. Running :program:`stethoscope-connectivity` will attempt to verify
 network connectivity and, in many cases, successful authentication with all configured plugins.
 Any errors will be printed on the command-line and debug logs written to :file:`connectivity.log`.
