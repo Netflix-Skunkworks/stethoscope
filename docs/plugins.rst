@@ -22,6 +22,8 @@ example, your :file:`config.py` might contain:
 
 The above example configures only the ``bitfit`` plugin.
 
+.. note:: Login managers plugins are configured differently; see `Login Managers`_ for more details.
+
 .. note:: Many plugins involve communicating with external servers. Each of these respects an
    optional ``TIMEOUT`` configuration variable which controls the timeout for these external
    connections. If not set for a particular plugin, the top-level configuration variable
@@ -587,3 +589,72 @@ Any errors will be printed on the command-line and debug logs written to :file:`
 
    Restrict connectivity tests to plugins in one of the given namespaces (as defined in
    ``setup.py``).
+
+
+Login Managers
+--------------
+
+Stethoscope currently has two options for user login. If you leave ``LOGIN_MANAGER`` unset (or set
+to ``'null'``), Stethoscope won't require a login and anyone visiting the site will be able to
+visit anyone else's view.
+
+.. note::
+
+  The login manager configuration variables should be defined at the top-level of the configuration
+  file (rather than within the ``PLUGINS`` dictionary as with other plugins).
+
+OpenID Connect
+^^^^^^^^^^^^^^
+
+The other option is to set ``LOGIN_MANAGER`` to ``'oidc'`` (`OpenID Connect`_), which will allow you
+to use an OIDC provider (like Google) for user login/identity.
+
+
+Configuration
+'''''''''''''
+
+The values for these configuration variables will be determined by your OIDC provider:
+
+- ``OIDC_AUTHORIZATION_URL``
+- ``OIDC_TOKEN_URL``
+- ``OIDC_USERINFO_URL``
+- ``OIDC_CLIENT_ID``
+- ``OIDC_CLIENT_SECRET``
+
+These variables define the OIDC callback endpoint(s) which Stethoscope will expose and must be
+registered with your OIDC provider. They are used to form the URI to which users are redirected
+after authenticating to the provider.
+
+- ``OIDC_CALLBACK_PATHS``: Paths for the callback endpoints at Stethoscope (e.g.,
+  ``['/auth/oidc', '/auth/oidc/<string:email>']``).
+- ``OIDC_CALLBACK_URL``: External name/IP of your Stethoscope instance (e.g.,
+  ``stethoscope.example.com``, or ``127.0.0.1`` for local development).
+- ``OIDC_CALLBACK_PORT``: External port on which Stethoscope listens (e.g., ``5000`` in the default
+  configuration provided).
+- ``OIDC_CALLBACK_SCHEME``: URL scheme (either ``http`` or ``https``).
+
+
+Example
+'''''''
+
+.. code:: py
+
+   LOGIN_MANAGER = 'oidc'
+
+   # from OIDC provider
+   OIDC_AUTHORIZATION_URL = 'https://accounts.google.com/o/oauth2/v2/auth'
+   OIDC_TOKEN_URL = 'https://www.googleapis.com/oauth2/v4/token'
+   OIDC_USERINFO_URL = 'https://www.googleapis.com/oauth2/v3/userinfo'
+   OIDC_CLIENT_ID = '...'
+   OIDC_CLIENT_SECRET = '...'
+
+   # local settings for the OIDC callbacks; need to be registered with OIDC provider
+   OIDC_CALLBACK_PATHS = ['/auth/oidc', '/auth/oidc/<string:email>']
+   OIDC_CALLBACK_URL = '127.0.0.1'
+   OIDC_CALLBACK_PORT = 5000
+   OIDC_CALLBACK_SCHEME = 'http'
+
+More information if using Google is available in `Google's OIDC Documentation`_.
+
+.. _OpenID Connect: https://openid.net/connect/
+.. _Google's OIDC Documentation: https://developers.google.com/identity/protocols/OpenIDConnect
