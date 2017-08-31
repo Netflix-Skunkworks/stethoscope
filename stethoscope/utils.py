@@ -68,6 +68,7 @@ def grouper(iterable, n, fillvalue=None):
   args = [iter(iterable)] * n
   return six.moves.zip_longest(fillvalue=fillvalue, *args)
 
+
 def setup_logbook(logfile, logfile_kwargs=None):
   """Return a basic `logbook` setup which logs to `stderr` and to file."""
 
