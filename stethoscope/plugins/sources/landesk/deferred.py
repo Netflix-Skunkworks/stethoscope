@@ -2,8 +2,8 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from twisted.internet import threads
 import logbook
+from twisted.internet import threads
 
 import stethoscope.plugins.sources.landesk.base
 

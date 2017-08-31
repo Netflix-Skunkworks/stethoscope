@@ -5,8 +5,8 @@ from __future__ import absolute_import, print_function, unicode_literals
 import logbook
 from twisted.internet import threads
 
-import stethoscope.plugins.sources.duo.base
 import stethoscope.configurator
+import stethoscope.plugins.sources.duo.base
 
 
 logger = logbook.Logger(__name__)

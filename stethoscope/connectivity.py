@@ -2,15 +2,14 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from itertools import chain
 import argparse
 import collections
 import operator
+from itertools import chain
 
-from twisted.internet import defer
-from twisted.internet import task
 import logbook
 import six.moves
+from twisted.internet import defer, task
 
 import stethoscope.api.factory
 import stethoscope.plugins.utils

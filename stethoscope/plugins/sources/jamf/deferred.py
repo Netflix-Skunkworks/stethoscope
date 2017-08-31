@@ -8,8 +8,8 @@ import sys
 
 import logbook
 import treq
-from twisted.internet import defer
 import txwebretry
+from twisted.internet import defer
 
 import stethoscope.api.exceptions
 import stethoscope.api.utils

@@ -10,11 +10,11 @@ import random
 import logbook
 import six
 import six.moves.urllib.parse as urlparse
-import werkzeug.security
 import werkzeug.exceptions
+import werkzeug.security
 
-import stethoscope.hostchecker
 import stethoscope.configurator
+import stethoscope.hostchecker
 
 
 logger = logbook.Logger(__name__)

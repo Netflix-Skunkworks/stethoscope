@@ -2,10 +2,10 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from apiclient import discovery
 import arrow
 import logbook
 import six
+from apiclient import discovery
 
 import stethoscope.plugins.sources.google.utils as gutils
 import stethoscope.validation

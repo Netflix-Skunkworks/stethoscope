@@ -4,7 +4,6 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import json
 
-from klein.resource import KleinResource
 import klein
 import klein.test.test_resource
 import mock
@@ -12,9 +11,10 @@ import six
 import stevedore
 import twisted.internet.defer
 import twisted.trial
+from klein.resource import KleinResource
 
-import stethoscope.auth
 import stethoscope.api.factory
+import stethoscope.auth
 
 
 config = {

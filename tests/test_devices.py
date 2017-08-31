@@ -6,10 +6,10 @@ import itertools
 import json
 import pprint
 
-from twisted.internet import defer
 import logbook
 import mock
 import pytest
+from twisted.internet import defer
 
 import stethoscope.api.devices
 import stethoscope.api.factory

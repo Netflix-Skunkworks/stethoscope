@@ -5,10 +5,10 @@ from __future__ import absolute_import, print_function, unicode_literals
 import arrow
 import logbook
 
-import stethoscope.plugins.sources.jamf.utils as jutils
-import stethoscope.validation
 import stethoscope.configurator
+import stethoscope.plugins.sources.jamf.utils as jutils
 import stethoscope.utils
+import stethoscope.validation
 
 
 logger = logbook.Logger(__name__)

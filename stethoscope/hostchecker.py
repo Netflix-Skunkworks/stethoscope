@@ -3,7 +3,6 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import twisted.python.compat
-
 import werkzeug.exceptions
 import werkzeug.wsgi
 

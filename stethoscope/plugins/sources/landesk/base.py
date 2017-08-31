@@ -12,8 +12,8 @@ import logbook
 import six
 
 import stethoscope.api.exceptions
-import stethoscope.validation
 import stethoscope.configurator
+import stethoscope.validation
 
 
 logger = logbook.Logger(__name__)

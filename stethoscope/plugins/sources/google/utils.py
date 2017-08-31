@@ -4,11 +4,11 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import pprint
 
-from retrying import retry
 import arrow
 import logbook
 import oauth2client
 import six
+from retrying import retry
 
 
 logger = logbook.Logger(__name__)

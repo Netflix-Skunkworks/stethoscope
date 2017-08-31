@@ -6,8 +6,8 @@ import time
 
 import duo_client
 
-import stethoscope.plugins.sources.duo.utils
 import stethoscope.configurator
+import stethoscope.plugins.sources.duo.utils
 
 
 class DuoDataSourceBase(stethoscope.configurator.Configurator):

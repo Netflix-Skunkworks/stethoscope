@@ -2,9 +2,9 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from klein.test.test_resource import requestMock
 import pytest
 import werkzeug.exceptions
+from klein.test.test_resource import requestMock
 
 import stethoscope.hostchecker
 

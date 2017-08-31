@@ -5,12 +5,11 @@ from __future__ import absolute_import, print_function, unicode_literals
 import argparse
 import collections
 
-from twisted.internet import defer
-from twisted.internet import task
 import arrow
 import logbook
 import six
 import yaml
+from twisted.internet import defer, task
 
 import stethoscope.api.factory
 import stethoscope.plugins.utils

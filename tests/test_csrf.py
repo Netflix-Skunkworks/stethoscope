@@ -5,12 +5,12 @@ from __future__ import absolute_import, print_function, unicode_literals
 import json
 
 import klein
-from klein.test.test_resource import requestMock
 import mock
 import pytest
 import six
-import twisted.web
 import twisted.trial
+import twisted.web
+from klein.test.test_resource import requestMock
 
 import stethoscope.csrf
 

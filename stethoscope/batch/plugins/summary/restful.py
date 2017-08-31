@@ -2,15 +2,15 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-import pprint
 import json
+import pprint
 
 import arrow
 import logbook
 import six
 
-import stethoscope.plugins.mixins.http
 import stethoscope.configurator
+import stethoscope.plugins.mixins.http
 
 
 logger = logbook.Logger(__name__)

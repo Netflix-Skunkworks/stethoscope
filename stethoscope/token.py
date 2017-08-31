@@ -6,8 +6,8 @@ import argparse
 
 import arrow
 
-import stethoscope.auth
 import stethoscope.api.factory
+import stethoscope.auth
 
 
 def _main(args):

@@ -8,9 +8,9 @@ import pprint
 import arrow
 import pytest
 
-import stethoscope.plugins.sources.bitfit.deferred
-import stethoscope.api.utils
 import stethoscope.api.exceptions
+import stethoscope.api.utils
+import stethoscope.plugins.sources.bitfit.deferred
 
 
 @pytest.fixture(scope='module')
