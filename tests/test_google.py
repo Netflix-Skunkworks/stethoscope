@@ -3,6 +3,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import json
+import copy
 import pprint
 
 import arrow
@@ -18,9 +19,9 @@ def raw_devices():
   return data
 
 
-@pytest.fixture(params=[0, 1], scope='module')
+@pytest.fixture(params=[0, 1], scope='function')
 def raw_device(request, raw_devices):
-  return raw_devices[request.param]
+  return copy.deepcopy(raw_devices[request.param])
 
 
 @pytest.fixture(scope='function')
@@ -97,3 +98,22 @@ def test_process_device_android(raw_device, mock_datasource):
   assert device['os'] == 'Android'
   assert device['os_version'] == '5.1.1'
   assert device['last_sync'].to('utc') == arrow.get('2016-02-23T21:49:14.719Z')
+
+
+@pytest.mark.parametrize(
+    ['raw_device', 'boot_mode', 'value'],
+    [(1, 'Validated', True), (1, 'validated', True), (1, 'unknown', False)],
+    indirect=['raw_device']
+)
+def test_process_device_android_case_insensitive(raw_device, boot_mode, value, mock_datasource):
+  # pretend device 1 is ChromeOS device
+  del raw_device['deviceCompromisedStatus']
+  raw_device['bootMode'] = boot_mode
+  device = mock_datasource._process_chromeos_device(raw_device)
+  pprint.pprint(device)
+
+  last_updated = arrow.get('2016-02-23T21:49:14.719000+00:00')
+  assert device['practices']['jailed'] == {
+    'value': value,
+    'last_updated': last_updated,
+  }
