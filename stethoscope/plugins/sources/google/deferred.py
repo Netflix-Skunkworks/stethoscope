@@ -2,17 +2,16 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from itertools import chain
 import sys
+from itertools import chain
 
-from twisted.internet import defer
-from twisted.internet import threads
 import httplib2
 import logbook
+from twisted.internet import defer, threads
 
-import stethoscope.plugins.sources.google.base
 import stethoscope.api.utils
 import stethoscope.configurator
+import stethoscope.plugins.sources.google.base
 
 
 logger = logbook.Logger(__name__)

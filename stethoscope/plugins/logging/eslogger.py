@@ -6,8 +6,8 @@ import copy
 import json
 
 import arrow
-import logbook
 import elasticsearch.exceptions
+import logbook
 from twisted.internet import threads
 
 import stethoscope.plugins.mixins.es

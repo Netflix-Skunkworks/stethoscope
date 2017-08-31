@@ -2,14 +2,14 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from twisted.internet.defer import succeed
-from twisted.trial import unittest
 import mock
 import treq
+from twisted.internet.defer import succeed
+from twisted.trial import unittest
 
-import stethoscope.plugins.sources.jamf.deferred
-import stethoscope.api.utils
 import stethoscope.api.exceptions
+import stethoscope.api.utils
+import stethoscope.plugins.sources.jamf.deferred
 
 
 class DeferredJAMFTestCase(unittest.TestCase):

@@ -5,11 +5,11 @@ from __future__ import absolute_import, print_function, unicode_literals
 import arrow
 import logbook
 
-import stethoscope.plugins.sources.bitfit.utils
 import stethoscope.api.exceptions
-import stethoscope.validation
 import stethoscope.configurator
+import stethoscope.plugins.sources.bitfit.utils
 import stethoscope.utils
+import stethoscope.validation
 
 
 logger = logbook.Logger(__name__)

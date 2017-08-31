@@ -5,9 +5,6 @@ from __future__ import absolute_import, print_function, unicode_literals
 import datetime
 import json
 
-from klein.resource import KleinResource
-from klein.test.test_resource import requestMock, _render
-from twisted.trial import unittest
 import jwt
 import klein
 import logbook
@@ -15,6 +12,9 @@ import mock
 import pytest
 import twisted.web.http
 import werkzeug.exceptions
+from klein.resource import KleinResource
+from klein.test.test_resource import _render, requestMock
+from twisted.trial import unittest
 
 import stethoscope.auth
 

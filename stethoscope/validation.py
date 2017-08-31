@@ -8,6 +8,7 @@ import uuid
 import logbook
 import six
 import validate_email
+
 import stethoscope.exceptions
 
 

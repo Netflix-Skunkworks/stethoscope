@@ -2,7 +2,8 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from flask_script import Manager, Shell, Server
+from flask_script import Manager, Server, Shell
+
 import stethoscope.login.factory
 
 

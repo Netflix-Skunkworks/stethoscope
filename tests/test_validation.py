@@ -4,15 +4,15 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import json
 
-from klein.resource import KleinResource
-from klein.test.test_resource import requestMock, _render
-from twisted.trial import unittest
 import klein
 import logbook
 import six
+from klein.resource import KleinResource
+from klein.test.test_resource import _render, requestMock
+from twisted.trial import unittest
 
-import stethoscope.validation
 import stethoscope.api.factory
+import stethoscope.validation
 
 
 logger = logbook.Logger(__name__)

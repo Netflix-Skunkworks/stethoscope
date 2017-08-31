@@ -8,9 +8,9 @@ import logbook
 import six
 import werkzeug.exceptions
 
+import stethoscope.exceptions
 import stethoscope.plugins.mixins.deferred_http
 import stethoscope.validation
-import stethoscope.exceptions
 
 
 logger = logbook.Logger(__name__)

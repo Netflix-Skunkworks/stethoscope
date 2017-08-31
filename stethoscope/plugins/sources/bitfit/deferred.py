@@ -2,17 +2,17 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-import sys
 import json
 import operator
+import sys
 
 import logbook
 import treq
-from twisted.internet import defer
 import txwebretry
+from twisted.internet import defer
 
-import stethoscope.plugins.sources.bitfit.base
 import stethoscope.api.utils
+import stethoscope.plugins.sources.bitfit.base
 
 
 logger = logbook.Logger(__name__)

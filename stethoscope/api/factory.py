@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from itertools import chain
 import functools
 import json
 import operator
@@ -10,22 +9,23 @@ import os
 import pprint
 import re
 import sys
+from itertools import chain
 
-from twisted.internet import defer
 import flask.config
 import klein
 import logbook
 import six
 import treq
 import werkzeug.exceptions
+from twisted.internet import defer
 
-import stethoscope.auth
-import stethoscope.csrf
 import stethoscope.api.devices
 import stethoscope.api.utils
-import stethoscope.validation
+import stethoscope.auth
+import stethoscope.csrf
 import stethoscope.plugins.utils
 import stethoscope.utils
+import stethoscope.validation
 
 
 logger = logbook.Logger(__name__)
