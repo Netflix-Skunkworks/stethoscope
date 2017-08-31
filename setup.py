@@ -22,7 +22,6 @@ def parse_file(filename, encoding='utf-8'):
 extras_require = {
   'google': [
     'google-api-python-client',
-    'retrying',
     'httplib2',
     'oauth2client<4.0.0',
   ],
