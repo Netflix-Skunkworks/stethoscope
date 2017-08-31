@@ -61,12 +61,6 @@ def execute_batch(resource, request, result_key, max_results=None):
   return results
 
 
-def should_retry(exc):
-  """Check if we should retry a Google API request which raises the given exception."""
-  return isinstance(exc, oauth2client.client.AccessTokenRefreshError)
-
-
-@retry(stop_max_attempt_number=3, wait_exponential_multiplier=1000, retry_on_exception=should_retry)
 def execute_request(request):
   """Execute a Google API request with retries and exponential backoff."""
   return request.execute(num_retries=3)
