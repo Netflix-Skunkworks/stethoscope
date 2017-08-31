@@ -69,7 +69,7 @@ def should_retry(exc):
 @retry(stop_max_attempt_number=3, wait_exponential_multiplier=1000, retry_on_exception=should_retry)
 def execute_request(request):
   """Execute a Google API request with retries and exponential backoff."""
-  return request.execute()
+  return request.execute(num_retries=3)
 
 
 def parse_parameters_list(dict_list):
