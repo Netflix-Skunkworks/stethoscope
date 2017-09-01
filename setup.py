@@ -82,7 +82,7 @@ if sys.version_info < (2, 7, 9):
 
 setup_params = dict(
   name='Stethoscope',
-  version='0.0.1',
+  use_scm_version=True,
   author='Andrew M. White',
   author_email='andreww@netflix.com',
   license='Apache License, Version 2.0',
@@ -112,6 +112,7 @@ setup_params = dict(
   include_package_data=True,
   setup_requires=[
     'setuptools-git',  # >=0.3
+    'setuptools-scm',
     'pytest-runner',
   ],
   tests_require=[
