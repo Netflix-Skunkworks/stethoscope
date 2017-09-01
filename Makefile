@@ -30,6 +30,7 @@ install-editable-package:
 	bitfit,\
 	vpn_labeler,\
 	mac_manufacturer,\
+	re_filter,\
 	oidc,\
 	es_logger,\
 	es_notifications,\

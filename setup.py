@@ -48,6 +48,7 @@ extras_require = {
     'requests-oauthlib',
   ],
   'vpn_labeler': ['netaddr'],
+  're_filter': [],
   'mac_manufacturer': ['netaddr'],
   'atlas': [],
   'batch_es': ['elasticsearch>=2.0.0,<3.0.0'],
@@ -191,6 +192,7 @@ setup_params = dict(
     'stethoscope.plugins.transform.devices': [
       # hooks to transform devices (e.g., by adding manufacturer information from MAC addresses)
       'mac_manufacturer = stethoscope.plugins.transform.macmanufacturer:AddMACManufacturer [mac_manufacturer]',  # noqa
+      're_filter = stethoscope.plugins.transform.refilter:FilterMatching [re_filter]',
     ],
     'stethoscope.plugins.logging.request': [
       # hooks to log api requests (e.g., accesses) externally
