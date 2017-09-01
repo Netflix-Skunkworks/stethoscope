@@ -8,7 +8,6 @@ import arrow
 import logbook
 import oauth2client
 import six
-from retrying import retry
 
 
 logger = logbook.Logger(__name__)
