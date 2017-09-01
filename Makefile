@@ -1,3 +1,5 @@
+SHELL = /bin/bash -o pipefail
+
 USER := $(shell whoami)
 
 check-root:
