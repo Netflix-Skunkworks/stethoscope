@@ -510,12 +510,36 @@ Similarly to event transforms, device transforms take as input a list of devices
 list and/or its elements in some way. For instance, one might want to filter out virtual machines
 from one's devices (as below).
 
-VM Filter
-^^^^^^^^^
+Regular Expression Filter
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This transform filters out virtual machines (VMs) by searching certain fields in each device's
-data for strings matching common patterns for VMs. The `vm_filter` plugin has no configuration
-variables.
+This transform filters out devices by searching certain fields in each device's data for strings
+matching those specified in the configuration:
+
+Configuration
+'''''''''''''
+
+- ``PATTERN_MAP``: A :class:`dict` mapping fields in the device data (e.g., ``model``) to :mod:`re`
+  patterns. Each field is then searched for the corresponding pattern and a device filtered out if
+  the pattern matches the field value.
+
+Example
+'''''''
+
+To filter out common types of virtual machine:
+
+.. code:: py
+
+  're_filter': {
+    'PATTERN_MAP': {
+      'model': '(Virtual Machine|VMware|amazon|HVM domU)',
+      'serial': '(Parallels|VMware)',
+    },
+  },
+
+This configures the plugin to filter out devices with a ``model`` field matching (via
+:func:`re.search`) the pattern ``(Virtual Machine|VMware|amazon|HVM domU)`` or a ``serial`` field
+matching the corresponding pattern.
 
 Manufacturer from MAC Address
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
