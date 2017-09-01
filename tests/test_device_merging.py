@@ -177,7 +177,10 @@ def test_merge_practices():
 def test_merge_practices_raises_on_extra_kwargs():
   with pytest.raises(TypeError) as excinfo:
     stethoscope.api.devices.merge_practices(foo='bar', baz='qux')
-  assert str(excinfo.value) == "merge_practices() got unexpected keyword argument(s) 'foo', 'baz'"
+  assert str(excinfo.value) in (
+      "merge_practices() got unexpected keyword argument(s) 'foo', 'baz'",
+      "merge_practices() got unexpected keyword argument(s) 'baz', 'foo'"
+  )
 
 
 def test_merge_multiple_practices():
