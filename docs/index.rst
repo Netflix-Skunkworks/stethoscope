@@ -4,7 +4,7 @@ Stethoscope
 Stethoscope is a web application that collects information from existing device data sources (e.g.,
 JAMF or LANDESK) on a given user’s devices and gives them clear and specific recommendations for
 securing their systems. An overview is available on the `Netflix Tech Blog
-<http://techblog.netflix.com/>`_.
+<https://medium.com/netflix-techblog>`_.
 
 
 .. toctree::

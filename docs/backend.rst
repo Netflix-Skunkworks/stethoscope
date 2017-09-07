@@ -38,7 +38,7 @@ Python 2.7.6 and ``pyenv``
 ++++++++++++++++++++++++++
 
 If installing on OSX 10.10+ for Python 2.7.6 or 2.7.7 using `pyenv`_, you may encounter an error
-(``ld: file not found: python.exe``; see `this issue <https://github.com/yyuu/pyenv/issues/273>`__)
+(``ld: file not found: python.exe``; see `this issue <https://github.com/pyenv/pyenv/issues/273>`__)
 while installing `Twisted`_. The workaround is to build a wheel for `Twisted`_ under 2.7.8, then
 install the wheel into the 2.7.6 environment:
 
@@ -130,5 +130,5 @@ API
 .. _virtualenv: https://virtualenv.pypa.io
 .. _Nginx: https://www.nginx.com/
 .. _pymssql: http://pymssql.org
-.. _pyenv: https://github.com/yyuu/pyenv
+.. _pyenv: https://github.com/pyenv/pyenv
 .. _tox: https://tox.readthedocs.io/
