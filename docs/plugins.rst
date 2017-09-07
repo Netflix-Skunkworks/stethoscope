@@ -349,8 +349,7 @@ The ``duo`` plugin requires the following:
 -  ``DUO_API_HOSTNAME``: The hostname for your Duo API server (e.g.,
    ``api-xxxxxx.duosecurity.com``).
 
-Values for the above can be found using `these instructions
-<https://duo.com/docs/adminapi#first-steps>`__.
+Values for the above can be found using `these instructions <https://duo.com/docs/adminapi>`__.
 
 Example
 '''''''
