@@ -78,9 +78,7 @@ dev-token:
 
 lint-py:
 	@echo "--> Linting Python files."
-# settings in setup.cfg
-	pep8 instance config stethoscope tests
-	isort --check-only --recursive --diff instance config stethoscope tests
+	tox -e lint
 
 lint-js:
 	@echo "--> Linting JavaScript files."

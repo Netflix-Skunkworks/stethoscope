@@ -125,8 +125,8 @@ setup_params = dict(
   extras_require=extras_require,
   install_requires=install_requires,
   dependency_links=[
-    'git+https://github.com/duosecurity/duo_client_python.git@1cc71f80927b02e75773094c9dd77af1fc8e4064.zip#egg=duo_client-3.0', # noqa
-    'git+https://github.com/wrapp/txwebretry.git@df5014019cf3a5d501bc755b9ce46509c1b31351#egg=txwebretry-0.1.1', # noqa
+    'git+https://github.com/duosecurity/duo_client_python.git@1cc71f80927b02e75773094c9dd77af1fc8e4064.zip#egg=duo_client-3.0',  # noqa
+    'git+https://github.com/wrapp/txwebretry.git@df5014019cf3a5d501bc755b9ce46509c1b31351#egg=txwebretry-0.1.1',  # noqa
   ],
   entry_points={
     'console_scripts': [

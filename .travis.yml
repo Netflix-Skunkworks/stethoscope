@@ -19,6 +19,7 @@ cache:
 before_install:
   - nvm install 6.9.5
 install:
-  - ./.travis/install.sh
+  - pip install tox-travis
+  - if [[ "$TEST_SUITE" == "js" ]]; then make install-node-requirements; fi
 script:
-  - make test-$TEST_SUITE
+  - if [[ "$TEST_SUITE" == "js" ]]; then make test-js; else tox; fi
