@@ -66,6 +66,8 @@ version of `FreeTDS`_ via:
     pip install pymssql
 
 
+.. _backend-configuration:
+
 Configuration
 ^^^^^^^^^^^^^
 
