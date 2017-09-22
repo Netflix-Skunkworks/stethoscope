@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Accessible from './Accessible'
 
 class ActionIcon extends Component {
 
@@ -31,6 +32,7 @@ class Action extends Component {
     this.state = {
       showDescription: false
     }
+    this.toggleDescription = this.toggleDescription.bind(this)
   }
   hoverText (type) {
     var hoverTextLabels = {
@@ -62,6 +64,7 @@ class Action extends Component {
       showDescription: !this.state.showDescription
     })
   }
+
   render () {
     const action = this.props.action
     const type = this.props.type
@@ -86,11 +89,13 @@ class Action extends Component {
     }
     return (
       <li className={type}>
-        <span className='title' onClick={() => this.toggleDescription()}>
+        <span className='title' onClick={this.toggleDescription}>
           <ActionIcon className='action-icon' name={this.iconName(type)} color={this.iconColor(type)} title={this.hoverText(type)} width='18px' height='18px' />
           {action.title}
         </span>
-        <a className={`toggleLink show-description ${this.state.showDescription ? 'open' : 'closed'}`} onClick={() => this.toggleDescription()}>&#9660;</a>
+        <Accessible label='Toggle action description' expanded={this.state.showDescription}>
+          <a className={`toggleLink show-description ${this.state.showDescription ? 'open' : 'closed'}`} onClick={this.toggleDescription}>&#9660;</a>
+        </Accessible>
         {description}
       </li>
     )
