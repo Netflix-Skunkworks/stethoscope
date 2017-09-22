@@ -103,7 +103,7 @@ class GoogleDataSourceBase(object):
     value = get_nonempty_value(raw, 'bootMode')
     return None if value is None else {
       'last_updated': last_updated,
-      'value': (value.lower() == 'validated'),
+      'value': (value.lower() in ('validated', 'verified')),
     }
 
   def _check_encrypted(self, raw, last_updated):
