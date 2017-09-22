@@ -108,7 +108,7 @@ PRACTICES = {
 
   'remotelogin': {
     'KEY': 'remotelogin',
-    'DISPLAY_TITLE': 'Remote Login',
+    'DISPLAY_TITLE': 'Remote Login Disabled',
     'DESCRIPTION': (
       "The 'Remote Login' setting on your Mac controls whether users can login remotely "
       "to the system using SSH. If you don't know what this is or why you would want it, "
@@ -166,7 +166,7 @@ PRACTICES = {
 
   'unknownsources': {
     'KEY': 'unknownsources',
-    'DISPLAY_TITLE': 'Unknown Sources',
+    'DISPLAY_TITLE': 'Unknown Sources Disabled',
     'DESCRIPTION': (
       "Apps from unknown sources are more likely to contain malware than apps "
       "downloaded from the Play Store. Keeping this setting disabled prevents "
@@ -178,7 +178,7 @@ PRACTICES = {
 
   'adbstatus': {
     'KEY': 'adbstatus',
-    'DISPLAY_TITLE': 'Android Debug Bridge',
+    'DISPLAY_TITLE': 'Android Debug Bridge Disabled',
     'DESCRIPTION': (
       "The Android Debug Bridge (ADB) is a debugging tool intended for use by Android developers. "
       "Enabling ADB provides enhanced access to a device via both USB and wireless interfaces, "
