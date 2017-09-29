@@ -24,7 +24,7 @@ incremental==17.5.0
 ipaddress==1.0.18
 itsdangerous==0.24
 Jinja2==2.9.6
-klein==15.3.1
+klein==17.2.0
 Logbook==1.0.0
 MarkupSafe==1.0
 mock==2.0.0
@@ -55,7 +55,7 @@ rsa==3.4.2
 service-identity==16.0.0
 six==1.11.0
 stevedore==1.19.1
-treq==15.1.0
+treq==17.8.0
 Twisted==17.9.0
 txretry==1.0.1
 git+https://github.com/wrapp/txwebretry.git@df5014019cf3a5d501bc755b9ce46509c1b31351#egg=txwebretry
