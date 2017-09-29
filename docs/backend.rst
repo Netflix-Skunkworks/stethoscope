@@ -119,7 +119,7 @@ API
 
 .. code:: sh
 
-    twistd -n web -p 5001 --class=stethoscope.api.resource.resource
+    twistd -n web --port 'tcp:port=5001' --class=stethoscope.api.resource.resource
 
 
 .. _Flask: http://flask.pocoo.org
