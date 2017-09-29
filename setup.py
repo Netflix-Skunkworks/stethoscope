@@ -23,7 +23,7 @@ extras_require = {
   'google': [
     'google-api-python-client',
     'httplib2',
-    'oauth2client<4.0.0',
+    'oauth2client',
   ],
   'duo': ['duo_client'],
   'jamf': [],
