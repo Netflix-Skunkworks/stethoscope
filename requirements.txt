@@ -10,7 +10,7 @@ constantly==15.1.0
 coverage==4.4.1
 cryptography==2.0.3
 duo-client==3.0
-elasticsearch==2.4.0
+elasticsearch==2.4.1
 elasticsearch-dsl==2.2.0
 enum34==1.1.6
 Flask==0.12.2
