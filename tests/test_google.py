@@ -102,7 +102,7 @@ def test_process_device_android(raw_device, mock_datasource):
 
 @pytest.mark.parametrize(
     ['raw_device', 'boot_mode', 'value'],
-    [(1, 'Validated', True), (1, 'validated', True), (1, 'unknown', False)],
+    [(1, 'Verified', True), (1, 'Validated', True), (1, 'validated', True), (1, 'unknown', False)],
     indirect=['raw_device']
 )
 def test_process_device_android_case_insensitive(raw_device, boot_mode, value, mock_datasource):
