@@ -6,7 +6,6 @@ import pprint
 
 import arrow
 import logbook
-import oauth2client
 import six
 
 

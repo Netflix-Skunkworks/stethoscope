@@ -4,23 +4,37 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import copy
 import json
+import os
+import os.path
 import pprint
 
 import arrow
+import logbook
 import pytest
 
 import stethoscope.plugins.sources.google.deferred
 
 
+logger = logbook.Logger(__name__)
+
+
 @pytest.fixture(scope='module')
-def raw_devices():
-  with open("tests/fixtures/google/list-devices_response.json") as fo:
-    data = json.load(fo)
-  return data
+def raw_devices(basedir="tests/fixtures/google/devices"):
+  """Loads files in a directory as JSON; returns `dict` mapping filename (w/o ext) to contents."""
+  devices = dict()
+  for filename in os.listdir(basedir):
+    filepath = os.path.join(basedir, filename)
+    if os.path.isfile(filepath):
+      shortname = os.path.splitext(filename)[0]
+      with open(filepath) as fo:
+        devices[shortname] = json.load(fo)
+      logger.debug("loaded '{!s}' as '{!s}'", filepath, shortname)
+  return devices
 
 
-@pytest.fixture(params=[0, 1], scope='function')
+@pytest.fixture(params=['android', 'android_oreo', 'ios_google-sync', 'chromeos'], scope='function')
 def raw_device(request, raw_devices):
+  """Returns a copy of a single device, given name, from the `dict` returned by `raw_devices`."""
   return copy.deepcopy(raw_devices[request.param])
 
 
@@ -34,8 +48,8 @@ def mock_datasource():
   })
 
 
-@pytest.mark.parametrize(['raw_device'], [(0,)], indirect=['raw_device'])
-def test_process_device_ios(raw_device, mock_datasource):
+@pytest.mark.parametrize(['raw_device'], [('ios_google-sync',)], indirect=['raw_device'])
+def test_process_device_ios_googlesync(raw_device, mock_datasource):
   device = mock_datasource._process_mobile_device(raw_device)
   pprint.pprint(device)
 
@@ -64,7 +78,7 @@ def test_process_device_ios(raw_device, mock_datasource):
   assert device['last_sync'].to('utc') == arrow.get('2016-03-24T01:42:02.702Z')
 
 
-@pytest.mark.parametrize(['raw_device'], [(1,)], indirect=['raw_device'])
+@pytest.mark.parametrize(['raw_device'], [('android',)], indirect=['raw_device'])
 def test_process_device_android(raw_device, mock_datasource):
   device = mock_datasource._process_mobile_device(raw_device)
   pprint.pprint(device)
@@ -100,19 +114,57 @@ def test_process_device_android(raw_device, mock_datasource):
   assert device['last_sync'].to('utc') == arrow.get('2016-02-23T21:49:14.719Z')
 
 
+@pytest.mark.parametrize(['raw_device'], [('android_oreo',)], indirect=['raw_device'])
+def test_process_device_android_oreo(raw_device, mock_datasource):
+  device = mock_datasource._process_mobile_device(raw_device)
+  pprint.pprint(device)
+
+  last_updated = arrow.get('2017-10-06T16:06:52.071Z')
+
+  assert device['practices']['jailed'] == {
+    'value': True,
+    'last_updated': last_updated,
+  }
+
+  assert device['practices']['encryption'] == {
+    'value': True,
+    'last_updated': last_updated,
+  }
+
+  # Oreo has no system-level setting for unknown sources
+  assert 'unknownsources' not in device['practices']
+
+  assert device['practices']['adbstatus'] == {
+    'value': True,
+    'last_updated': last_updated,
+  }
+
+  assert device['source'] == 'google'
+  assert device['type'] == 'Mobile Device'
+  assert device['platform'] == 'Android'
+  assert device['model'] == 'Pixel XL'
+  assert device['os'] == 'Android'
+  assert device['os_version'] == '8.0.0'
+  assert device['last_sync'].to('utc') == last_updated
+
+
 @pytest.mark.parametrize(
     ['raw_device', 'boot_mode', 'value'],
-    [(1, 'Validated', True), (1, 'validated', True), (1, 'unknown', False)],
+    [
+      ('chromeos', 'Verified', True),
+      ('chromeos', 'Validated', True),
+      ('chromeos', 'validated', True),
+      ('chromeos', 'unknown', False),
+      ('chromeos', 'dev', False),
+    ],
     indirect=['raw_device']
 )
-def test_process_device_android_case_insensitive(raw_device, boot_mode, value, mock_datasource):
-  # pretend device 1 is ChromeOS device
-  del raw_device['deviceCompromisedStatus']
+def test_process_device_chromeos_bootmode(raw_device, boot_mode, value, mock_datasource):
   raw_device['bootMode'] = boot_mode
   device = mock_datasource._process_chromeos_device(raw_device)
   pprint.pprint(device)
 
-  last_updated = arrow.get('2016-02-23T21:49:14.719000+00:00')
+  last_updated = arrow.get('2017-10-04T20:31:26.258Z')
   assert device['practices']['jailed'] == {
     'value': value,
     'last_updated': last_updated,

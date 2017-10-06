@@ -4,6 +4,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import arrow
 import logbook
+import pkg_resources
 import six
 from apiclient import discovery
 
@@ -31,12 +32,14 @@ IDENTIFIERS = {
 
 
 def get_nonempty_value(mapping, key):
+  """Returns value for `key` if `key` is in `mapping` and not a blank/empty string else `None`."""
   if mapping.get(key, '').strip() != '':
     return mapping[key]
   return None
 
 
 def copy_nonempty_values(dst, src, key_map):
+  """Copy non-empty key/value pairs from `src` to `dst` for source and dest keys in `key_map`."""
   for dst_key, src_key in six.iteritems(key_map):
     value = get_nonempty_value(src, src_key)
     if value is not None:
@@ -162,10 +165,13 @@ class GoogleDataSourceBase(object):
     if encrypted is not None:
       data['practices']['encryption'] = encrypted
 
-    data['practices']['unknownsources'] = {
-      'last_updated': data['last_sync'],
-      'value': not raw['unknownSourcesStatus'],
-    }
+    if raw['type'] != 'ANDROID' or \
+        pkg_resources.parse_version(data['os_version']) < pkg_resources.parse_version('8.0.0'):
+      # 'unknownSourcesStatus' is meaningless on Android 8.X+; equivalent setting is per-app
+      data['practices']['unknownsources'] = {
+        'last_updated': data['last_sync'],
+        'value': not raw['unknownSourcesStatus'],
+      }
 
     data['practices']['adbstatus'] = {
       'last_updated': data['last_sync'],
