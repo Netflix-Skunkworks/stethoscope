@@ -4,6 +4,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import arrow
 import logbook
+import pkg_resources
 import six
 from apiclient import discovery
 
@@ -162,10 +163,13 @@ class GoogleDataSourceBase(object):
     if encrypted is not None:
       data['practices']['encryption'] = encrypted
 
-    data['practices']['unknownsources'] = {
-      'last_updated': data['last_sync'],
-      'value': not raw['unknownSourcesStatus'],
-    }
+    if raw['type'] != 'ANDROID' or \
+        pkg_resources.parse_version(data['os_version']) < pkg_resources.parse_version('8.0.0'):
+      # 'unknownSourcesStatus' is meaningless on Android 8.X+; equivalent setting is per-app
+      data['practices']['unknownsources'] = {
+        'last_updated': data['last_sync'],
+        'value': not raw['unknownSourcesStatus'],
+      }
 
     data['practices']['adbstatus'] = {
       'last_updated': data['last_sync'],

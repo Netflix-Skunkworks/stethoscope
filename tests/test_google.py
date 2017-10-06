@@ -16,6 +16,8 @@ import stethoscope.plugins.sources.google.deferred
 def raw_devices():
   with open("tests/fixtures/google/list-devices_response.json") as fo:
     data = json.load(fo)
+  with open("tests/fixtures/google/list-devices_response_oreo.json") as fo:
+    data.extend(json.load(fo))
   return data
 
 
@@ -98,6 +100,40 @@ def test_process_device_android(raw_device, mock_datasource):
   assert device['os'] == 'Android'
   assert device['os_version'] == '5.1.1'
   assert device['last_sync'].to('utc') == arrow.get('2016-02-23T21:49:14.719Z')
+
+
+@pytest.mark.parametrize(['raw_device'], [(-1,)], indirect=['raw_device'])
+def test_process_device_android_oreo(raw_device, mock_datasource):
+  device = mock_datasource._process_mobile_device(raw_device)
+  pprint.pprint(device)
+
+  last_updated = arrow.get('2017-10-06T16:06:52.071Z')
+
+  assert device['practices']['jailed'] == {
+    'value': True,
+    'last_updated': last_updated,
+  }
+
+  assert device['practices']['encryption'] == {
+    'value': True,
+    'last_updated': last_updated,
+  }
+
+  # Oreo has no system-level setting for unknown sources
+  assert 'unknownsources' not in device['practices']
+
+  assert device['practices']['adbstatus'] == {
+    'value': True,
+    'last_updated': last_updated,
+  }
+
+  assert device['source'] == 'google'
+  assert device['type'] == 'Mobile Device'
+  assert device['platform'] == 'Android'
+  assert device['model'] == 'Pixel XL'
+  assert device['os'] == 'Android'
+  assert device['os_version'] == '8.0.0'
+  assert device['last_sync'].to('utc') == last_updated
 
 
 @pytest.mark.parametrize(
