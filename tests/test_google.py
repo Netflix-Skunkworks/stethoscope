@@ -20,6 +20,7 @@ logger = logbook.Logger(__name__)
 
 @pytest.fixture(scope='module')
 def raw_devices(basedir="tests/fixtures/google/devices"):
+  """Loads files in a directory as JSON; returns `dict` mapping filename (w/o ext) to contents."""
   devices = dict()
   for filename in os.listdir(basedir):
     filepath = os.path.join(basedir, filename)
@@ -33,6 +34,7 @@ def raw_devices(basedir="tests/fixtures/google/devices"):
 
 @pytest.fixture(params=['android', 'android_oreo', 'ios_google-sync', 'chromeos'], scope='function')
 def raw_device(request, raw_devices):
+  """Returns a copy of a single device, given name, from the `dict` returned by `raw_devices`."""
   return copy.deepcopy(raw_devices[request.param])
 
 
@@ -153,10 +155,11 @@ def test_process_device_android_oreo(raw_device, mock_datasource):
       ('chromeos', 'Validated', True),
       ('chromeos', 'validated', True),
       ('chromeos', 'unknown', False),
+      ('chromeos', 'dev', False),
     ],
     indirect=['raw_device']
 )
-def test_process_device_android_case_insensitive(raw_device, boot_mode, value, mock_datasource):
+def test_process_device_chromeos_bootmode(raw_device, boot_mode, value, mock_datasource):
   raw_device['bootMode'] = boot_mode
   device = mock_datasource._process_chromeos_device(raw_device)
   pprint.pprint(device)
