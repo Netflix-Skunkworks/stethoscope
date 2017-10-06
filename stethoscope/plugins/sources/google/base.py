@@ -32,12 +32,14 @@ IDENTIFIERS = {
 
 
 def get_nonempty_value(mapping, key):
+  """Returns value for `key` if `key` is in `mapping` and not a blank/empty string else `None`."""
   if mapping.get(key, '').strip() != '':
     return mapping[key]
   return None
 
 
 def copy_nonempty_values(dst, src, key_map):
+  """Copy non-empty key/value pairs from `src` to `dst` for source and dest keys in `key_map`."""
   for dst_key, src_key in six.iteritems(key_map):
     value = get_nonempty_value(src, src_key)
     if value is not None:
