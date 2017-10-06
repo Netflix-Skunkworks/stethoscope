@@ -1,0 +1,49 @@
+{
+  "activeTimeRanges": [
+    {
+      "activeTime": 4320048,
+      "date": "2017-09-22"
+    },
+    {
+      "activeTime": 1170004,
+      "date": "2017-09-24"
+    },
+    {
+      "activeTime": 420009,
+      "date": "2017-09-25"
+    },
+    {
+      "activeTime": 4290054,
+      "date": "2017-10-02"
+    },
+    {
+      "activeTime": 5728289,
+      "date": "2017-10-03"
+    }
+  ],
+  "annotatedAssetId": "example",
+  "annotatedUser": "user@example.com",
+  "bootMode": "Verified",
+  "deviceId": "...",
+  "etag": "...",
+  "firmwareVersion": "Google_Caroline.7820.300.0",
+  "kind": "admin#directory#chromeosdevice",
+  "lastEnrollmentTime": "2017-09-22T15:47:14.233Z",
+  "lastSync": "2017-10-04T20:31:26.258Z",
+  "macAddress": "decafbad0000",
+  "model": "Samsung Chromebook Pro",
+  "orgUnitPath": "/Devices/Chrome Devices/Chrome Managed",
+  "osVersion": "60.0.3112.114",
+  "platformVersion": "9592.96.0 (Official Build) stable-channel caroline",
+  "recentUsers": [
+    {
+      "email": "user@exmaple.com",
+      "type": "USER_TYPE_MANAGED"
+    },
+    {
+      "type": "USER_TYPE_UNMANAGED"
+    }
+  ],
+  "serialNumber": "0xDECAFBAD",
+  "status": "ACTIVE"
+}

@@ -1,0 +1,36 @@
+{
+  "imei": "...",
+  "deviceId": "...",
+  "status" : "APPROVED",
+  "model" : "iPad Mini Retina",
+  "buildNumber" : "",
+  "userAgent" : "Apple-iPad4C5/1305.233,gzip(gfe)",
+  "managedAccountIsOnOwnerProfile" : false,
+  "os" : "iOS 9.3",
+  "kernelVersion" : "",
+  "email" : [
+    "user@example.com"
+  ],
+  "lastSync" : "2016-03-24T01:42:02.702Z",
+  "kind" : "admin#directory#mobiledevice",
+  "hardwareId": "...",
+  "defaultLanguage" : "",
+  "supportsWorkProfile" : false,
+  "wifiMacAddress" : "",
+  "firstSync" : "2015-02-03T07:18:59.369Z",
+  "developerOptionsStatus" : false,
+  "basebandVersion" : "",
+  "name" : [
+    "Example User"
+  ],
+  "deviceCompromisedStatus" : "Undetected",
+  "encryptionStatus" : "",
+  "adbStatus" : false,
+  "serialNumber": "...",
+  "etag": "...",
+  "unknownSourcesStatus" : false,
+  "resourceId": "...",
+  "type" : "GOOGLE_SYNC",
+  "meid": "...",
+  "networkOperator" : ""
+}
