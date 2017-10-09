@@ -9,7 +9,7 @@ export default (props) => {
 
   if (summary) {
     return (
-      <Accessible role='marquee' live>
+      <Accessible role='alert' live='assertive'>
         <p>
           You have <span className='text-danger'>{summary.count}</span> {summary.pluralizedDevices} that {summary.pluralizedRequires} attention:
           &nbsp;
