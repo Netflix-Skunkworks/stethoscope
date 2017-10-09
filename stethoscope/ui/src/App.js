@@ -106,18 +106,18 @@ class App extends Component {
         <Tracker />
         <nav>
           <div className='main'>
-            <a className='brand' href='#'>{Config.appName}</a>
+            <a className='brand' role='link' aria-label='Navigate Home' href='#'>{Config.appName}</a>
             <ul>
-              { show('overview') && <li><Link to='/overview' activeClassName='active'>Overview</Link></li> }
-              { show('devices') && <li><Link to='/devices' activeClassName='active'>Devices</Link></li> }
-              { show('accounts') && <li><Link to='/accounts' activeClassName='active'>Accounts</Link></li> }
-              { show('faq') && <li><Link to='/faq' activeClassName='active'>FAQ</Link></li> }
+              { show('overview') && <li><Link to='/overview' tabIndex={0} activeClassName='active'>Overview</Link></li> }
+              { show('devices') && <li><Link to='/devices' tabIndex={0} activeClassName='active'>Devices</Link></li> }
+              { show('accounts') && <li><Link to='/accounts' tabIndex={0} activeClassName='active'>Accounts</Link></li> }
+              { show('faq') && <li><Link to='/faq' tabIndex={0} activeClassName='active'>FAQ</Link></li> }
             </ul>
           </div>
           <ul className='right'>
-            <li><a href={`mailto:${Config.contactEmail}`} className='nf-button btn-small btn-classic'>Email us</a></li>
+            <li><a href={`mailto:${Config.contactEmail}`} tabIndex={0} className='nf-button btn-small btn-classic'>Email us</a></li>
             { Config.slackLink &&
-              <li className='close'><a href={Config.slackLink} className='nf-button btn-small btn-classic'>Talk to us on Slack</a></li>
+              <li className='close'><a href={Config.slackLink} tabIndex={0} className='nf-button btn-small btn-classic'>Talk to us on Slack</a></li>
             }
             <li>{this.state.email}</li>
           </ul>

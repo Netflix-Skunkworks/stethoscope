@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import fecha from 'fecha'
 import Timeago from 'timeago.js'
+import Accessible from './Accessible'
 import Action from './Action'
 import './Device.css'
 import Config from './Config'
@@ -22,6 +23,7 @@ class Device extends Component {
     this.state = {
       showInfo: false
     }
+    this.toggleInfo = this.toggleInfo.bind(this)
   }
 
   actions (actions, type) {
@@ -129,7 +131,9 @@ class Device extends Component {
           <header>
             <div className='device-name'>{device.friendlyName}</div>
             <div className='device-identifier'>{device.identifier}&nbsp;</div>
-            <a className={`device-info-toggle ${this.state.showInfo ? 'open' : 'closed'}`} onClick={() => this.toggleInfo()}>&#9660;</a>
+            <Accessible expanded={this.state.showInfo} label={`Toggle and review ${device.deviceRating} device information for ${device.friendlyName}`}>
+              <a className={`device-info-toggle ${this.state.showInfo ? 'open' : 'closed'}`} onClick={this.toggleInfo}>&#9660;</a>
+            </Accessible>
           </header>
 
           {deviceInfo}
