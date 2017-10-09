@@ -26,7 +26,7 @@ services:
       - STETHOSCOPE_API_INSTANCE_PATH=/code/instance
       - STETHOSCOPE_LOGIN_HOST=login:5002
     ports:
-     - "5001:5001"
+      - "5001:5001"
     command:
       - "twistd"
       - "--nodaemon"
@@ -34,7 +34,7 @@ services:
       - ""
       - "web"
       - "--port"
-      - "5001"
+      - "tcp:port=5001"
       - "--class=stethoscope.api.resource.resource"
   nginx:
     build:

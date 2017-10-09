@@ -23,7 +23,7 @@ extras_require = {
   'google': [
     'google-api-python-client',
     'httplib2',
-    'oauth2client<4.0.0',
+    'oauth2client',
   ],
   'duo': ['duo_client'],
   'jamf': [],
@@ -64,9 +64,11 @@ install_requires = [
   'PyJWT>=1.4.2',  # 1.4.2 contains a bugfix for a parsing issue in JWT decoding
   'PyOpenSSL',
   'six',
+  'service-identity',
   'setuptools',
   'stevedore',
   'treq',
+  'Twisted',
   'txretry>=1.0.1',  # 1.0.1 introduced support for Python 3
   'txwebretry',
   'validate-email',

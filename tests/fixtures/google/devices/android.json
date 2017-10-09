@@ -1,0 +1,37 @@
+{
+  "imei": "...",
+  "deviceId": "...",
+  "status" : "APPROVED",
+  "model" : "SAMSUNG-SM-G925A",
+  "buildNumber" : "LMY47X.G925AUCU3BOI2",
+  "userAgent" : "Google Apps Device Policy 6.86",
+  "managedAccountIsOnOwnerProfile" : true,
+  "os" : "Android 5.1.1",
+  "kernelVersion" : "3.10.61-5527015",
+  "email" : [
+    "user@example.com"
+  ],
+  "lastSync" : "2016-02-23T21:49:14.719Z",
+  "kind" : "admin#directory#mobiledevice",
+  "hardwareId": "...",
+  "defaultLanguage" : "English",
+  "supportsWorkProfile" : true,
+  "wifiMacAddress" : "DE:AD:BE:EF:DE:AD",
+  "firstSync" : "2015-08-11T07:46:31.642Z",
+  "developerOptionsStatus" : false,
+  "basebandVersion" : "G925AUCU3BOI2",
+  "name" : [
+    "Example User"
+  ],
+  "deviceCompromisedStatus" : "No compromise detected",
+  "encryptionStatus" : "Encrypted",
+  "applications" : [],
+  "adbStatus" : true,
+  "serialNumber": "...",
+  "etag": "...",
+  "unknownSourcesStatus" : true,
+  "resourceId": "...",
+  "type" : "ANDROID",
+  "meid": "...",
+  "networkOperator" : ""
+}

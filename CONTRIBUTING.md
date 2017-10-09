@@ -1,11 +1,16 @@
 How to Contribute to Stethoscope
 ================================
 
-Thanks for considering contributing!
+Thanks for considering contributing to Stethoscope! We're open to all kinds of contributions. 
+If you're looking for ideas, take a look at the issues labeled [help 
+wanted](https://github.com/Netflix/stethoscope/labels/help%20wanted). Some easier issues for 
+a newcomer to tackle are also labeled with [difficulty: newcomer](https://github.com/Netflix/stethoscope/labels/difficulty%3A%20newcomer). 
 
+Feel free to join us on [Gitter](https://gitter.im/Netflix-Stethoscope/Lobby) to chat about 
+ideas or ask questions.  
 
-Python Guidelines
------------------
+Python Coding Style Guidelines
+------------------------------
 
 ### Code Style
 
