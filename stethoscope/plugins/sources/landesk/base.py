@@ -202,7 +202,7 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
         logger.debug("screenlock reason:\n{!r}", data['details'])
 
     if raw.get('sw_last_scan_date') is not None:
-      data['last_updated'] = arrow.get(raw['sw_last_scan_date'], 'US/Pacific')
+      data['last_updated'] = arrow.get(raw['sw_last_scan_date'])
 
     return data
 
@@ -215,7 +215,7 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
         data['details'] = vuln['Reason']
 
     if raw.get('sw_last_scan_date') is not None:
-      data['last_updated'] = arrow.get(raw['sw_last_scan_date'], 'US/Pacific')
+      data['last_updated'] = arrow.get(raw['sw_last_scan_date'])
 
     return data
 
@@ -232,7 +232,7 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
         data['details'] += "    {Title!s}\n".format(**vuln)
 
     if raw.get('sw_last_scan_date') is not None:
-      data['last_updated'] = arrow.get(raw['sw_last_scan_date'], 'US/Pacific')
+      data['last_updated'] = arrow.get(raw['sw_last_scan_date'])
 
     return data
 
@@ -248,7 +248,7 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
       ).format(**raw)
 
     if raw.get('hw_last_scan_date') is not None:
-      data['last_updated'] = arrow.get(raw['hw_last_scan_date'], 'US/Pacific')
+      data['last_updated'] = arrow.get(raw['hw_last_scan_date'])
 
     return data
 
@@ -268,7 +268,7 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
     data['details'] = '\n'.join(details)
 
     if raw.get('hw_last_scan_date') is not None:
-      data['last_updated'] = arrow.get(raw['hw_last_scan_date'], 'US/Pacific')
+      data['last_updated'] = arrow.get(raw['hw_last_scan_date'])
 
     return data
 
@@ -282,7 +282,7 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
         device[attr] = raw[attr]
 
     if raw.get('last_seen') is not None:
-      device['last_sync'] = arrow.get(raw['last_seen'], 'US/Pacific')
+      device['last_sync'] = arrow.get(raw['last_seen'])
 
     # hack to get a readable model string for Lenovo machines
     if device.get('manufacturer') == "LENOVO" and raw.get('systemversion') is not None:
@@ -291,7 +291,7 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
     # SOFTWARE
     device['software'] = {'installed': raw['software']}
     if raw.get('sw_last_scan_date') is not None:
-      device['software']['last_scan_date'] = arrow.get(raw['sw_last_scan_date'], 'US/Pacific')
+      device['software']['last_scan_date'] = arrow.get(raw['sw_last_scan_date'])
 
     # PRACTICES
     device['practices'] = dict()
