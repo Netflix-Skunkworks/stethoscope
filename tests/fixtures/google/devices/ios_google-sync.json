@@ -1,6 +1,6 @@
 {
   "imei": "...",
-  "deviceId": "...",
+  "deviceId": "exampleGoogleDeviceId",
   "status" : "APPROVED",
   "model" : "iPad Mini Retina",
   "buildNumber" : "",
