@@ -77,6 +77,8 @@ def test_process_device_ios_googlesync(raw_device, mock_datasource):
   # assert device['os_version'] == '9.3'
   assert device['last_sync'].to('utc') == arrow.get('2016-03-24T01:42:02.702Z')
 
+  assert device['identifiers']['googleDeviceId'] == 'exampleGoogleDeviceId'
+
 
 @pytest.mark.parametrize(['raw_device'], [('android',)], indirect=['raw_device'])
 def test_process_device_android(raw_device, mock_datasource):

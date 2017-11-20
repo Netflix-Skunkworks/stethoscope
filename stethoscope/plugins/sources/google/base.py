@@ -28,6 +28,7 @@ IDENTIFIERS = {
   "imei": "imei",
   "meid": "meid",
   "serial": "serialNumber",
+  "googleDeviceId": "deviceId",
 }
 
 
