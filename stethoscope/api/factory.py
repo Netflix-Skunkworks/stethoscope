@@ -7,7 +7,6 @@ import json
 import operator
 import os
 import pprint
-import re
 import sys
 from itertools import chain
 
