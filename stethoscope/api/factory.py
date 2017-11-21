@@ -620,7 +620,7 @@ def register_error_handlers(app, config, auth):
 
   @app.handle_errors(Exception)
   def check_authorization(request, failure):
-    logger.error("Exception: {!s}\n{!s}", failure.value, failure.getTraceback())
+    logger.error("Exception while handling request:\n{!s}\n{:s}", request, failure.getTraceback())
 
     # log to, e.g., a metrics backend like atlas
     for plugin in plugins:
