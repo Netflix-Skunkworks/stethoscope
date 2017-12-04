@@ -25,7 +25,12 @@ DEVICE_NAMES = (
 
 
 @pytest.fixture(scope='module')
-def raw_devices(basedir="tests/fixtures/google/devices"):
+def basedir():
+  return "tests/fixtures/google/devices"
+
+
+@pytest.fixture(scope='module')
+def raw_devices(basedir):
   """Loads files in a directory as JSON; returns `dict` mapping filename (w/o ext) to contents."""
   devices = dict()
   for filename in os.listdir(basedir):
