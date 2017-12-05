@@ -642,6 +642,12 @@ def check_upstream_response(response, request):
     defer.returnValue(content)
 
 
+def handle_upstream_error(failure, request):
+  request.setResponseCode(502)
+  logger.error("Error connecting to upstream: {!s}\n{:s}", failure.value, failure.getTraceback())
+  return "Error connecting to upstream:\n{:s}".format(failure.getErrorMessage())
+
+
 def register_endpoints(app, config, auth, csrf):
   @app.route('/healthcheck')
   def healthcheck(request):
@@ -649,6 +655,7 @@ def register_endpoints(app, config, auth, csrf):
       "127.0.0.1:5002"))
     deferred = treq.get(upstream, timeout=0.1, headers={'Host': request.getHost().host})
     deferred.addCallback(check_upstream_response, request)
+    deferred.addErrback(handle_upstream_error, request)
     return deferred
 
   # gather hooks to external loggers
