@@ -7,7 +7,6 @@ import json
 import operator
 import os
 import pprint
-import re
 import sys
 from itertools import chain
 
@@ -621,7 +620,7 @@ def register_error_handlers(app, config, auth):
 
   @app.handle_errors(Exception)
   def check_authorization(request, failure):
-    logger.error("Exception: {!s}\n{!s}", failure.value, failure.getTraceback())
+    logger.error("Exception while handling request:\n{!s}\n{:s}", request, failure.getTraceback())
 
     # log to, e.g., a metrics backend like atlas
     for plugin in plugins:
@@ -643,6 +642,12 @@ def check_upstream_response(response, request):
     defer.returnValue(content)
 
 
+def handle_upstream_error(failure, request):
+  request.setResponseCode(502)
+  logger.error("Error connecting to upstream: {!s}\n{:s}", failure.value, failure.getTraceback())
+  return "Error connecting to upstream:\n{:s}".format(failure.getErrorMessage())
+
+
 def register_endpoints(app, config, auth, csrf):
   @app.route('/healthcheck')
   def healthcheck(request):
@@ -650,6 +655,7 @@ def register_endpoints(app, config, auth, csrf):
       "127.0.0.1:5002"))
     deferred = treq.get(upstream, timeout=0.1, headers={'Host': request.getHost().host})
     deferred.addCallback(check_upstream_response, request)
+    deferred.addErrback(handle_upstream_error, request)
     return deferred
 
   # gather hooks to external loggers
