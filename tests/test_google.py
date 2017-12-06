@@ -17,6 +17,14 @@ import stethoscope.plugins.sources.google.deferred
 
 logger = logbook.Logger(__name__)
 
+DEVICE_NAMES = (
+  'android',
+  'android_oreo',
+  'ios_google-sync',
+  'chromeos',
+  'chromeos_pixelbook',
+)
+
 
 @pytest.fixture(scope='module')
 def raw_devices(basedir="tests/fixtures/google/devices"):
@@ -32,7 +40,7 @@ def raw_devices(basedir="tests/fixtures/google/devices"):
   return devices
 
 
-@pytest.fixture(params=['android', 'android_oreo', 'ios_google-sync', 'chromeos'], scope='function')
+@pytest.fixture(params=DEVICE_NAMES, scope='function')
 def raw_device(request, raw_devices):
   """Returns a copy of a single device, given name, from the `dict` returned by `raw_devices`."""
   return copy.deepcopy(raw_devices[request.param])
@@ -77,7 +85,7 @@ def test_process_device_ios_googlesync(raw_device, mock_datasource):
   # assert device['os_version'] == '9.3'
   assert device['last_sync'].to('utc') == arrow.get('2016-03-24T01:42:02.702Z')
 
-  assert device['identifiers']['googleDeviceId'] == 'exampleGoogleDeviceId'
+  assert device['identifiers']['google_device_id'] == 'exampleGoogleDeviceId'
 
 
 @pytest.mark.parametrize(['raw_device'], [('android',)], indirect=['raw_device'])
@@ -171,3 +179,20 @@ def test_process_device_chromeos_bootmode(raw_device, boot_mode, value, mock_dat
     'value': value,
     'last_updated': last_updated,
   }
+
+
+@pytest.mark.parametrize(
+    ['raw_device', 'expected'],
+    [
+      ('chromeos', 'Samsung Chromebook Pro'),
+      ('chromeos_pixelbook', None)
+    ],
+    indirect=['raw_device']
+)
+def test_process_device_chromeos_model(raw_device, expected, mock_datasource):
+  device = mock_datasource._process_chromeos_device(raw_device)
+  pprint.pprint(device)
+  if expected is None:
+    assert 'model' not in device
+  else:
+    assert device['model'] == expected

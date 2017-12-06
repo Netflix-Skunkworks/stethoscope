@@ -28,7 +28,7 @@ IDENTIFIERS = {
   "imei": "imei",
   "meid": "meid",
   "serial": "serialNumber",
-  "googleDeviceId": "deviceId",
+  "google_device_id": "deviceId",
 }
 
 
@@ -237,7 +237,7 @@ class GoogleDataSourceBase(object):
   def _get_chromeos_devices_by_email(self, email, batch_size=1000):
     service = discovery.build('admin', 'directory_v1', http=self.connection)
     resource = service.chromeosdevices()
-    request = resource.list(customerId='my_customer', query='user:{!s}'.format(email.split('@')[0]),
+    request = resource.list(customerId='my_customer', query='user:{!s}'.format(email),
         projection="FULL", maxResults=batch_size)
     chromeos_devices = gutils.execute_batch(resource, request, 'chromeosdevices')
     # logger.debug("found {:d} chrome OS devices", len(chromeos_devices))

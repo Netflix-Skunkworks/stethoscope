@@ -1,0 +1,46 @@
+{
+    "activeTimeRanges": [
+        {
+            "activeTime": 5576043,
+            "date": "2017-11-15"
+        },
+        {
+            "activeTime": 5164060,
+            "date": "2017-11-20"
+        },
+        {
+            "activeTime": 8250076,
+            "date": "2017-11-27"
+        },
+        {
+            "activeTime": 11221984,
+            "date": "2017-11-28"
+        },
+        {
+            "activeTime": 1320009,
+            "date": "2017-11-29"
+        }
+    ],
+    "annotatedUser": "user@example.com",
+    "bootMode": "Verified",
+    "deviceId": "...",
+    "etag": "...",
+    "firmwareVersion": "Google_Eve.9584.95.0",
+    "kind": "admin#directory#chromeosdevice",
+    "lastEnrollmentTime": "2017-11-14T20:31:20.530Z",
+    "lastSync": "2017-11-29T19:05:30.483Z",
+    "macAddress": "decafbad0001",
+    "model": "",
+    "notes": "Pixelbook (2017)",
+    "orgUnitPath": "/Devices/Chrome Devices/Chrome Managed/User Chromebooks",
+    "osVersion": "62.0.3202.82",
+    "platformVersion": "9901.66.0 (Official Build) stable-channel eve",
+    "recentUsers": [
+        {
+            "email": "user@example.com",
+            "type": "USER_TYPE_MANAGED"
+        }
+    ],
+    "serialNumber": "0xDECAFBAD",
+    "status": "ACTIVE"
+}
