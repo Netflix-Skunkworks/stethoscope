@@ -678,6 +678,9 @@ def create_app():
 
   config['LOGBOOK'].push_application()
 
+  if "PLUGINS" not in config or len(config["PLUGINS"]) < 1:
+    logger.warn("Missing or invalid PLUGINS configuration!")
+
   app = klein.Klein()
   auth = stethoscope.auth.KleinAuthProvider(config)
   csrf = stethoscope.csrf.CSRFProtection(config)
