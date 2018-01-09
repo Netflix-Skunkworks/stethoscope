@@ -72,7 +72,7 @@ class JAMFDataSourceBase(stethoscope.configurator.Configurator):
       for drive in storage:
         if drive['drive_capacity_mb'] > 0 and 'partition' in drive:
           # hack to work around bug in JAMF
-          if drive['partition']['name'] == 'Recovery HD':
+          if drive['partition']['name'] in ('Recovery', 'Recovery HD'):
             continue
 
           encrypted.append(drive['partition']['filevault2_status'] == "Encrypted")
