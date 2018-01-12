@@ -52,7 +52,8 @@ def json_serialize_datetime(obj):
 
 def json_pp(obj):
   """Encodes the given object as pretty-printed JSON and returns the resulting string."""
-  return json.dumps(obj, sort_keys=True, indent=4, separators=(',', ': '))
+  return json.dumps(obj, sort_keys=True, indent=4, separators=(',', ': '),
+      default=json_serialize_datetime)
 
 
 def grouper(iterable, n, fillvalue=None):

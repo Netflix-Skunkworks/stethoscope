@@ -33,7 +33,7 @@ logger = logbook.Logger(__name__)
 def log_response(name, extension_name, response, debug=False):
   msg = "retrieved {:d} {:s}(s) from '{:s}'".format(len(response), name, extension_name)
   if debug:
-    msg += ":\n{:s}".format(pprint.pformat(response))
+    msg += ":\n{:s}".format(stethoscope.utils.json_pp(response))
   logger.debug(msg)
   return response
 
