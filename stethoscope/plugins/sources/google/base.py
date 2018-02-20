@@ -10,6 +10,7 @@ from apiclient import discovery
 
 import stethoscope.plugins.sources.google.utils as gutils
 import stethoscope.validation
+from stethoscope.utils import json_pp
 
 
 logger = logbook.Logger(__name__)
@@ -45,6 +46,41 @@ def copy_nonempty_values(dst, src, key_map):
     value = get_nonempty_value(src, src_key)
     if value is not None:
       dst[dst_key] = value
+
+
+def parse_os_information(os):
+  """Extract platform, OS, and version information from the Google API OS information string.
+
+  >>> sorted(six.iteritems(parse_os_information('iOS 10.2.1')))
+  [('os', 'iOS'), ('os_version', '10.2.1'), ('platform', 'iOS')]
+
+  >>> sorted(six.iteritems(parse_os_information('Android 8.0.0')))
+  [('os', 'Android'), ('os_version', '8.0.0'), ('platform', 'Android')]
+
+  NOTE: Google sometimes only provides major/minor versions without patch number; we throw that out
+  since it's not enough information to know if it's up-to-date or not.
+  >>> sorted(six.iteritems(parse_os_information('iOS 9.3')))
+  [('os', 'iOS'), ('platform', 'iOS')]
+  """
+  (os, version) = os.split()
+  data = {
+    'platform': os,
+    'os': os,
+  }
+
+  # Google sometimes only provides minor version without patch number; we ignore that case since
+  # that's not enough information to know if the device is up-to-date or not.
+  try:
+    parsed_version = pkg_resources.parse_version(version)
+  except Exception:
+    logger.exception("Failed to parse version string from {!r}; ignoring.".format(version))
+  else:
+    # Dirty hack which will probably break some day but there's basically no public API for
+    # `pkg_resources.SetuptoolsVersion`.
+    if len(parsed_version._version.release) >= 3:
+      data['os_version'] = version
+
+  return data
 
 
 class GoogleDataSourceBase(object):
@@ -144,17 +180,14 @@ class GoogleDataSourceBase(object):
     data = {'_raw': raw} if self._debug else {}
     data['type'] = 'Mobile Device'
 
+    os = get_nonempty_value(raw, 'os')
+    if os is not None:
+      data.update(parse_os_information(os))
+
+    # prefer 'osVersion' key to parsed key if present
     copy_nonempty_values(data, raw, PROPERTIES)
 
     data['last_sync'] = arrow.get(data['last_sync'])
-
-    os = get_nonempty_value(raw, 'os')
-    if os is not None:
-      data['platform'] = os.split()[0]
-      data['os'] = os.rsplit(None, 2)[0]
-      if raw['type'] in ['ANDROID', 'IOS_SYNC']:
-        # GOOGLE_SYNC doesn't provide the full version string
-        data['os_version'] = os.rsplit(None, 2)[1]
 
     data['practices'] = dict()
 
@@ -167,7 +200,8 @@ class GoogleDataSourceBase(object):
       data['practices']['encryption'] = encrypted
 
     if raw['type'] != 'ANDROID' or \
-        pkg_resources.parse_version(data['os_version']) < pkg_resources.parse_version('8.0.0'):
+        ('os_version' in data and
+         pkg_resources.parse_version(data['os_version']) < pkg_resources.parse_version('8.0.0')):
       # 'unknownSourcesStatus' is meaningless on Android 8.X+; equivalent setting is per-app
       data['practices']['unknownsources'] = {
         'last_updated': data['last_sync'],
