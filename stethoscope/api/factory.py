@@ -3,7 +3,6 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import functools
-import operator
 import os
 import pprint
 import sys
@@ -16,6 +15,7 @@ import treq
 from twisted.internet import defer
 
 import stethoscope.api.devices
+import stethoscope.api.endpoints.events
 import stethoscope.api.endpoints.utils
 import stethoscope.api.utils
 import stethoscope.auth
@@ -25,30 +25,6 @@ import stethoscope.validation
 
 
 logger = logbook.Logger(__name__)
-
-
-def sort_events(events):
-  return sorted(events, key=operator.itemgetter('timestamp'), reverse=True)
-
-
-def merge_events(events):
-  return sort_events(chain.from_iterable(_events for (status, _events) in events if status))
-
-
-def get_events_by_email(email, extensions):
-  deferreds = []
-  for ext in extensions:
-    deferred = ext.obj.get_events_by_email(email)
-    deferred.addCallback(functools.partial(stethoscope.api.endpoints.utils.log_response, 'event', ext.name))
-    deferreds.append(deferred)
-
-  return defer.DeferredList(deferreds, consumeErrors=True)
-
-
-@stethoscope.api.endpoints.utils.serialized_endpoint(merge_events)
-def merged_events(*args, **kwargs):
-  """Endpoint returning (as JSON) all events after merging."""
-  return get_events_by_email(*args, **kwargs)
 
 
 def get_accounts_by_email(email, extensions):
@@ -359,34 +335,6 @@ def register_device_api_endpoints(app, config, auth, log_hooks=[]):
       methods=['GET'])(__get_devices_by_stages)
 
 
-def register_event_api_endpoints(app, config, auth, log_hooks=[]):
-  event_plugins = stethoscope.plugins.utils.instantiate_plugins(config,
-      namespace='stethoscope.plugins.sources.events')
-
-  if config.get('ENABLE_EVENT_ENDPOINTS', config['DEBUG']) and len(event_plugins.names()) > 0:
-    event_plugins.map(stethoscope.api.endpoints.utils.add_get_route, app, auth, 'events', 'email', callbacks=[sort_events],
-        log_hooks=log_hooks)
-
-  # gather hooks to transform events (e.g., by adding geolocation data)
-  hooks = stethoscope.plugins.utils.instantiate_plugins(config,
-      namespace='stethoscope.plugins.transform.events')
-
-  @auth.match_required
-  @stethoscope.validation.check_valid_email
-  def _merged_events(request, email, **_kwargs):
-    userinfo = _kwargs.pop('userinfo')
-
-    # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [hook.obj.transform for hook in hooks] + [
-      functools.partial(stethoscope.api.endpoints.utils.log_response, 'event', 'merged'),
-      functools.partial(stethoscope.api.endpoints.utils.log_access, 'event', userinfo, email, context='merged'),
-    ] + [functools.partial(hook.obj.log, 'event', userinfo, email, context='merged')
-        for hook in log_hooks]
-    return merged_events(request, email, event_plugins, **_kwargs)
-  app.route('/events/merged/<string:email>', endpoint='events-merged',
-      methods=['GET'])(_merged_events)
-
-
 def register_userinfo_api_endpoints(app, config, auth, log_hooks=[]):
   userinfo_plugins = stethoscope.plugins.utils.instantiate_plugins(config,
       namespace='stethoscope.plugins.sources.userinfo')
@@ -519,7 +467,7 @@ def register_endpoints(app, config, auth, csrf):
 
   with app.subroute('/api/v1'):
     register_device_api_endpoints(app, config, auth, log_hooks=log_hooks)
-    register_event_api_endpoints(app, config, auth, log_hooks=log_hooks)
+    stethoscope.api.endpoints.events.register_event_api_endpoints(app, config, auth, log_hooks=log_hooks)
     register_account_api_endpoints(app, config, auth, log_hooks=log_hooks)
     register_notification_api_endpoints(app, config, auth, log_hooks=log_hooks)
     register_feedback_api_endpoints(app, config, auth, csrf, log_hooks=log_hooks)
