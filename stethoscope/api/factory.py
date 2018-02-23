@@ -18,7 +18,7 @@ import werkzeug.exceptions
 from twisted.internet import defer
 
 import stethoscope.api.devices
-import stethoscope.api.endpoints
+import stethoscope.api.endpoints.utils
 import stethoscope.api.utils
 import stethoscope.auth
 import stethoscope.csrf
@@ -49,7 +49,7 @@ def get_events_by_email(email, extensions):
   return defer.DeferredList(deferreds, consumeErrors=True)
 
 
-@stethoscope.api.endpoints.serialized_endpoint(merge_events)
+@stethoscope.api.endpoints.utils.serialized_endpoint(merge_events)
 def merged_events(*args, **kwargs):
   """Endpoint returning (as JSON) all events after merging."""
   return get_events_by_email(*args, **kwargs)
@@ -69,7 +69,7 @@ def merge_accounts(accts):
   return list(acct for (status, acct) in accts if status)
 
 
-@stethoscope.api.endpoints.serialized_endpoint(merge_accounts)
+@stethoscope.api.endpoints.utils.serialized_endpoint(merge_accounts)
 def merged_accounts(*args, **kwargs):
   """Endpoint returning (as JSON) all accounts after merging."""
   return get_accounts_by_email(*args, **kwargs)
@@ -97,7 +97,7 @@ def merge_notifications(notifications):
     status))
 
 
-@stethoscope.api.endpoints.serialized_endpoint(merge_notifications)
+@stethoscope.api.endpoints.utils.serialized_endpoint(merge_notifications)
 def merged_notifications(*args, **kwargs):
   """Endpoint returning (as JSON) all notifications after merging."""
   return get_notifications_by_email(*args, **kwargs)
@@ -296,7 +296,7 @@ def register_merged_device_endpoints(app, config, auth, device_plugins, apply_pr
     kwargs.setdefault('debug', config.get('DEBUG', False))
     return kwargs
 
-  @stethoscope.api.endpoints.serialized_endpoint(apply_practices,
+  @stethoscope.api.endpoints.utils.serialized_endpoint(apply_practices,
                                                  stethoscope.api.devices.merge_devices)
   def merged_devices_by_email(*args, **kwargs):
     """Endpoint returning (as JSON) all devices for given email after merging."""
@@ -311,7 +311,7 @@ def register_merged_device_endpoints(app, config, auth, device_plugins, apply_pr
   app.route('/devices/email/<string:email>', endpoint='devices-email',
       methods=['GET'])(__get_devices_by_email)
 
-  @stethoscope.api.endpoints.serialized_endpoint(apply_practices,
+  @stethoscope.api.endpoints.utils.serialized_endpoint(apply_practices,
                                                  stethoscope.api.devices.merge_devices)
   def merged_devices_by_serial(*args, **kwargs):
     """Endpoint returning (as JSON) all devices for given serial after merging."""
@@ -326,7 +326,7 @@ def register_merged_device_endpoints(app, config, auth, device_plugins, apply_pr
   app.route('/devices/serial/<string:serial>', endpoint='devices-serial',
       methods=['GET'])(__get_devices_by_serial)
 
-  @stethoscope.api.endpoints.serialized_endpoint(apply_practices,
+  @stethoscope.api.endpoints.utils.serialized_endpoint(apply_practices,
                                                  stethoscope.api.devices.merge_devices)
   def merged_devices_by_macaddr(*args, **kwargs):
     """Endpoint returning (as JSON) all devices for given macaddr after merging."""
@@ -384,7 +384,7 @@ def register_device_api_endpoints(app, config, auth, log_hooks=[]):
 
   # primary device api endpoint ('merged' or 'staged') which merges device data across all
   # device plugins (both initial and second-stage)
-  @stethoscope.api.endpoints.serialized_endpoint(apply_practices,
+  @stethoscope.api.endpoints.utils.serialized_endpoint(apply_practices,
                                                  stethoscope.api.devices.merge_devices)
   def merged_devices_by_stages(*args, **kwargs):
     """Endpoint returning (as JSON) all devices for given email (including second-stage lookups)."""
