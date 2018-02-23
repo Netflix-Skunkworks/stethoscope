@@ -13,6 +13,7 @@ import twisted.internet.defer
 import twisted.trial
 from klein.resource import KleinResource
 
+import stethoscope.api.endpoints.utils
 import stethoscope.api.factory
 import stethoscope.auth
 
@@ -77,7 +78,8 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
 
     callback = mock.Mock(side_effect=lambda x: x)
 
-    stethoscope.api.factory.add_get_route(ext, app, auth, 'resource', 'email', callbacks=[callback])
+    stethoscope.api.endpoints.utils.add_get_route(ext, app, auth, 'resource', 'email',
+                                                  callbacks=[callback])
 
     # see klein's test_app.py
     self.assertEqual(

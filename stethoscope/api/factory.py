@@ -3,7 +3,6 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import functools
-import json
 import operator
 import os
 import pprint
@@ -14,7 +13,6 @@ import flask.config
 import klein
 import logbook
 import treq
-import werkzeug.exceptions
 from twisted.internet import defer
 
 import stethoscope.api.devices
@@ -23,9 +21,7 @@ import stethoscope.api.utils
 import stethoscope.auth
 import stethoscope.csrf
 import stethoscope.plugins.utils
-import stethoscope.utils
 import stethoscope.validation
-from stethoscope.api.utils import log_access, log_error, log_response
 
 
 logger = logbook.Logger(__name__)
@@ -43,7 +39,7 @@ def get_events_by_email(email, extensions):
   deferreds = []
   for ext in extensions:
     deferred = ext.obj.get_events_by_email(email)
-    deferred.addCallback(functools.partial(log_response, 'event', ext.name))
+    deferred.addCallback(functools.partial(stethoscope.api.endpoints.utils.log_response, 'event', ext.name))
     deferreds.append(deferred)
 
   return defer.DeferredList(deferreds, consumeErrors=True)
@@ -59,7 +55,7 @@ def get_accounts_by_email(email, extensions):
   deferreds = []
   for ext in extensions:
     deferred = ext.obj.get_account_by_email(email)
-    deferred.addCallback(functools.partial(log_response, 'account', ext.name))
+    deferred.addCallback(functools.partial(stethoscope.api.endpoints.utils.log_response, 'account', ext.name))
     deferreds.append(deferred)
 
   return defer.DeferredList(deferreds, consumeErrors=True)
@@ -86,7 +82,7 @@ def get_notifications_by_email(email, extensions):
   deferreds = []
   for ext in extensions:
     deferred = ext.obj.get_notifications_by_email(email)
-    deferred.addCallback(functools.partial(log_response, 'notifications', ext.name))
+    deferred.addCallback(functools.partial(stethoscope.api.endpoints.utils.log_response, 'notifications', ext.name))
     deferreds.append(deferred)
 
   return defer.DeferredList(deferreds, consumeErrors=True)
@@ -110,7 +106,7 @@ def get_devices_by_email(email, extensions, debug=False):
     if hasattr(ext.obj, 'get_devices_by_email'):
       deferred = ext.obj.get_devices_by_email(email)
       deferred.addErrback(stethoscope.api.utils.check_user_not_found)
-      deferred.addCallback(functools.partial(log_response, 'device',
+      deferred.addCallback(functools.partial(stethoscope.api.endpoints.utils.log_response, 'device',
         ext.name + " ({!s})".format(email), debug=debug))
       deferreds.append(deferred)
 
@@ -130,7 +126,7 @@ def get_devices_by_macaddr(macaddr, extensions, debug=False):
     if hasattr(ext.obj, 'get_devices_by_macaddr'):
       deferred = ext.obj.get_devices_by_macaddr(macaddr)
       deferred.addErrback(stethoscope.api.utils.check_device_not_found)
-      deferred.addCallback(functools.partial(log_response, 'device',
+      deferred.addCallback(functools.partial(stethoscope.api.endpoints.utils.log_response, 'device',
         ext.name + " ({!s})".format(macaddr), debug=debug))
       deferreds.append(deferred)
 
@@ -150,7 +146,7 @@ def get_devices_by_serial(serial, extensions, debug=False):
     if hasattr(ext.obj, 'get_devices_by_serial'):
       deferred = ext.obj.get_devices_by_serial(serial)
       deferred.addErrback(stethoscope.api.utils.check_device_not_found)
-      deferred.addCallback(functools.partial(log_response, 'device',
+      deferred.addCallback(functools.partial(stethoscope.api.endpoints.utils.log_response, 'device',
         ext.name + " ({!s})".format(serial), debug=debug))
       deferreds.append(deferred)
 
@@ -233,54 +229,6 @@ def get_devices_by_stages(email, pre_extensions, extensions, transforms, debug=F
   defer.returnValue(devices)
 
 
-def add_get_route(ext, app, auth, name, argname, **kwargs):
-  """Add a GET route to Klein app `app` which calls `ext.obj.get_{name}`.
-
-  The route takes the form `/{name}/{ext.name}/<string:email>`, e.g.,
-  `/devices/google/<string:email>`.
-  """
-  method_name = 'get_' + name + "_by_" + argname
-  if not hasattr(ext.obj, method_name):
-    return None
-
-  callbacks = kwargs.pop('callbacks', [])
-  log_hooks = kwargs.pop('log_hooks', [])
-
-  @auth.match_required
-  @getattr(stethoscope.validation, 'check_valid_' + argname)
-  def _get(request, arg, **kwargs):
-    """Return a `Deferred` which calls an extension'a `get_{name}` method with the given `email`
-    and gives the result as a JSON resource."""
-    userinfo = kwargs.pop('userinfo')
-    if len(kwargs) > 0:
-      raise werkzeug.exceptions.BadRequest("unexpected parameters: {:s}",
-          stethoscope.utils.html_escape(str(kwargs)))
-
-    deferred = getattr(ext.obj, method_name)(arg)
-    deferred.addCallback(functools.partial(log_response, name, ext.name))
-    # deferred.addCallback(functools.partial(log_access, name, userinfo, arg, context=ext.name))
-    for hook in log_hooks:
-      deferred.addCallback(functools.partial(hook.obj.log, name, userinfo, arg, context=ext.name))
-    deferred.addErrback(functools.partial(log_error, name, ext.name))
-
-    for callback in callbacks:
-      deferred.addCallback(callback)
-
-    deferred.addCallback(json.dumps, default=stethoscope.utils.json_serialize_datetime)
-    request.setHeader('Content-Type', 'application/json')
-    return deferred
-
-  # note: setting the endpoint manually is necessary for Klein to direct flows properly
-  kwargs['endpoint'] = '-'.join([name, ext.name, argname])
-  kwargs.setdefault('methods', ['GET'])
-
-  url = '/' + '/'.join([name, ext.name, argname, '<string:{:s}>'.format(argname)])
-
-  logger.debug("registering extension:\n  extension: {!r}\n  object: {!r}\n  function: {!r}\n"
-               "  url: {!r}\n  kwargs: {!r}".format(ext, ext.obj, _get, url, kwargs))
-  app.route(url, **kwargs)(_get)
-
-
 def register_merged_device_endpoints(app, config, auth, device_plugins, apply_practices,
     transforms, log_hooks=[]):
   """Registers endpoints which provide merged devices without the ownership attribution stage."""
@@ -289,8 +237,8 @@ def register_merged_device_endpoints(app, config, auth, device_plugins, apply_pr
     userinfo = kwargs.pop('userinfo')
 
     kwargs['callbacks'] = [transform.obj.transform for transform in transforms] + [
-      functools.partial(log_response, 'device', endpoint_type),
-      functools.partial(log_access, 'device', userinfo, *args),
+      functools.partial(stethoscope.api.endpoints.utils.log_response, 'device', endpoint_type),
+      functools.partial(stethoscope.api.endpoints.utils.log_access, 'device', userinfo, *args),
     ] + [functools.partial(hook.obj.log, 'device', userinfo, *args) for hook in log_hooks]
 
     kwargs.setdefault('debug', config.get('DEBUG', False))
@@ -363,9 +311,9 @@ def register_device_api_endpoints(app, config, auth, log_hooks=[]):
   if config.get('ENABLE_PREDEVICE_ENDPOINTS', config['DEBUG']) and \
       len(predevice_plugins.names()) > 0:
     # individual endpoints for each plugin for device lookup by mac, email, serial
-    predevice_plugins.map(add_get_route, app, auth, 'devices', 'email', log_hooks=log_hooks)
-    predevice_plugins.map(add_get_route, app, auth, 'devices', 'macaddr', log_hooks=log_hooks)
-    predevice_plugins.map(add_get_route, app, auth, 'devices', 'serial', log_hooks=log_hooks)
+    predevice_plugins.map(stethoscope.api.endpoints.utils.add_get_route, app, auth, 'devices', 'email', log_hooks=log_hooks)
+    predevice_plugins.map(stethoscope.api.endpoints.utils.add_get_route, app, auth, 'devices', 'macaddr', log_hooks=log_hooks)
+    predevice_plugins.map(stethoscope.api.endpoints.utils.add_get_route, app, auth, 'devices', 'serial', log_hooks=log_hooks)
 
   # instantiate the second-stage plugins which provide detailed device data
   device_plugins = stethoscope.plugins.utils.instantiate_plugins(config,
@@ -373,9 +321,9 @@ def register_device_api_endpoints(app, config, auth, log_hooks=[]):
 
   if config.get('ENABLE_DEVICE_ENDPOINTS', config['DEBUG']) and len(device_plugins.names()) > 0:
     # individual endpoints for each plugin for device lookup by mac, email, serial
-    device_plugins.map(add_get_route, app, auth, 'devices', 'email', log_hooks=log_hooks)
-    device_plugins.map(add_get_route, app, auth, 'devices', 'macaddr', log_hooks=log_hooks)
-    device_plugins.map(add_get_route, app, auth, 'devices', 'serial', log_hooks=log_hooks)
+    device_plugins.map(stethoscope.api.endpoints.utils.add_get_route, app, auth, 'devices', 'email', log_hooks=log_hooks)
+    device_plugins.map(stethoscope.api.endpoints.utils.add_get_route, app, auth, 'devices', 'macaddr', log_hooks=log_hooks)
+    device_plugins.map(stethoscope.api.endpoints.utils.add_get_route, app, auth, 'devices', 'serial', log_hooks=log_hooks)
 
     # 'merged' endpoints which merge device data across all second-stage device plugins
     # (without the initial ownership-attribution stage) for lookup by mac, email, serial
@@ -397,8 +345,8 @@ def register_device_api_endpoints(app, config, auth, log_hooks=[]):
 
     # required so that app.route can get a '__name__' attribute from decorated function
     _kwargs['callbacks'] = [transform.obj.transform for transform in transforms] + [
-      functools.partial(log_response, 'device', 'staged'),
-      functools.partial(log_access, 'device', userinfo, email, context='merged'),
+      functools.partial(stethoscope.api.endpoints.utils.log_response, 'device', 'staged'),
+      functools.partial(stethoscope.api.endpoints.utils.log_access, 'device', userinfo, email, context='merged'),
     ] + [functools.partial(hook.obj.log, 'device', userinfo, email, context='merged')
         for hook in log_hooks]
     logger.debug("callbacks:\n{!s}", pprint.pformat(_kwargs['callbacks']))
@@ -416,7 +364,7 @@ def register_event_api_endpoints(app, config, auth, log_hooks=[]):
       namespace='stethoscope.plugins.sources.events')
 
   if config.get('ENABLE_EVENT_ENDPOINTS', config['DEBUG']) and len(event_plugins.names()) > 0:
-    event_plugins.map(add_get_route, app, auth, 'events', 'email', callbacks=[sort_events],
+    event_plugins.map(stethoscope.api.endpoints.utils.add_get_route, app, auth, 'events', 'email', callbacks=[sort_events],
         log_hooks=log_hooks)
 
   # gather hooks to transform events (e.g., by adding geolocation data)
@@ -430,8 +378,8 @@ def register_event_api_endpoints(app, config, auth, log_hooks=[]):
 
     # required so that app.route can get a '__name__' attribute from decorated function
     _kwargs['callbacks'] = [hook.obj.transform for hook in hooks] + [
-      functools.partial(log_response, 'event', 'merged'),
-      functools.partial(log_access, 'event', userinfo, email, context='merged'),
+      functools.partial(stethoscope.api.endpoints.utils.log_response, 'event', 'merged'),
+      functools.partial(stethoscope.api.endpoints.utils.log_access, 'event', userinfo, email, context='merged'),
     ] + [functools.partial(hook.obj.log, 'event', userinfo, email, context='merged')
         for hook in log_hooks]
     return merged_events(request, email, event_plugins, **_kwargs)
@@ -444,7 +392,7 @@ def register_userinfo_api_endpoints(app, config, auth, log_hooks=[]):
       namespace='stethoscope.plugins.sources.userinfo')
 
   if config['DEBUG']:
-    userinfo_plugins.map(add_get_route, app, auth, 'userinfo', 'email', log_hooks=log_hooks)
+    userinfo_plugins.map(stethoscope.api.endpoints.utils.add_get_route, app, auth, 'userinfo', 'email', log_hooks=log_hooks)
 
 
 def register_account_api_endpoints(app, config, auth, log_hooks=[]):
@@ -452,7 +400,7 @@ def register_account_api_endpoints(app, config, auth, log_hooks=[]):
       namespace='stethoscope.plugins.sources.accounts')
 
   if config.get('ENABLE_ACCOUNT_ENDPOINTS', config['DEBUG']) and len(account_plugins.names()) > 0:
-    account_plugins.map(add_get_route, app, auth, 'account', 'email', log_hooks=log_hooks)
+    account_plugins.map(stethoscope.api.endpoints.utils.add_get_route, app, auth, 'account', 'email', log_hooks=log_hooks)
 
   @auth.match_required
   @stethoscope.validation.check_valid_email
@@ -461,8 +409,8 @@ def register_account_api_endpoints(app, config, auth, log_hooks=[]):
 
     # required so that app.route can get a '__name__' attribute from decorated function
     _kwargs['callbacks'] = [
-      functools.partial(log_response, 'account', 'merged'),
-      functools.partial(log_access, 'account', userinfo, email, context='merged'),
+      functools.partial(stethoscope.api.endpoints.utils.log_response, 'account', 'merged'),
+      functools.partial(stethoscope.api.endpoints.utils.log_access, 'account', userinfo, email, context='merged'),
     ] + [functools.partial(hook.obj.log, 'account', userinfo, email, context='merged')
         for hook in log_hooks]
     return merged_accounts(request, email, account_plugins, **_kwargs)
@@ -476,7 +424,7 @@ def register_notification_api_endpoints(app, config, auth, log_hooks=[]):
 
   if config.get('ENABLE_NOTIFICATION_ENDPOINTS', config['DEBUG']) \
       and len(notification_plugins.names()) > 0:
-    notification_plugins.map(add_get_route, app, auth, 'notifications', 'email', log_hooks=log_hooks)
+    notification_plugins.map(stethoscope.api.endpoints.utils.add_get_route, app, auth, 'notifications', 'email', log_hooks=log_hooks)
 
   @auth.match_required
   @stethoscope.validation.check_valid_email
@@ -485,67 +433,13 @@ def register_notification_api_endpoints(app, config, auth, log_hooks=[]):
 
     # required so that app.route can get a '__name__' attribute from decorated function
     _kwargs['callbacks'] = [
-      functools.partial(log_response, 'notification', 'merged'),
-      functools.partial(log_access, 'notification', userinfo, email, context='merged'),
+      functools.partial(stethoscope.api.endpoints.utils.log_response, 'notification', 'merged'),
+      functools.partial(stethoscope.api.endpoints.utils.log_access, 'notification', userinfo, email, context='merged'),
     ] + [functools.partial(hook.obj.log, 'notification', userinfo, email, context='merged')
         for hook in log_hooks]
     return merged_notifications(request, email, notification_plugins, **_kwargs)
   app.route('/notifications/merged/<string:email>', endpoint='notifications-merged',
       methods=['GET'])(_merged_notifications)
-
-
-def log_post_response(name, extension_name, result, debug=False):
-  msg = "posted '{:s}' to '{:s}'".format(name, extension_name)
-  if debug:
-    msg += ":\n{:s}".format(pprint.pformat(result))
-  logger.debug(msg)
-  return result
-
-
-def log_post_error(name, extension_name, result):
-  logger.error("error posting '{:s}' to '{:s}':\n{!s}", name, extension_name, result)
-  return result
-
-
-def add_post_route(ext, app, config, auth, csrf, name, **kwargs):
-  method_name = 'post_' + name
-  if not hasattr(ext.obj, method_name):
-    return None
-
-  callbacks = kwargs.pop('callbacks', [])
-  # log_hooks = kwargs.pop('log_hooks', [])
-
-  @auth.token_required  # TODO: consider auth
-  @csrf.csrf_protect
-  def _post(request, **kwargs):
-    """Return a `Deferred` which calls an extension'a `post_{name}` method with the POST data
-    and gives the result as a JSON resource."""
-    userinfo = kwargs.pop('userinfo')
-    if len(kwargs) > 0:
-      raise werkzeug.exceptions.BadRequest("unexpected parameters: {:s}",
-          stethoscope.utils.html_escape(str(kwargs)))
-
-    content = json.loads(request.content.getvalue().decode('utf-8'))
-    deferred = getattr(ext.obj, method_name)(userinfo['sub'], content)
-    deferred.addCallback(functools.partial(log_post_response, name, ext.name))
-    deferred.addErrback(functools.partial(log_post_error, name, ext.name))
-
-    for callback in callbacks:
-      deferred.addCallback(callback)
-
-    deferred.addCallback(json.dumps, default=stethoscope.utils.json_serialize_datetime)
-    request.setHeader('Content-Type', 'application/json')
-    return deferred
-
-  # note: setting the endpoint manually is necessary for Klein to direct flows properly
-  kwargs['endpoint'] = '-'.join([name, ext.name])
-  kwargs.setdefault('methods', ['POST'])
-
-  url = '/' + '/'.join([name, ext.name])
-
-  logger.debug("registering extension:\n  extension: {!r}\n  object: {!r}\n  function: {!r}\n"
-               "  url: {!r}\n  kwargs: {!r}".format(ext, ext.obj, _post, url, kwargs))
-  app.route(url, **kwargs)(_post)
 
 
 def register_feedback_api_endpoints(app, config, auth, csrf, log_hooks=[]):
@@ -554,7 +448,7 @@ def register_feedback_api_endpoints(app, config, auth, csrf, log_hooks=[]):
 
   if config.get('ENABLE_FEEDBACK_ENDPOINTS', config['DEBUG']) \
       and len(feedback_plugins.names()) > 0:
-    feedback_plugins.map(add_post_route, app, config, auth, csrf, 'feedback')
+    feedback_plugins.map(stethoscope.api.endpoints.utils.add_post_route, app, config, auth, csrf, 'feedback')
 
 
 def get_config():
