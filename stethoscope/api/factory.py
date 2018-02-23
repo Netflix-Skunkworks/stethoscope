@@ -22,29 +22,10 @@ import stethoscope.auth
 import stethoscope.csrf
 import stethoscope.plugins.utils
 import stethoscope.validation
+import stethoscope.api.endpoints.accounts
 
 
 logger = logbook.Logger(__name__)
-
-
-def get_accounts_by_email(email, extensions):
-  deferreds = []
-  for ext in extensions:
-    deferred = ext.obj.get_account_by_email(email)
-    deferred.addCallback(functools.partial(stethoscope.api.endpoints.utils.log_response, 'account', ext.name))
-    deferreds.append(deferred)
-
-  return defer.DeferredList(deferreds, consumeErrors=True)
-
-
-def merge_accounts(accts):
-  return list(acct for (status, acct) in accts if status)
-
-
-@stethoscope.api.endpoints.utils.serialized_endpoint(merge_accounts)
-def merged_accounts(*args, **kwargs):
-  """Endpoint returning (as JSON) all accounts after merging."""
-  return get_accounts_by_email(*args, **kwargs)
 
 
 def sort_notifications(notifications):
@@ -343,29 +324,6 @@ def register_userinfo_api_endpoints(app, config, auth, log_hooks=[]):
     userinfo_plugins.map(stethoscope.api.endpoints.utils.add_get_route, app, auth, 'userinfo', 'email', log_hooks=log_hooks)
 
 
-def register_account_api_endpoints(app, config, auth, log_hooks=[]):
-  account_plugins = stethoscope.plugins.utils.instantiate_plugins(config,
-      namespace='stethoscope.plugins.sources.accounts')
-
-  if config.get('ENABLE_ACCOUNT_ENDPOINTS', config['DEBUG']) and len(account_plugins.names()) > 0:
-    account_plugins.map(stethoscope.api.endpoints.utils.add_get_route, app, auth, 'account', 'email', log_hooks=log_hooks)
-
-  @auth.match_required
-  @stethoscope.validation.check_valid_email
-  def _merged_accounts(request, email, **_kwargs):
-    userinfo = _kwargs.pop('userinfo')
-
-    # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [
-      functools.partial(stethoscope.api.endpoints.utils.log_response, 'account', 'merged'),
-      functools.partial(stethoscope.api.endpoints.utils.log_access, 'account', userinfo, email, context='merged'),
-    ] + [functools.partial(hook.obj.log, 'account', userinfo, email, context='merged')
-        for hook in log_hooks]
-    return merged_accounts(request, email, account_plugins, **_kwargs)
-  app.route('/accounts/merged/<string:email>', endpoint='accounts-merged',
-      methods=['GET'])(_merged_accounts)
-
-
 def register_notification_api_endpoints(app, config, auth, log_hooks=[]):
   notification_plugins = stethoscope.plugins.utils.instantiate_plugins(config,
       namespace='stethoscope.plugins.sources.notifications')
@@ -468,7 +426,7 @@ def register_endpoints(app, config, auth, csrf):
   with app.subroute('/api/v1'):
     register_device_api_endpoints(app, config, auth, log_hooks=log_hooks)
     stethoscope.api.endpoints.events.register_event_api_endpoints(app, config, auth, log_hooks=log_hooks)
-    register_account_api_endpoints(app, config, auth, log_hooks=log_hooks)
+    stethoscope.api.endpoints.accounts.register_account_api_endpoints(app, config, auth, log_hooks=log_hooks)
     register_notification_api_endpoints(app, config, auth, log_hooks=log_hooks)
     register_feedback_api_endpoints(app, config, auth, csrf, log_hooks=log_hooks)
     # temporarily disabled: userinfo is not in use
