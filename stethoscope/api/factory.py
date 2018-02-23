@@ -23,37 +23,10 @@ import stethoscope.csrf
 import stethoscope.plugins.utils
 import stethoscope.validation
 import stethoscope.api.endpoints.accounts
+import stethoscope.api.endpoints.notifications
 
 
 logger = logbook.Logger(__name__)
-
-
-def sort_notifications(notifications):
-  # TODO: replace with generic version
-  def get_timestamp(notification):
-    return notification['_source']['event_timestamp']
-  return sorted(notifications, key=get_timestamp, reverse=True)
-
-
-def get_notifications_by_email(email, extensions):
-  deferreds = []
-  for ext in extensions:
-    deferred = ext.obj.get_notifications_by_email(email)
-    deferred.addCallback(functools.partial(stethoscope.api.endpoints.utils.log_response, 'notifications', ext.name))
-    deferreds.append(deferred)
-
-  return defer.DeferredList(deferreds, consumeErrors=True)
-
-
-def merge_notifications(notifications):
-  return sort_notifications(chain.from_iterable(notifs for (status, notifs) in notifications if
-    status))
-
-
-@stethoscope.api.endpoints.utils.serialized_endpoint(merge_notifications)
-def merged_notifications(*args, **kwargs):
-  """Endpoint returning (as JSON) all notifications after merging."""
-  return get_notifications_by_email(*args, **kwargs)
 
 
 def get_devices_by_email(email, extensions, debug=False):
@@ -324,30 +297,6 @@ def register_userinfo_api_endpoints(app, config, auth, log_hooks=[]):
     userinfo_plugins.map(stethoscope.api.endpoints.utils.add_get_route, app, auth, 'userinfo', 'email', log_hooks=log_hooks)
 
 
-def register_notification_api_endpoints(app, config, auth, log_hooks=[]):
-  notification_plugins = stethoscope.plugins.utils.instantiate_plugins(config,
-      namespace='stethoscope.plugins.sources.notifications')
-
-  if config.get('ENABLE_NOTIFICATION_ENDPOINTS', config['DEBUG']) \
-      and len(notification_plugins.names()) > 0:
-    notification_plugins.map(stethoscope.api.endpoints.utils.add_get_route, app, auth, 'notifications', 'email', log_hooks=log_hooks)
-
-  @auth.match_required
-  @stethoscope.validation.check_valid_email
-  def _merged_notifications(request, email, **_kwargs):
-    userinfo = _kwargs.pop('userinfo')
-
-    # required so that app.route can get a '__name__' attribute from decorated function
-    _kwargs['callbacks'] = [
-      functools.partial(stethoscope.api.endpoints.utils.log_response, 'notification', 'merged'),
-      functools.partial(stethoscope.api.endpoints.utils.log_access, 'notification', userinfo, email, context='merged'),
-    ] + [functools.partial(hook.obj.log, 'notification', userinfo, email, context='merged')
-        for hook in log_hooks]
-    return merged_notifications(request, email, notification_plugins, **_kwargs)
-  app.route('/notifications/merged/<string:email>', endpoint='notifications-merged',
-      methods=['GET'])(_merged_notifications)
-
-
 def register_feedback_api_endpoints(app, config, auth, csrf, log_hooks=[]):
   feedback_plugins = stethoscope.plugins.utils.instantiate_plugins(config,
       namespace='stethoscope.plugins.feedback')
@@ -427,7 +376,7 @@ def register_endpoints(app, config, auth, csrf):
     register_device_api_endpoints(app, config, auth, log_hooks=log_hooks)
     stethoscope.api.endpoints.events.register_event_api_endpoints(app, config, auth, log_hooks=log_hooks)
     stethoscope.api.endpoints.accounts.register_account_api_endpoints(app, config, auth, log_hooks=log_hooks)
-    register_notification_api_endpoints(app, config, auth, log_hooks=log_hooks)
+    stethoscope.api.endpoints.notifications.register_notification_api_endpoints(app, config, auth, log_hooks=log_hooks)
     register_feedback_api_endpoints(app, config, auth, csrf, log_hooks=log_hooks)
     # temporarily disabled: userinfo is not in use
     # register_userinfo_api_endpoints(app, config, auth, log_hooks=log_hooks)
