@@ -23,14 +23,6 @@ import stethoscope.plugins.utils
 logger = logbook.Logger(__name__)
 
 
-def register_userinfo_api_endpoints(app, config, auth, log_hooks=[]):
-  userinfo_plugins = stethoscope.plugins.utils.instantiate_plugins(config,
-      namespace='stethoscope.plugins.sources.userinfo')
-
-  if config['DEBUG']:
-    userinfo_plugins.map(stethoscope.api.endpoints.utils.add_get_route, app, auth, 'userinfo', 'email', log_hooks=log_hooks)
-
-
 def register_feedback_api_endpoints(app, config, auth, csrf, log_hooks=[]):
   feedback_plugins = stethoscope.plugins.utils.instantiate_plugins(config,
       namespace='stethoscope.plugins.feedback')

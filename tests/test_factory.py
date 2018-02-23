@@ -18,8 +18,8 @@ import stethoscope.api.endpoints.devices
 import stethoscope.api.endpoints.events
 import stethoscope.api.endpoints.notifications
 import stethoscope.api.endpoints.utils
-import stethoscope.api.factory
 import stethoscope.auth
+import stethoscope.api.endpoints.userinfo
 
 
 config = {
@@ -102,7 +102,7 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
         mock_instantiate_plugins:
       mock_instantiate_plugins.return_value = stevedore.ExtensionManager.make_test_instance(
           [get_mock_ext(result)])
-      stethoscope.api.factory.register_userinfo_api_endpoints(app, config, auth)
+      stethoscope.api.endpoints.userinfo.register_userinfo_api_endpoints(app, config, auth)
 
     # see klein's test_app.py
     self.assertEqual(
