@@ -10,14 +10,14 @@ import logbook
 import treq
 from twisted.internet import defer
 
-import stethoscope.api.endpoints.accounts
-import stethoscope.api.endpoints.devices
-import stethoscope.api.endpoints.notifications
-import stethoscope.api.endpoints.events
 import stethoscope.auth
 import stethoscope.csrf
 import stethoscope.plugins.utils
-import stethoscope.api.endpoints.feedback
+from stethoscope.api.endpoints.accounts import register_account_api_endpoints
+from stethoscope.api.endpoints.devices import register_device_api_endpoints
+from stethoscope.api.endpoints.events import register_event_api_endpoints
+from stethoscope.api.endpoints.feedback import register_feedback_api_endpoints
+from stethoscope.api.endpoints.notifications import register_notification_api_endpoints
 
 
 logger = logbook.Logger(__name__)
@@ -90,11 +90,11 @@ def register_endpoints(app, config, auth, csrf):
   logger.debug("loaded request logging hooks: {!r}", [hook.name for hook in log_hooks])
 
   with app.subroute('/api/v1'):
-    stethoscope.api.endpoints.devices.register_device_api_endpoints(app, config, auth, log_hooks=log_hooks)
-    stethoscope.api.endpoints.events.register_event_api_endpoints(app, config, auth, log_hooks=log_hooks)
-    stethoscope.api.endpoints.accounts.register_account_api_endpoints(app, config, auth, log_hooks=log_hooks)
-    stethoscope.api.endpoints.notifications.register_notification_api_endpoints(app, config, auth, log_hooks=log_hooks)
-    stethoscope.api.endpoints.feedback.register_feedback_api_endpoints(app, config, auth, csrf, log_hooks=log_hooks)
+    register_device_api_endpoints(app, config, auth, log_hooks=log_hooks)
+    register_event_api_endpoints(app, config, auth, log_hooks=log_hooks)
+    register_account_api_endpoints(app, config, auth, log_hooks=log_hooks)
+    register_notification_api_endpoints(app, config, auth, log_hooks=log_hooks)
+    register_feedback_api_endpoints(app, config, auth, csrf, log_hooks=log_hooks)
     # temporarily disabled: userinfo is not in use
     # register_userinfo_api_endpoints(app, config, auth, log_hooks=log_hooks)
 
