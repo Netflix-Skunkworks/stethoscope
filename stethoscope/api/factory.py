@@ -14,22 +14,13 @@ import stethoscope.api.endpoints.accounts
 import stethoscope.api.endpoints.devices
 import stethoscope.api.endpoints.notifications
 import stethoscope.api.endpoints.events
-import stethoscope.api.endpoints.utils
 import stethoscope.auth
 import stethoscope.csrf
 import stethoscope.plugins.utils
+import stethoscope.api.endpoints.feedback
 
 
 logger = logbook.Logger(__name__)
-
-
-def register_feedback_api_endpoints(app, config, auth, csrf, log_hooks=[]):
-  feedback_plugins = stethoscope.plugins.utils.instantiate_plugins(config,
-      namespace='stethoscope.plugins.feedback')
-
-  if config.get('ENABLE_FEEDBACK_ENDPOINTS', config['DEBUG']) \
-      and len(feedback_plugins.names()) > 0:
-    feedback_plugins.map(stethoscope.api.endpoints.utils.add_post_route, app, config, auth, csrf, 'feedback')
 
 
 def get_config():
@@ -103,7 +94,7 @@ def register_endpoints(app, config, auth, csrf):
     stethoscope.api.endpoints.events.register_event_api_endpoints(app, config, auth, log_hooks=log_hooks)
     stethoscope.api.endpoints.accounts.register_account_api_endpoints(app, config, auth, log_hooks=log_hooks)
     stethoscope.api.endpoints.notifications.register_notification_api_endpoints(app, config, auth, log_hooks=log_hooks)
-    register_feedback_api_endpoints(app, config, auth, csrf, log_hooks=log_hooks)
+    stethoscope.api.endpoints.feedback.register_feedback_api_endpoints(app, config, auth, csrf, log_hooks=log_hooks)
     # temporarily disabled: userinfo is not in use
     # register_userinfo_api_endpoints(app, config, auth, log_hooks=log_hooks)
 
