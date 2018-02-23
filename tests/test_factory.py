@@ -77,7 +77,7 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
 
     callback = mock.Mock(side_effect=lambda x: x)
 
-    stethoscope.api.factory._add_route(ext, app, auth, 'resource', 'email', callbacks=[callback])
+    stethoscope.api.factory.add_get_route(ext, app, auth, 'resource', 'email', callbacks=[callback])
 
     # see klein's test_app.py
     self.assertEqual(

@@ -233,7 +233,7 @@ def get_devices_by_stages(email, pre_extensions, extensions, transforms, debug=F
   defer.returnValue(devices)
 
 
-def _add_route(ext, app, auth, name, argname, **kwargs):
+def add_get_route(ext, app, auth, name, argname, **kwargs):
   """Add a GET route to Klein app `app` which calls `ext.obj.get_{name}`.
 
   The route takes the form `/{name}/{ext.name}/<string:email>`, e.g.,
@@ -363,9 +363,9 @@ def register_device_api_endpoints(app, config, auth, log_hooks=[]):
   if config.get('ENABLE_PREDEVICE_ENDPOINTS', config['DEBUG']) and \
       len(predevice_plugins.names()) > 0:
     # individual endpoints for each plugin for device lookup by mac, email, serial
-    predevice_plugins.map(_add_route, app, auth, 'devices', 'email', log_hooks=log_hooks)
-    predevice_plugins.map(_add_route, app, auth, 'devices', 'macaddr', log_hooks=log_hooks)
-    predevice_plugins.map(_add_route, app, auth, 'devices', 'serial', log_hooks=log_hooks)
+    predevice_plugins.map(add_get_route, app, auth, 'devices', 'email', log_hooks=log_hooks)
+    predevice_plugins.map(add_get_route, app, auth, 'devices', 'macaddr', log_hooks=log_hooks)
+    predevice_plugins.map(add_get_route, app, auth, 'devices', 'serial', log_hooks=log_hooks)
 
   # instantiate the second-stage plugins which provide detailed device data
   device_plugins = stethoscope.plugins.utils.instantiate_plugins(config,
@@ -373,9 +373,9 @@ def register_device_api_endpoints(app, config, auth, log_hooks=[]):
 
   if config.get('ENABLE_DEVICE_ENDPOINTS', config['DEBUG']) and len(device_plugins.names()) > 0:
     # individual endpoints for each plugin for device lookup by mac, email, serial
-    device_plugins.map(_add_route, app, auth, 'devices', 'email', log_hooks=log_hooks)
-    device_plugins.map(_add_route, app, auth, 'devices', 'macaddr', log_hooks=log_hooks)
-    device_plugins.map(_add_route, app, auth, 'devices', 'serial', log_hooks=log_hooks)
+    device_plugins.map(add_get_route, app, auth, 'devices', 'email', log_hooks=log_hooks)
+    device_plugins.map(add_get_route, app, auth, 'devices', 'macaddr', log_hooks=log_hooks)
+    device_plugins.map(add_get_route, app, auth, 'devices', 'serial', log_hooks=log_hooks)
 
     # 'merged' endpoints which merge device data across all second-stage device plugins
     # (without the initial ownership-attribution stage) for lookup by mac, email, serial
@@ -416,7 +416,7 @@ def register_event_api_endpoints(app, config, auth, log_hooks=[]):
       namespace='stethoscope.plugins.sources.events')
 
   if config.get('ENABLE_EVENT_ENDPOINTS', config['DEBUG']) and len(event_plugins.names()) > 0:
-    event_plugins.map(_add_route, app, auth, 'events', 'email', callbacks=[sort_events],
+    event_plugins.map(add_get_route, app, auth, 'events', 'email', callbacks=[sort_events],
         log_hooks=log_hooks)
 
   # gather hooks to transform events (e.g., by adding geolocation data)
@@ -444,7 +444,7 @@ def register_userinfo_api_endpoints(app, config, auth, log_hooks=[]):
       namespace='stethoscope.plugins.sources.userinfo')
 
   if config['DEBUG']:
-    userinfo_plugins.map(_add_route, app, auth, 'userinfo', 'email', log_hooks=log_hooks)
+    userinfo_plugins.map(add_get_route, app, auth, 'userinfo', 'email', log_hooks=log_hooks)
 
 
 def register_account_api_endpoints(app, config, auth, log_hooks=[]):
@@ -452,7 +452,7 @@ def register_account_api_endpoints(app, config, auth, log_hooks=[]):
       namespace='stethoscope.plugins.sources.accounts')
 
   if config.get('ENABLE_ACCOUNT_ENDPOINTS', config['DEBUG']) and len(account_plugins.names()) > 0:
-    account_plugins.map(_add_route, app, auth, 'account', 'email', log_hooks=log_hooks)
+    account_plugins.map(add_get_route, app, auth, 'account', 'email', log_hooks=log_hooks)
 
   @auth.match_required
   @stethoscope.validation.check_valid_email
@@ -476,7 +476,7 @@ def register_notification_api_endpoints(app, config, auth, log_hooks=[]):
 
   if config.get('ENABLE_NOTIFICATION_ENDPOINTS', config['DEBUG']) \
       and len(notification_plugins.names()) > 0:
-    notification_plugins.map(_add_route, app, auth, 'notifications', 'email', log_hooks=log_hooks)
+    notification_plugins.map(add_get_route, app, auth, 'notifications', 'email', log_hooks=log_hooks)
 
   @auth.match_required
   @stethoscope.validation.check_valid_email
@@ -507,7 +507,7 @@ def log_post_error(name, extension_name, result):
   return result
 
 
-def _add_post_route(ext, app, config, auth, csrf, name, **kwargs):
+def add_post_route(ext, app, config, auth, csrf, name, **kwargs):
   method_name = 'post_' + name
   if not hasattr(ext.obj, method_name):
     return None
@@ -554,7 +554,7 @@ def register_feedback_api_endpoints(app, config, auth, csrf, log_hooks=[]):
 
   if config.get('ENABLE_FEEDBACK_ENDPOINTS', config['DEBUG']) \
       and len(feedback_plugins.names()) > 0:
-    feedback_plugins.map(_add_post_route, app, config, auth, csrf, 'feedback')
+    feedback_plugins.map(add_post_route, app, config, auth, csrf, 'feedback')
 
 
 def get_config():
