@@ -25,28 +25,10 @@ import stethoscope.csrf
 import stethoscope.plugins.utils
 import stethoscope.utils
 import stethoscope.validation
+from stethoscope.api.utils import log_access, log_error, log_response
 
 
 logger = logbook.Logger(__name__)
-
-
-def log_response(name, extension_name, response, debug=False):
-  msg = "retrieved {:d} {:s}(s) from '{:s}'".format(len(response), name, extension_name)
-  if debug:
-    msg += ":\n{:s}".format(stethoscope.utils.json_pp(response))
-  logger.debug(msg)
-  return response
-
-
-def log_error(name, extension_name, response):
-  logger.error("error retrieving {:s}(s) from '{:s}':\n{!s}", name, extension_name, response)
-  return response
-
-
-def log_access(record_type, userinfo, target, response, context=None):
-  logger.notice("'{!s}' accessed {!s} records{!s} for '{!s}'", userinfo['sub'], record_type,
-      " ({!s})".format(context) if context is not None else "", target)
-  return response
 
 
 def sort_events(events):
