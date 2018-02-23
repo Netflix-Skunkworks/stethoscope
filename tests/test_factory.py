@@ -13,12 +13,13 @@ import twisted.internet.defer
 import twisted.trial
 from klein.resource import KleinResource
 
+import stethoscope.api.endpoints.accounts
+import stethoscope.api.endpoints.devices
 import stethoscope.api.endpoints.events
+import stethoscope.api.endpoints.notifications
 import stethoscope.api.endpoints.utils
 import stethoscope.api.factory
 import stethoscope.auth
-import stethoscope.api.endpoints.accounts
-import stethoscope.api.endpoints.notifications
 
 
 config = {
@@ -225,7 +226,7 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
         mock_instantiate_plugins:
       mock_instantiate_plugins.return_value = stevedore.ExtensionManager.make_test_instance(
           [get_mock_ext(result)])
-      stethoscope.api.factory.register_device_api_endpoints(app, config, auth)
+      stethoscope.api.endpoints.devices.register_device_api_endpoints(app, config, auth)
 
     # see klein's test_app.py
     self.assertEqual(
