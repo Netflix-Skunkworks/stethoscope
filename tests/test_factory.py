@@ -17,9 +17,9 @@ import stethoscope.api.endpoints.accounts
 import stethoscope.api.endpoints.devices
 import stethoscope.api.endpoints.events
 import stethoscope.api.endpoints.notifications
+import stethoscope.api.endpoints.userinfo
 import stethoscope.api.endpoints.utils
 import stethoscope.auth
-import stethoscope.api.endpoints.userinfo
 
 
 config = {

@@ -12,9 +12,9 @@ import pytest
 from twisted.internet import defer
 
 import stethoscope.api.devices
+import stethoscope.api.endpoints.devices
 import stethoscope.plugins.sources.bitfit.deferred
 import stethoscope.plugins.sources.jamf.deferred
-import stethoscope.api.endpoints.devices
 
 
 logger = logbook.Logger(__name__)

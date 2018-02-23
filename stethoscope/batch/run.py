@@ -11,10 +11,10 @@ import six
 import yaml
 from twisted.internet import defer, task
 
+import stethoscope.api.endpoints.devices
 import stethoscope.api.factory
 import stethoscope.plugins.utils
 import stethoscope.utils
-import stethoscope.api.endpoints.devices
 
 
 logger = logbook.Logger(__name__)

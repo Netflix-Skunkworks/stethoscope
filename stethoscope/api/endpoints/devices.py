@@ -15,7 +15,7 @@ import stethoscope.api.endpoints.utils
 import stethoscope.api.utils
 import stethoscope.plugins.utils
 import stethoscope.validation
-from stethoscope.api.endpoints.utils import log_response, log_access, add_get_route
+from stethoscope.api.endpoints.utils import add_get_route, log_access, log_response
 
 
 logger = logbook.Logger(__name__)
