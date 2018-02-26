@@ -42,7 +42,7 @@ class RESTfulSummary(
     status_code, response_text = super(RESTfulSummary, self).post(snapshot)
     try:
       response_json = json.loads(response_text)
-    except:
+    except Exception:
       logger.warning("server responded with {:d}:\n{!r}", status_code, response_text)
     else:
       logger.warning("server responded with {:d}:\n{!s}", status_code,

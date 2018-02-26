@@ -10,7 +10,6 @@ from apiclient import discovery
 
 import stethoscope.plugins.sources.google.utils as gutils
 import stethoscope.validation
-from stethoscope.utils import json_pp
 
 
 logger = logbook.Logger(__name__)

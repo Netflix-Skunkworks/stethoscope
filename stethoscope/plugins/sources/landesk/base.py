@@ -3,7 +3,6 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import collections
-import pprint
 import re
 
 import _mssql
@@ -262,7 +261,7 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
         data['value'] = False
         try:
           name = stethoscope.validation.canonicalize_macaddr(adapter['PhysAddress'])
-        except:
+        except Exception:
           name = 'unknown'
         details.append("Firewall not enabled for adapter '{!s}'".format(name))
     data['details'] = '\n'.join(details)

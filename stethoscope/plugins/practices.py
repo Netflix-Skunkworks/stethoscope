@@ -4,7 +4,6 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import abc
 import collections
-import pprint
 import re
 
 import logbook
@@ -130,7 +129,7 @@ def check_os_version(os, os_version, required_versions, recommended_versions):
 
   try:
     version = pkg_resources.parse_version(os_version)
-  except:
+  except Exception:
     logger.error("failed to parse version string: {!r}", os_version)
   else:
     if os in required_versions and version < pkg_resources.parse_version(required_versions[os]):

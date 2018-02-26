@@ -4,9 +4,6 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import os
 
-import logbook
-import logbook.more
-
 import stethoscope.utils
 
 
@@ -23,6 +20,7 @@ JWT_EXPIRATION_DELTA = 60 * 60 * 24
 
 def IS_PRIVILEGED_USER(userinfo):
   return userinfo['sub'] == '*'
+
 
 MOBILE_PLATFORMS = ['Android', 'iOS']
 NONMOBILE_PLATFORMS = ['Mac', 'Windows']

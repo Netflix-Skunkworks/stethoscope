@@ -7,6 +7,7 @@ import json
 
 import arrow
 import logbook
+import logbook.more
 import six
 import six.moves
 

@@ -113,7 +113,7 @@ def create_app():
 
     try:
       userinfo = auth.decode_token(token)
-    except werkzeug.exceptions.Unauthorized as exc:
+    except werkzeug.exceptions.Unauthorized:
       if token is not None:
         logger.exception("Invalid token in auth flow:")
       return flask.redirect(login_manager.authorization_url())
