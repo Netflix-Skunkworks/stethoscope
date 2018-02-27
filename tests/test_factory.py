@@ -13,7 +13,12 @@ import twisted.internet.defer
 import twisted.trial
 from klein.resource import KleinResource
 
-import stethoscope.api.factory
+import stethoscope.api.endpoints.accounts
+import stethoscope.api.endpoints.devices
+import stethoscope.api.endpoints.events
+import stethoscope.api.endpoints.notifications
+import stethoscope.api.endpoints.userinfo
+import stethoscope.api.endpoints.utils
 import stethoscope.auth
 
 
@@ -77,7 +82,8 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
 
     callback = mock.Mock(side_effect=lambda x: x)
 
-    stethoscope.api.factory._add_route(ext, app, auth, 'resource', 'email', callbacks=[callback])
+    stethoscope.api.endpoints.utils.add_get_route(ext, app, auth, 'resource', 'email',
+                                                  callbacks=[callback])
 
     # see klein's test_app.py
     self.assertEqual(
@@ -96,7 +102,7 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
         mock_instantiate_plugins:
       mock_instantiate_plugins.return_value = stevedore.ExtensionManager.make_test_instance(
           [get_mock_ext(result)])
-      stethoscope.api.factory.register_userinfo_api_endpoints(app, config, auth)
+      stethoscope.api.endpoints.userinfo.register_userinfo_api_endpoints(app, config, auth)
 
     # see klein's test_app.py
     self.assertEqual(
@@ -122,7 +128,7 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
     with mock.patch('stethoscope.plugins.utils.instantiate_plugins') as \
         mock_instantiate_plugins:
       mock_instantiate_plugins.side_effect = [mock_extension_manager, mock_hook_manager]
-      stethoscope.api.factory.register_notification_api_endpoints(app, config, auth)
+      stethoscope.api.endpoints.notifications.register_notification_api_endpoints(app, config, auth)
 
     # see klein's test_app.py
     adapter_foo = app.url_map.bind('notifications-foo-email')
@@ -158,7 +164,7 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
         mock_instantiate_plugins:
       mock_instantiate_plugins.return_value = stevedore.ExtensionManager.make_test_instance(
           [get_mock_ext(result)])
-      stethoscope.api.factory.register_account_api_endpoints(app, config, auth)
+      stethoscope.api.endpoints.accounts.register_account_api_endpoints(app, config, auth)
 
     # see klein's test_app.py
     self.assertEqual(
@@ -189,7 +195,7 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
     with mock.patch('stethoscope.plugins.utils.instantiate_plugins') as \
         mock_instantiate_plugins:
       mock_instantiate_plugins.side_effect = [mock_extension_manager, mock_hook_manager]
-      stethoscope.api.factory.register_event_api_endpoints(app, config, auth)
+      stethoscope.api.endpoints.events.register_event_api_endpoints(app, config, auth)
 
     # see klein's test_app.py
     self.assertEqual(
@@ -220,7 +226,7 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
         mock_instantiate_plugins:
       mock_instantiate_plugins.return_value = stevedore.ExtensionManager.make_test_instance(
           [get_mock_ext(result)])
-      stethoscope.api.factory.register_device_api_endpoints(app, config, auth)
+      stethoscope.api.endpoints.devices.register_device_api_endpoints(app, config, auth)
 
     # see klein's test_app.py
     self.assertEqual(

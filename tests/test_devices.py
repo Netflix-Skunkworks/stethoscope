@@ -12,7 +12,7 @@ import pytest
 from twisted.internet import defer
 
 import stethoscope.api.devices
-import stethoscope.api.factory
+import stethoscope.api.endpoints.devices
 import stethoscope.plugins.sources.bitfit.deferred
 import stethoscope.plugins.sources.jamf.deferred
 
@@ -125,28 +125,28 @@ def mock_sources(mock_jamf_ext, mock_bitfit_ext, mock_failure_ext):
 
 
 def test_get_devices_by_email(mock_sources):
-  deferred = stethoscope.api.factory.get_devices_by_email(None, mock_sources)
+  deferred = stethoscope.api.endpoints.devices.get_devices_by_email(None, mock_sources)
   deferred.addCallback(stethoscope.api.devices.merge_devices)
   deferred.addCallback(check_merge_devices)
   return deferred
 
 
 def test_get_devices_by_serial(mock_sources):
-  deferred = stethoscope.api.factory.get_devices_by_serial(None, mock_sources)
+  deferred = stethoscope.api.endpoints.devices.get_devices_by_serial(None, mock_sources)
   deferred.addCallback(stethoscope.api.devices.merge_devices)
   deferred.addCallback(check_merge_devices)
   return deferred
 
 
 def test_get_devices_by_macaddr(mock_sources):
-  deferred = stethoscope.api.factory.get_devices_by_macaddr(None, mock_sources)
+  deferred = stethoscope.api.endpoints.devices.get_devices_by_macaddr(None, mock_sources)
   deferred.addCallback(stethoscope.api.devices.merge_devices)
   deferred.addCallback(check_merge_devices)
   return deferred
 
 
 def test_get_devices_by_stages(mock_bitfit_ext, mock_jamf_ext):
-  deferred = stethoscope.api.factory.get_devices_by_stages(None, [mock_bitfit_ext],
+  deferred = stethoscope.api.endpoints.devices.get_devices_by_stages(None, [mock_bitfit_ext],
       [mock_jamf_ext], [])
   deferred.addCallback(stethoscope.api.devices.merge_devices)
   deferred.addCallback(check_merge_devices)

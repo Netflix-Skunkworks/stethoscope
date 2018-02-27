@@ -11,6 +11,7 @@ import six
 import yaml
 from twisted.internet import defer, task
 
+import stethoscope.api.endpoints.devices
 import stethoscope.api.factory
 import stethoscope.plugins.utils
 import stethoscope.utils
@@ -95,9 +96,9 @@ def work_generator(args, config, emails, results):
   incremental_hooks = [wrap_hook(hook.obj.post) for hook in hook_iter]
 
   for email in emails:
-    deferred = stethoscope.api.factory.get_devices_by_stages(email, predevice_plugins,
+    deferred = stethoscope.api.endpoints.devices.get_devices_by_stages(email, predevice_plugins,
         device_plugins, transforms)
-    deferred.addCallback(stethoscope.api.factory.apply_device_transforms, transforms)
+    deferred.addCallback(stethoscope.api.endpoints.devices.apply_device_transforms, transforms)
     deferred.addCallback(apply_practices)
     deferred.addCallback(stethoscope.api.devices.merge_devices)
 
