@@ -4,9 +4,6 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import os
 
-import logbook
-import logbook.more
-
 import stethoscope.utils
 
 

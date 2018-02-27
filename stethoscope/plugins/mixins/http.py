@@ -67,7 +67,7 @@ class HTTPMixin(BaseHTTPMixin):
 
     try:
       response.raise_for_status()
-    except:
+    except requests.exceptions.HTTPError:
       logger.exception("request to {!s} returned {:d}", url, response.status_code)
       logger.debug("response text:\n{!s}", response.text)
 
