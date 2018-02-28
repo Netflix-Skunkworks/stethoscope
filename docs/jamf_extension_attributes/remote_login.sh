@@ -1,2 +1,6 @@
 #!/bin/sh
-echo "<result>`/usr/sbin/systemsetup -getremotelogin | awk '{print $3}'`</result>"
+remoteLogin=$(/usr/sbin/systemsetup -getremotelogin | awk '{print $3}')
+
+echo "<result>$remoteLogin</result>"
+
+exit 0
