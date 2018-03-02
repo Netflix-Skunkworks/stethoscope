@@ -17,7 +17,4 @@ ADD stethoscope ./stethoscope/
 ADD instance ./instance/
 ADD config ./config/
 
-# ADD pytest.ini tox.ini tox.sh
-# ADD tests tests/
-
 RUN make install-editable-package

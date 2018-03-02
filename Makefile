@@ -104,7 +104,7 @@ test: test-py test-js
 
 tox: clean-py
 	@echo "--> Running tox."
-	./tox.sh
+	if which detox; then detox; else tox; fi
 
 coverage-py: clean-py
 	@echo "--> Running Python tests with coverage (see test.log and htmlcov/ for output)."
