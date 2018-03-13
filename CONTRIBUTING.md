@@ -57,17 +57,11 @@ or:
 py.test
 ```
 
-Tests for other versions can be run via [tox] using the supplied `tox.sh` script after installing
-all the relevant versions of Python (2.7, 3.3, 3.4, 3.5).
+Tests for other versions can be run via [tox] after installing all the relevant versions of Python
+(2.7, 3.4, 3.5, 3.6). Using `make tox` will run `detox` in place of `tox` if available.
 
 ```sh
 make tox
-```
-
-or:
-
-```sh
-./tox.sh
 ```
 
 You can run the tests and output a test coverage report (via the `pytest-cov` plugin) with either:
