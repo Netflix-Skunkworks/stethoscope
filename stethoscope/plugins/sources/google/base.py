@@ -47,6 +47,16 @@ def copy_nonempty_values(dst, src, key_map):
       dst[dst_key] = value
 
 
+def get_mac_addrs(raw, keys=('macAddress', 'wifiMacAddress', 'ethernetMacAddress')):
+  """Retrieve a (filtered) list of unique MAC addresses in canonical format."""
+  addrs = set()
+  for key in keys:
+    value = get_nonempty_value(raw, key)
+    if value is not None:
+      addrs.add(stethoscope.validation.canonicalize_macaddr(value))
+  return list(stethoscope.validation.filter_macaddrs(addrs))
+
+
 def parse_os_information(os):
   """Extract platform, OS, and version information from the Google API OS information string.
 
@@ -217,12 +227,7 @@ class GoogleDataSourceBase(object):
     # copy all relevant identifiers
     data['identifiers'] = {}
     copy_nonempty_values(data['identifiers'], raw, IDENTIFIERS)
-
-    value = get_nonempty_value(raw, 'wifiMacAddress')
-    if value is not None:
-      data['identifiers']['mac_addresses'] = [
-        stethoscope.validation.canonicalize_macaddr(value)
-      ]
+    data['identifiers']['mac_addresses'] = get_mac_addrs(raw)
 
     data['source'] = 'google'
     return data
@@ -246,13 +251,7 @@ class GoogleDataSourceBase(object):
     # copy all relevant identifiers
     data['identifiers'] = {}
     copy_nonempty_values(data['identifiers'], raw, IDENTIFIERS)
-
-    macs = []
-    for key in ['macAddress', 'ethernetMacAddress']:
-      value = get_nonempty_value(raw, key)
-      if value is not None:
-        macs.append(stethoscope.validation.canonicalize_macaddr(value))
-    data['identifiers']['mac_addresses'] = macs
+    data['identifiers']['mac_addresses'] = get_mac_addrs(raw)
 
     data['source'] = 'google'
     return data
