@@ -15,6 +15,18 @@ import stethoscope.validation
 logger = logbook.Logger(__name__)
 
 
+def _get_mac_addrs(values):
+  mac_addresses = set()
+  for value in values:
+    try:
+      addr = stethoscope.validation.canonicalize_macaddr(value)
+    except (KeyError, TypeError, ValueError):
+      pass
+    else:
+      mac_addresses.add(addr)
+  return list(stethoscope.validation.filter_macaddrs(mac_addresses))
+
+
 class BitfitDataSourceBase(stethoscope.configurator.Configurator):
 
   config_keys = (
@@ -33,19 +45,8 @@ class BitfitDataSourceBase(stethoscope.configurator.Configurator):
   def _process_fields(self, raw, data):
     fields = stethoscope.plugins.sources.bitfit.utils.parse_field_list(raw['item']['fields'])
 
-    mac_addresses = list()
-    try:
-      addr = stethoscope.validation.canonicalize_macaddr(fields['mac_address']['value'])
-      mac_addresses.append(addr)
-    except (KeyError, TypeError, ValueError):
-      pass
-
-    try:
-      addr = stethoscope.validation.canonicalize_macaddr(fields['alt_mac_address']['value'])
-      mac_addresses.append(addr)
-    except (KeyError, TypeError, ValueError):
-      pass
-
+    mac_addresses = _get_mac_addrs([fields['mac_address']['value'],
+                                    fields['alt_mac_address']['value']])
     if len(mac_addresses) > 0:
       data['identifiers']['mac_addresses'] = mac_addresses
 
