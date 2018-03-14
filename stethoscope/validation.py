@@ -35,6 +35,38 @@ def _is_valid_macaddr(addr):
   return MACADDR_PATTERN.match(addr) is not None
 
 
+def raise_for_invalid_macaddr(macaddr):
+  """Raise `ValueError` for invalid MAC address input.
+
+  >>> canonicalize_macaddr('00:00')
+  ... # doctest: +IGNORE_EXCEPTION_DETAIL
+  ... # above directive is a hack to support 2.X and 3.X at the same time
+  Traceback (most recent call last):
+    ...
+  ValueError: invalid MAC address ('00:00')
+
+  """
+  if not _is_valid_macaddr(macaddr):
+    raise ValueError("invalid MAC address ({!r})".format(macaddr))
+
+
+def is_locally_administered_macaddr(macaddr):
+  """Certain MAC addresses are "locally administered" rather than a universal identifier.
+
+  A MAC address is "locally administered" if and only if the *second* least-significant bit of the
+  first octet is ``1`` [wikipedia-local-mac]_.
+
+  .. [wikipedia-local-mac] https://en.wikipedia.org/wiki/MAC_address#Universal_vs._local
+
+  >>> is_locally_administered_macaddr('02:00:00:00:00:00')
+  True
+  >>> is_locally_administered_macaddr('00:00:DE:CA:FB:AD')
+  False
+
+  """
+  return bool(int(canonicalize_macaddr(macaddr)[1], 16) & 0b10)
+
+
 def canonicalize_macaddr(addr):
   """Convert a MAC address into canonical format (uppercase with colon separators).
 
@@ -54,8 +86,7 @@ def canonicalize_macaddr(addr):
   '00:00:DE:CA:FB:AD'
 
   """
-  if not _is_valid_macaddr(addr):
-    raise ValueError("invalid MAC address ({!r})".format(addr))
+  raise_for_invalid_macaddr(addr)
   addr = addr.replace(':', '').upper()
   return ':'.join(addr[idx:idx + 2] for idx in range(0, len(addr), 2))
 
