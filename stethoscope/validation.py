@@ -7,6 +7,7 @@ import uuid
 
 import logbook
 import six
+import six.moves
 import validate_email
 
 import stethoscope.exceptions
@@ -83,6 +84,19 @@ def is_group_macaddr(macaddr):
 
   """
   return bool(int(canonicalize_macaddr(macaddr)[1], 16) & 0b1)
+
+
+def filter_macaddrs(macaddrs, filter_functions=(is_locally_administered_macaddr, is_group_macaddr)):
+  """Filter out any MAC addresses that can't be used as universal identifiers.
+
+  For instance, group addresses and locally administered addresses are not intended to be unique to
+  a particular piece of hardware and so can't be used as universal identifiers.
+
+  >>> list(filter_macaddrs(['02:00:00:00:00:00', '01:00:00:00:00:00', '00:00:DE:CA:FB:AD']))
+  ['00:00:DE:CA:FB:AD']
+
+  """
+  return six.moves.filterfalse(lambda addr: any(f(addr) for f in filter_functions), macaddrs)
 
 
 def canonicalize_macaddr(addr):
