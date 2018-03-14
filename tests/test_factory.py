@@ -244,8 +244,8 @@ class RoutingTestCase(twisted.trial.unittest.TestCase):
     self.assertEqual(app.url_map.bind('devices-serial').match("/devices/serial/0xDECAFBAD"),
         ('devices-serial', {'serial': "0xDECAFBAD"}))
     self.assertEqual(app.url_map.bind('devices-macaddr').match(
-        "/devices/macaddr/DE:CA:FB:AD:00:00"),
-        ('devices-macaddr', {'macaddr': "DE:CA:FB:AD:00:00"}))
+        "/devices/macaddr/00:DE:CA:FB:AD:00"),
+        ('devices-macaddr', {'macaddr': "00:DE:CA:FB:AD:00"}))
     self.assertEqual(app.url_map.bind('devices-staged').match("/devices/staged/user@example.com"),
         ('devices-staged', {'email': "user@example.com"}))
     self.assertEqual(app.url_map.bind('devices-merged').match("/devices/merged/user@example.com"),
