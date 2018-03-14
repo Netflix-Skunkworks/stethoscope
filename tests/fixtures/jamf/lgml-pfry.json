@@ -65,8 +65,8 @@
       ],
       "general" : {
          "sus" : "",
-         "mac_address" : "DE:CA:FB:AD:00:01",
-         "alt_mac_address" :  "DE:CA:FB:AD:00:00",
+         "mac_address" : "00:DE:CA:FB:AD:01",
+         "alt_mac_address" :  "00:DE:CA:FB:AD:00",
          "mdm_capable" : true,
          "initial_entry_date_epoch" : 1428429749952,
          "last_cloud_backup_date_epoch" : 0,

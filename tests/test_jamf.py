@@ -93,8 +93,8 @@ def test_process_basic_information_lgml_pfry(device):
     assert device['identifiers'][key] == value
 
   mac_addresses = [
-    'DE:CA:FB:AD:00:01',
-    'DE:CA:FB:AD:00:00',
+    '00:DE:CA:FB:AD:01',
+    '00:DE:CA:FB:AD:00',
   ]
   assert set(device['identifiers']['mac_addresses']) == set(mac_addresses)
 
@@ -118,8 +118,8 @@ def test_process_basic_information_lgmd_pfry(device):
     assert device['identifiers'][key] == value
 
   mac_addresses = [
-    'DE:CA:FB:AD:00:02',
-    'DE:CA:FB:AD:00:03',
+    '00:DE:CA:FB:AD:02',
+    '00:DE:CA:FB:AD:03',
   ]
   assert set(device['identifiers']['mac_addresses']) == set(mac_addresses)
 
