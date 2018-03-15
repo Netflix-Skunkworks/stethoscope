@@ -16,7 +16,7 @@
   "hardwareId": "...",
   "defaultLanguage" : "English",
   "supportsWorkProfile" : true,
-  "wifiMacAddress" : "DE:AD:BE:EF:DE:AD",
+  "wifiMacAddress" : "00:DE:AD:BE:EF:00",
   "firstSync" : "2015-08-11T07:46:31.642Z",
   "developerOptionsStatus" : false,
   "basebandVersion" : "G925AUCU3BOI2",

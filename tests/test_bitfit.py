@@ -82,8 +82,8 @@ def test_process_lgmd_pfry(processed_device):
   assert processed_device['type'] == 'Workstation'
   assert processed_device['hw_release_date'] == arrow.get('2013-10-22')
 
-  assert 'DE:CA:FB:AD:00:02' in processed_device['identifiers']['mac_addresses']
-  assert 'DE:CA:FB:AD:00:03' in processed_device['identifiers']['mac_addresses']
+  assert '00:DE:CA:FB:AD:02' in processed_device['identifiers']['mac_addresses']
+  assert '00:DE:CA:FB:AD:03' in processed_device['identifiers']['mac_addresses']
   assert processed_device['identifiers']['udid'] == "DECAFBAD-DECA-FBAD-DECA-FBAD00000001"
 
 
@@ -96,8 +96,8 @@ def test_process_lgml_pfry(processed_device):
   assert processed_device['type'] == 'Laptop'
   assert processed_device['hw_release_date'] == arrow.get('2013-10-22')
 
-  assert 'DE:CA:FB:AD:00:00' in processed_device['identifiers']['mac_addresses']
-  assert 'DE:CA:FB:AD:00:01' in processed_device['identifiers']['mac_addresses']
+  assert '00:DE:CA:FB:AD:00' in processed_device['identifiers']['mac_addresses']
+  assert '00:DE:CA:FB:AD:01' in processed_device['identifiers']['mac_addresses']
   assert processed_device['identifiers']['udid'] == "DECAFBAD-DECA-FBAD-DECA-FBAD00000000"
 
 
@@ -110,6 +110,6 @@ def test_process_frys_laptop(processed_device):
   # 'type' is in a different place in this record
   assert processed_device['type'] == 'Laptop'
 
-  assert 'DE:CA:FB:AD:00:04' in processed_device['identifiers']['mac_addresses']
-  assert 'DE:CA:FB:AD:00:05' in processed_device['identifiers']['mac_addresses']
+  assert '00:DE:CA:FB:AD:04' in processed_device['identifiers']['mac_addresses']
+  assert '00:DE:CA:FB:AD:05' in processed_device['identifiers']['mac_addresses']
   assert processed_device['identifiers']['udid'] == "DECAFBAD-DECA-FBAD-DECA-FBAD00000002"

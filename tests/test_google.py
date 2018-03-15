@@ -123,6 +123,8 @@ def test_process_device_android(raw_device, mock_datasource):
   assert device['os_version'] == '5.1.1'
   assert device['last_sync'].to('utc') == arrow.get('2016-02-23T21:49:14.719Z')
 
+  assert device['identifiers']['mac_addresses'] == ['00:DE:AD:BE:EF:00']
+
 
 @pytest.mark.parametrize(['raw_device'], [('android_oreo',)], indirect=['raw_device'])
 def test_process_device_android_oreo(raw_device, mock_datasource):

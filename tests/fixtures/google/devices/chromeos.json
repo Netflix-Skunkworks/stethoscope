@@ -30,7 +30,7 @@
   "kind": "admin#directory#chromeosdevice",
   "lastEnrollmentTime": "2017-09-22T15:47:14.233Z",
   "lastSync": "2017-10-04T20:31:26.258Z",
-  "macAddress": "decafbad0000",
+  "macAddress": "00decafbad00",
   "model": "Samsung Chromebook Pro",
   "orgUnitPath": "/Devices/Chrome Devices/Chrome Managed",
   "osVersion": "60.0.3112.114",

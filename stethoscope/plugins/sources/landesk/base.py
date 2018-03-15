@@ -302,8 +302,10 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
 
     # IDENTIFIERS
     device['identifiers'] = {
-        'mac_addresses': [stethoscope.validation.canonicalize_macaddr(adapter['PhysAddress'])
-          for adapter in raw['adapters'] if adapter['FirewallEnabled'] != 'Not Installed']
+      'mac_addresses': list(stethoscope.validation.filter_macaddrs(set(map(
+        lambda adapter: stethoscope.validation.canonicalize_macaddr(adapter['PhysAddress']),
+        filter(lambda adapter: adapter['FirewallEnabled'] != 'Not Installed', raw['adapters'])
+      ))))
     }
     if device.get('serial') is not None:
       device['identifiers']['serial'] = device['serial']

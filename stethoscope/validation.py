@@ -7,6 +7,7 @@ import uuid
 
 import logbook
 import six
+import six.moves
 import validate_email
 
 import stethoscope.exceptions
@@ -35,6 +36,71 @@ def _is_valid_macaddr(addr):
   return MACADDR_PATTERN.match(addr) is not None
 
 
+def raise_for_invalid_macaddr(macaddr):
+  """Raise `ValueError` for invalid MAC address input.
+
+  >>> canonicalize_macaddr('00:00')
+  ... # doctest: +IGNORE_EXCEPTION_DETAIL
+  ... # above directive is a hack to support 2.X and 3.X at the same time
+  Traceback (most recent call last):
+    ...
+  ValueError: invalid MAC address ('00:00')
+
+  """
+  if not _is_valid_macaddr(macaddr):
+    raise ValueError("invalid MAC address ({!r})".format(macaddr))
+
+
+def is_locally_administered_macaddr(macaddr):
+  """Certain MAC addresses are "locally administered" rather than a universal identifier.
+
+  A MAC address is "locally administered" if and only if the *second* least-significant bit of the
+  first octet is ``1`` [wikipedia-local-mac]_.
+
+  .. [wikipedia-local-mac] https://en.wikipedia.org/wiki/MAC_address#Universal_vs._local
+
+  >>> is_locally_administered_macaddr('02:00:00:00:00:00')
+  True
+  >>> is_locally_administered_macaddr('00:00:DE:CA:FB:AD')
+  False
+
+  """
+  return bool(int(canonicalize_macaddr(macaddr)[1], 16) & 0b10)
+
+
+def is_group_macaddr(macaddr):
+  """Certain MAC addresses are for addressing groups and are therefore *not* universal identifiers.
+
+  A MAC address is a group address if and only if the least-significant bit of the first octet is
+  ``1`` [wikipedia-group-mac]_. This includes the broadcast address (`FF:FF:FF:FF:FF:FF`), multicast
+  addresses, and function addresses for token-ring networks.
+
+  .. [wikipedia-group-mac] https://en.wikipedia.org/wiki/MAC_address#Unicast_vs._multicast
+
+  >>> is_group_macaddr('01:00:00:00:00:00')
+  True
+  >>> is_group_macaddr('00:00:DE:CA:FB:AD')
+  False
+
+  """
+  return bool(int(canonicalize_macaddr(macaddr)[1], 16) & 0b1)
+
+
+def filter_macaddrs(macaddrs, filter_functions=(is_locally_administered_macaddr, is_group_macaddr)):
+  """Filter out any MAC addresses that can't be used as universal identifiers.
+
+  For instance, group addresses and locally administered addresses are not intended to be unique to
+  a particular piece of hardware and so can't be used as universal identifiers.
+
+  >>> list(filter_macaddrs(
+  ...   ['02:00:00:00:00:00', '01:00:00:00:00:00', '03:00:00:00:00:00', '00:00:DE:CA:FB:AD']
+  ... ))
+  ['00:00:DE:CA:FB:AD']
+
+  """
+  return six.moves.filterfalse(lambda addr: any(f(addr) for f in filter_functions), macaddrs)
+
+
 def canonicalize_macaddr(addr):
   """Convert a MAC address into canonical format (uppercase with colon separators).
 
@@ -54,8 +120,7 @@ def canonicalize_macaddr(addr):
   '00:00:DE:CA:FB:AD'
 
   """
-  if not _is_valid_macaddr(addr):
-    raise ValueError("invalid MAC address ({!r})".format(addr))
+  raise_for_invalid_macaddr(addr)
   addr = addr.replace(':', '').upper()
   return ':'.join(addr[idx:idx + 2] for idx in range(0, len(addr), 2))
 

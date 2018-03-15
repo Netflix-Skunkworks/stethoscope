@@ -131,6 +131,7 @@ def get_devices_by_stages(email, pre_extensions, extensions, transforms, debug=F
     if 'mac_addresses' in identifiers:
       for macaddr in identifiers['mac_addresses']:
         macaddrs.add(stethoscope.validation.canonicalize_macaddr(macaddr))
+  macaddrs = list(stethoscope.validation.filter_macaddrs(macaddrs))
 
   logger.debug("[{!s}] {:d} serials: {!s}", email, len(serials), serials)
   logger.debug("[{!s}] {:d} macaddrs: {!s}", email, len(macaddrs), macaddrs)

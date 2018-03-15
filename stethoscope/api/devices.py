@@ -12,6 +12,9 @@ import logbook
 import six
 import six.moves
 
+import stethoscope.validation
+from stethoscope.utils import json_pp
+
 
 logger = logbook.Logger(__name__)
 
@@ -80,6 +83,11 @@ def compare_identifiers(this_identifier_set, other_identifier_set):
     if isinstance(other_value, six.string_types):
       other_value = [other_value]
 
+    if identifier == 'mac_addresses':
+      # filter out MAC addresses that should not be considered unique identifiers
+      this_value = list(stethoscope.validation.filter_macaddrs(this_value))
+      other_value = list(stethoscope.validation.filter_macaddrs(other_value))
+
     # now can check cartesian product for any matches
     if any(foo == bar for (foo, bar) in itertools.product(this_value, other_value)):
       return True
@@ -106,6 +114,8 @@ def should_merge(groups):
             try:
               merge_identifiers([this_identifiers, other_identifiers])
             except MergeConflict:
+              logger.exception("merge conflict:\nthis:\n{:s}\nother:\n{:s}",
+                               json_pp(this_device), json_pp(other_device))
               continue
             return this_idx, other_idx
   return False

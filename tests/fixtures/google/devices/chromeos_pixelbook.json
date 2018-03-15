@@ -29,7 +29,7 @@
     "kind": "admin#directory#chromeosdevice",
     "lastEnrollmentTime": "2017-11-14T20:31:20.530Z",
     "lastSync": "2017-11-29T19:05:30.483Z",
-    "macAddress": "decafbad0001",
+    "macAddress": "00decafbad01",
     "model": "",
     "notes": "Pixelbook (2017)",
     "orgUnitPath": "/Devices/Chrome Devices/Chrome Managed/User Chromebooks",
