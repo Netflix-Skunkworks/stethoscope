@@ -67,6 +67,24 @@ def is_locally_administered_macaddr(macaddr):
   return bool(int(canonicalize_macaddr(macaddr)[1], 16) & 0b10)
 
 
+def is_group_macaddr(macaddr):
+  """Certain MAC addresses are for addressing groups and are therefore *not* universal identifiers.
+
+  A MAC address is a group address if and only if the least-significant bit of the first octet is
+  ``1`` [wikipedia-group-mac]_. This includes the broadcast address (`FF:FF:FF:FF:FF:FF`), multicast
+  addresses, and function addresses for token-ring networks.
+
+  .. [wikipedia-group-mac] https://en.wikipedia.org/wiki/MAC_address#Unicast_vs._multicast
+
+  >>> is_group_macaddr('01:00:00:00:00:00')
+  True
+  >>> is_group_macaddr('00:00:DE:CA:FB:AD')
+  False
+
+  """
+  return bool(int(canonicalize_macaddr(macaddr)[1], 16) & 0b1)
+
+
 def canonicalize_macaddr(addr):
   """Convert a MAC address into canonical format (uppercase with colon separators).
 
