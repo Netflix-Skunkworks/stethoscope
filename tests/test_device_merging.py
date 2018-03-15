@@ -8,6 +8,10 @@ import pytest
 import stethoscope.api.devices
 
 
+DECAFBAD = '00:DE:CA:FB:AD:00'
+DEADBEEF = '00:DE:AD:BE:EF:00'
+
+
 def test_compare_identifiers_by_serial():
   this = {'serial': '0xDECAFBAD'}
   other = {'serial': '0xDECAFBAD'}
@@ -18,22 +22,22 @@ def test_compare_identifiers_by_serial():
 
 
 def test_compare_identifiers_by_macaddr():
-  this = {'mac_addresses': ['00:DE:CA:FB:AD:00']}
-  other = {'mac_addresses': ['00:DE:CA:FB:AD:00', '00:DE:AD:BE:EF:00']}
-  third = {'mac_addresses': ['00:DE:AD:BE:EF:00']}
+  this = {'mac_addresses': [DECAFBAD]}
+  other = {'mac_addresses': [DECAFBAD, DEADBEEF]}
+  third = {'mac_addresses': [DEADBEEF]}
   assert stethoscope.api.devices.compare_identifiers(this, other)
   assert stethoscope.api.devices.compare_identifiers(other, third)
   assert not stethoscope.api.devices.compare_identifiers(this, third)
 
 
 def test_group_devices_by_macaddr():
-  this = {'identifiers': {'mac_addresses': ['00:DE:CA:FB:AD:00']}}
-  other = {'identifiers': {'mac_addresses': ['00:DE:CA:FB:AD:00', '00:DE:AD:BE:EF:00']}}
+  this = {'identifiers': {'mac_addresses': [DECAFBAD]}}
+  other = {'identifiers': {'mac_addresses': [DECAFBAD, DEADBEEF]}}
 
   groups = stethoscope.api.devices.group_devices([this, other])
   assert groups == [[this, other]]
 
-  third = {'mac_addresses': ['00:DE:AD:BE:EF:00']}
+  third = {'mac_addresses': [DEADBEEF]}
   groups = stethoscope.api.devices.group_devices([this, third])
   assert groups == [[this], [third]]
 
@@ -42,8 +46,8 @@ def test_group_devices_by_multiple():
   this = {
     "identifiers": {
       "mac_addresses": [
-        "00:DE:CA:FB:AD:00",
-        "00:DE:AD:BE:EF:00",
+        DECAFBAD,
+        DEADBEEF,
       ],
       "serial": "0xDEADBEEF",
     }
@@ -58,7 +62,7 @@ def test_group_devices_by_multiple():
   third = {
     "identifiers": {
       "mac_addresses": [
-        "00:DE:CA:FB:AD:00",
+        DECAFBAD,
       ]
     }
   }
@@ -81,22 +85,22 @@ def test_group_devices_by_multiple():
 def test_merge_identifiers():
   this = {
     "mac_addresses": [
-      "00:DE:AD:BE:EF:00",
-      "00:DE:CA:FB:AD:00",
+      DEADBEEF,
+      DECAFBAD,
     ],
     "serial": "0xDEADBEEF",
   }
 
   other = {
     "mac_addresses": [
-      "00:DE:AD:BE:EF:00",
+      DEADBEEF,
     ],
     "serial": "0xDEADBEEF",
   }
 
   third = {
     "mac_addresses": [
-      "00:DE:CA:FB:AD:00",
+      DECAFBAD,
     ]
   }
 
