@@ -10,6 +10,8 @@ import stethoscope.api.devices
 
 DECAFBAD = '00:DE:CA:FB:AD:00'
 DEADBEEF = '00:DE:AD:BE:EF:00'
+LOCALMAC = '02:00:00:00:00:00'
+GROUPMAC = '01:00:00:00:00:00'
 
 
 def test_compare_identifiers_by_serial():
@@ -25,6 +27,24 @@ def test_compare_identifiers_by_macaddr():
   this = {'mac_addresses': [DECAFBAD]}
   other = {'mac_addresses': [DECAFBAD, DEADBEEF]}
   third = {'mac_addresses': [DEADBEEF]}
+  assert stethoscope.api.devices.compare_identifiers(this, other)
+  assert stethoscope.api.devices.compare_identifiers(other, third)
+  assert not stethoscope.api.devices.compare_identifiers(this, third)
+
+
+def test_compare_identifiers_by_macaddr_with_locally_administered():
+  this = {'mac_addresses': [DECAFBAD, LOCALMAC]}
+  other = {'mac_addresses': [DECAFBAD, DEADBEEF, LOCALMAC]}
+  third = {'mac_addresses': [DEADBEEF, LOCALMAC]}
+  assert stethoscope.api.devices.compare_identifiers(this, other)
+  assert stethoscope.api.devices.compare_identifiers(other, third)
+  assert not stethoscope.api.devices.compare_identifiers(this, third)
+
+
+def test_compare_identifiers_by_macaddr_with_group_addresses():
+  this = {'mac_addresses': [DECAFBAD, GROUPMAC]}
+  other = {'mac_addresses': [DECAFBAD, DEADBEEF, GROUPMAC]}
+  third = {'mac_addresses': [DEADBEEF, GROUPMAC]}
   assert stethoscope.api.devices.compare_identifiers(this, other)
   assert stethoscope.api.devices.compare_identifiers(other, third)
   assert not stethoscope.api.devices.compare_identifiers(this, third)
