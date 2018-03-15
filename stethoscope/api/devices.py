@@ -69,6 +69,9 @@ def compare_identifiers(this_identifier_set, other_identifier_set):
       continue
     other_value = other_identifier_set[identifier]
 
+    if len(this_value) == 0 or len(other_value) == 0:
+      continue
+
     # shortcut if possible
     if this_value == other_value:
       return True

@@ -32,6 +32,12 @@ def test_compare_identifiers_by_macaddr():
   assert not stethoscope.api.devices.compare_identifiers(this, third)
 
 
+def test_compare_identifiers_ignores_empty():
+  this = {'mac_addresses': []}
+  other = {'mac_addresses': []}
+  assert not stethoscope.api.devices.compare_identifiers(this, other)
+
+
 def test_compare_identifiers_by_macaddr_with_locally_administered():
   this = {'mac_addresses': [DECAFBAD, LOCALMAC]}
   other = {'mac_addresses': [DECAFBAD, DEADBEEF, LOCALMAC]}
