@@ -92,7 +92,9 @@ def filter_macaddrs(macaddrs, filter_functions=(is_locally_administered_macaddr,
   For instance, group addresses and locally administered addresses are not intended to be unique to
   a particular piece of hardware and so can't be used as universal identifiers.
 
-  >>> list(filter_macaddrs(['02:00:00:00:00:00', '01:00:00:00:00:00', '00:00:DE:CA:FB:AD']))
+  >>> list(filter_macaddrs(
+  ...   ['02:00:00:00:00:00', '01:00:00:00:00:00', '03:00:00:00:00:00', '00:00:DE:CA:FB:AD']
+  ... ))
   ['00:00:DE:CA:FB:AD']
 
   """
