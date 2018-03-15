@@ -12,6 +12,8 @@ import logbook
 import six
 import six.moves
 
+from stethoscope.utils import json_pp
+
 
 logger = logbook.Logger(__name__)
 
@@ -106,6 +108,8 @@ def should_merge(groups):
             try:
               merge_identifiers([this_identifiers, other_identifiers])
             except MergeConflict:
+              logger.exception("merge conflict:\nthis:\n{:s}\nother:\n{:s}",
+                               json_pp(this_device), json_pp(other_device))
               continue
             return this_idx, other_idx
   return False
