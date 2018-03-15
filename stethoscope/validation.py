@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+import functools
 import re
 import uuid
 
@@ -86,7 +87,28 @@ def is_group_macaddr(macaddr):
   return bool(int(canonicalize_macaddr(macaddr)[1], 16) & 0b1)
 
 
-def filter_macaddrs(macaddrs, filter_functions=(is_locally_administered_macaddr, is_group_macaddr)):
+def should_filter_macaddr(macaddr, filter_functions=None):
+  """Determine if a MAC address can be used for device merging (i.e., is a unique identifier).
+
+  For instance, group addresses and locally administered addresses are not intended to be unique to
+  a particular piece of hardware and so can't be used as universal identifiers.
+
+  >>> should_filter_macaddr('01:00:00:00:00:00')  # group address
+  True
+  >>> should_filter_macaddr('02:00:00:00:00:00')  # locally-administered address
+  True
+  >>> should_filter_macaddr('03:00:00:00:00:00')  # locally-administered group address
+  True
+  >>> should_filter_macaddr('00:DE:CA:FB:AD:00')  # neither group nor locally-administered
+  False
+
+  """
+  if filter_functions is None:
+    filter_functions = (is_locally_administered_macaddr, is_group_macaddr)
+  return any(f(macaddr) for f in filter_functions)
+
+
+def filter_macaddrs(macaddrs, filter_functions=None):
   """Filter out any MAC addresses that can't be used as universal identifiers.
 
   For instance, group addresses and locally administered addresses are not intended to be unique to
@@ -98,7 +120,8 @@ def filter_macaddrs(macaddrs, filter_functions=(is_locally_administered_macaddr,
   ['00:00:DE:CA:FB:AD']
 
   """
-  return six.moves.filterfalse(lambda addr: any(f(addr) for f in filter_functions), macaddrs)
+  filter_func = functools.partial(should_filter_macaddr, filter_functions=filter_functions)
+  return six.moves.filterfalse(filter_func, macaddrs)
 
 
 def canonicalize_macaddr(addr):
