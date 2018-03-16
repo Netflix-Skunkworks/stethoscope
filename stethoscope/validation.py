@@ -87,12 +87,37 @@ def is_group_macaddr(macaddr):
   return bool(int(canonicalize_macaddr(macaddr)[1], 16) & 0b1)
 
 
+def is_zerod_macaddr(macaddr):
+  """The all-zeros OUI addresses "shall not be used as identifiers".
+
+  This includes any MAC addresses beginning with ``00:00:00``.
+
+      Values based on a zero-valued OUI, such as ``00-00-00-00-00-00`` and
+      ``00-00-00-00-00-00-00-00``, shall not be used as identifiers. [iee-eui-tut]_
+
+  .. [iee-eui-tut] http://standards.ieee.org/develop/regauth/tut/eui.pdf
+
+  >>> is_zerod_macaddr('00:00:00:00:00:00')
+  True
+  >>> is_zerod_macaddr('00:00:00:00:00:01')
+  True
+  >>> is_zerod_macaddr('00:DE:CA:FB:AD:00')
+  False
+
+  """
+  return canonicalize_macaddr(macaddr).startswith('00:00:00')
+
+
 def should_filter_macaddr(macaddr, filter_functions=None):
   """Determine if a MAC address can be used for device merging (i.e., is a unique identifier).
 
   For instance, group addresses and locally administered addresses are not intended to be unique to
   a particular piece of hardware and so can't be used as universal identifiers.
 
+  >>> should_filter_macaddr('00:00:00:00:00:00')  # zero OUI
+  True
+  >>> should_filter_macaddr('00:00:00:00:00:01')  # zero OUI
+  True
   >>> should_filter_macaddr('01:00:00:00:00:00')  # group address
   True
   >>> should_filter_macaddr('02:00:00:00:00:00')  # locally-administered address
@@ -104,7 +129,7 @@ def should_filter_macaddr(macaddr, filter_functions=None):
 
   """
   if filter_functions is None:
-    filter_functions = (is_locally_administered_macaddr, is_group_macaddr)
+    filter_functions = (is_locally_administered_macaddr, is_group_macaddr, is_zerod_macaddr)
   return any(f(macaddr) for f in filter_functions)
 
 
