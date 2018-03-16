@@ -12,6 +12,7 @@ DECAFBAD = '00:DE:CA:FB:AD:00'
 DEADBEEF = '00:DE:AD:BE:EF:00'
 LOCALMAC = '02:00:00:00:00:00'
 GROUPMAC = '01:00:00:00:00:00'
+ZERODMAC = '00:00:00:00:00:00'
 
 
 def test_compare_identifiers_by_serial():
@@ -51,6 +52,15 @@ def test_compare_identifiers_by_macaddr_with_group_addresses():
   this = {'mac_addresses': [DECAFBAD, GROUPMAC]}
   other = {'mac_addresses': [DECAFBAD, DEADBEEF, GROUPMAC]}
   third = {'mac_addresses': [DEADBEEF, GROUPMAC]}
+  assert stethoscope.api.devices.compare_identifiers(this, other)
+  assert stethoscope.api.devices.compare_identifiers(other, third)
+  assert not stethoscope.api.devices.compare_identifiers(this, third)
+
+
+def test_compare_identifiers_by_macaddr_with_zerod_addresses():
+  this = {'mac_addresses': [DECAFBAD, ZERODMAC]}
+  other = {'mac_addresses': [DECAFBAD, DEADBEEF, ZERODMAC]}
+  third = {'mac_addresses': [DEADBEEF, ZERODMAC]}
   assert stethoscope.api.devices.compare_identifiers(this, other)
   assert stethoscope.api.devices.compare_identifiers(other, third)
   assert not stethoscope.api.devices.compare_identifiers(this, third)
