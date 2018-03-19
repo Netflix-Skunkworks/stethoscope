@@ -62,6 +62,7 @@ ul.mac-addresses {
   -ms-transform: rotate(-90deg); /* IE 9 */
   -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
   transform: rotate(90deg);
+  backface-visibility: hidden;
 }
 .toggleLink, .device-info-toggle:hover {
   text-decoration: none;

@@ -7,6 +7,7 @@ a.toggleLink.closed {
   -ms-transform: rotate(-90deg); /* IE 9 */
   -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
   transform: rotate(90deg);
+  backface-visibility: hidden;
 }
 
 @media only screen and (min-width: 600px)  {
