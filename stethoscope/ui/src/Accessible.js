@@ -88,7 +88,7 @@ Accessible.propTypes = {
     'button', 'checkbox', 'dialog', 'gridcell', 'link', 'log', 'marquee',
     'menuitem', 'menuitemcheckbox', 'menuitemradio', 'option', 'progressbar',
     'radio', 'scrollbar', 'slider', 'spinbutton', 'status', 'tab', 'tabpanel',
-    'textbox', 'timer', 'tooltip', 'treeitem', 'switch'
+    'textbox', 'timer', 'tooltip', 'treeitem', 'switch', 'alert'
   ]).isRequired,
   action: PropTypes.func
 }
