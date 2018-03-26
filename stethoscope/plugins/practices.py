@@ -40,6 +40,12 @@ class PracticeBase(stethoscope.configurator.Configurator):
     'DESCRIPTION',
   )
 
+  def get_dependent_value(self, key, dependency_key):
+    value = self.config.get(key)
+    if value is None or isinstance(value, six.string_types):
+      return value
+    return value.get(dependency_key)
+
   @abc.abstractmethod
   def inject_status(self, device):
     pass  # pragma: nocover
@@ -49,8 +55,17 @@ class PracticeBase(stethoscope.configurator.Configurator):
 
     practice_data = device['practices'].get(self.config['KEY'], {})
 
+    title = self.get_dependent_value('DISPLAY_TITLE', status)
+    if title is not None:
+      logger.debug("setting title to {!r} for status {!r}", title, status)
+      practice_data['title'] = title
+
+    directions = self.get_dependent_value('DIRECTIONS', device['platform'])
+    if directions is not None:
+      logger.debug("setting directions for status {!r}", status)
+      practice_data['directions'] = directions
+
     practice_data.update({
-      'title': self.config['DISPLAY_TITLE'],
       'display': self.config.get('DISPLAY', True),
       'status': status,
       'description': self.config['DESCRIPTION'],
