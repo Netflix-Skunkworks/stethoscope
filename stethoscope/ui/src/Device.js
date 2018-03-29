@@ -58,6 +58,8 @@ class Device extends Component {
     let noModel = null
 
     if (this.state.showInfo) {
+      let { mac_addresses = [] } = device.identifiers
+
       deviceInfo = (
         <div className='deviceInfo'>
           <dl className='device-info'>
@@ -70,13 +72,9 @@ class Device extends Component {
             <dt>MAC addresses</dt>
             <dd>
               <ul className='mac-addresses'>
-                {
-                  device.identifiers.mac_addresses &&
-                    device.identifiers.mac_addresses.map((mac, i) =>
-                      <li key={i}>{mac}</li>
-                    )
-                }
+                {mac_addresses.map((mac, i) => <li key={i}>{mac}</li>)}
               </ul>
+              {mac_addresses.length ? null : <span>&nbsp;</span>}
             </dd>
             <dt>Serial</dt><dd>{device.identifiers.serial}&nbsp;</dd>
             <dt>UDID</dt><dd>{device.identifiers.udid}&nbsp;</dd>
