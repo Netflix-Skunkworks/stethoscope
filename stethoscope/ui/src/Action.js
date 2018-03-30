@@ -80,7 +80,7 @@ class Action extends Component {
     }
 
     return (
-      <li className={type} ref={el => this.el = el}>
+      <li className={type} ref={el => { this.el = el }}>
         <span className='title' onClick={this.toggleDescription}>
           <ActionIcon
             className='action-icon'
