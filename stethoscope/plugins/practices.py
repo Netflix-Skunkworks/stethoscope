@@ -41,8 +41,8 @@ class PracticeBase(stethoscope.configurator.Configurator):
   )
 
   def get_dependent_value(self, key, dependency_key):
-    value = self.config.get(key)
-    if value is None or isinstance(value, six.string_types):
+    value = self.config.get(key, {})
+    if isinstance(value, six.string_types):
       return value
     return value.get(dependency_key)
 
@@ -60,10 +60,11 @@ class PracticeBase(stethoscope.configurator.Configurator):
       # logger.debug("setting title to {!r} for status {!r}", title, status)
       practice_data['title'] = title
 
-    directions = self.get_dependent_value('DIRECTIONS', device['platform'])
-    if directions is not None:
-      # logger.debug("setting directions for status {!r}", status)
-      practice_data['directions'] = directions
+    if 'os' in device:
+      directions = self.get_dependent_value('DIRECTIONS', device['os'])
+      if directions is not None:
+        # logger.debug("setting directions for status {!r}", status)
+        practice_data['directions'] = directions
 
     practice_data.update({
       'display': self.config.get('DISPLAY', True),

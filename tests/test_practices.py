@@ -188,3 +188,22 @@ def test_uptodate_practice_ios_ok(uptodate_practice):
     'status': 'ok',
   }):
     assert device['practices']['uptodate'][key] == value
+
+
+def test_directions():
+  practice = stethoscope.plugins.practices.UptodatePractice({
+    'KEY': 'uptodate',
+    'DISPLAY_TITLE': 'The display title',
+    'DESCRIPTION': 'The description',
+    'RECOMMENDED_VERSIONS': {'iOS': '11.1.1'},
+    'REQUIRED_VERSIONS': {'iOS': '11.1.0'},
+    'DIRECTIONS': {'iOS': '1. Click the update button.'},
+  })
+
+  device = {
+    'os': 'iOS',
+    'os_version': '11.1.1',
+  }
+
+  practice.inject_status(device)
+  assert device['practices']['uptodate']['directions'] == '1. Click the update button.'
