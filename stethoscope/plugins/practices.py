@@ -57,12 +57,12 @@ class PracticeBase(stethoscope.configurator.Configurator):
 
     title = self.get_dependent_value('DISPLAY_TITLE', status)
     if title is not None:
-      logger.debug("setting title to {!r} for status {!r}", title, status)
+      # logger.debug("setting title to {!r} for status {!r}", title, status)
       practice_data['title'] = title
 
     directions = self.get_dependent_value('DIRECTIONS', device['platform'])
     if directions is not None:
-      logger.debug("setting directions for status {!r}", status)
+      # logger.debug("setting directions for status {!r}", status)
       practice_data['directions'] = directions
 
     practice_data.update({
