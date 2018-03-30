@@ -56,7 +56,7 @@ class Action extends Component {
 
     if (this.state.showDescription) {
       description = (
-        <div className="action-description">
+        <div className='action-description'>
           <div className='more-info'>
             <div className='description'>
               {action.description}
@@ -71,9 +71,9 @@ class Action extends Component {
           </div>
           { action.directions && (
             <div
-              className="instructions"
+              className='instructions'
               dangerouslySetInnerHTML={{__html: marked(action.directions)}}
-            ></div>
+             />
           )}
         </div>
       )
