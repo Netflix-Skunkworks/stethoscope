@@ -13,6 +13,7 @@ from twisted.internet import defer
 import stethoscope.auth
 import stethoscope.csrf
 import stethoscope.plugins.utils
+import stethoscope.utils
 from stethoscope.api.endpoints.accounts import register_account_api_endpoints
 from stethoscope.api.endpoints.devices import register_device_api_endpoints
 from stethoscope.api.endpoints.events import register_event_api_endpoints
@@ -106,6 +107,11 @@ def create_app():
 
   if "PLUGINS" not in config or len(config["PLUGINS"]) < 1:
     logger.warn("Missing or invalid PLUGINS configuration!")
+
+  if "PRACTICES" not in config or len(config["PRACTICES"]) < 1:
+    logger.warn("Missing or invalid PRACTICES configuration!")
+  else:
+    logger.debug("PRACTICES:\n{:s}", stethoscope.utils.json_pp(config['PRACTICES']))
 
   app = klein.Klein()
   auth = stethoscope.auth.KleinAuthProvider(config)
