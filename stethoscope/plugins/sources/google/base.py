@@ -57,6 +57,10 @@ def get_mac_addrs(raw, keys=('macAddress', 'wifiMacAddress', 'ethernetMacAddress
   return list(stethoscope.validation.filter_macaddrs(addrs))
 
 
+def filter_recent_users(device, email):
+  return len(device.get('recentUsers', [])) > 0 and device['recentUsers'][0].get('email') == email
+
+
 def parse_os_information(os):
   """Extract platform, OS, and version information from the Google API OS information string.
 
@@ -269,12 +273,13 @@ class GoogleDataSourceBase(object):
   def _get_chromeos_devices_by_email(self, email, batch_size=1000):
     service = discovery.build('admin', 'directory_v1', http=self.connection)
     resource = service.chromeosdevices()
-    request = resource.list(customerId='my_customer', query='user:{!s}'.format(email),
+    request = resource.list(customerId='my_customer', query='recent_user:{!s}'.format(email),
         projection="FULL", maxResults=batch_size)
     chromeos_devices = gutils.execute_batch(resource, request, 'chromeosdevices')
     # logger.debug("found {:d} chrome OS devices", len(chromeos_devices))
     # logger.debug("chrome OS devices:\n{!s}", pprint.pformat(chromeos_devices))
-    return [self._process_chromeos_device(raw) for raw in chromeos_devices]
+    return [self._process_chromeos_device(raw)
+            for raw in chromeos_devices if filter_recent_users(raw, email)]
 
   def get_devices_by_email(self, email, batch_size=1000):
     return self._get_mobile_devices_by_email(email, batch_size=batch_size) + \
