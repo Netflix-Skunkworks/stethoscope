@@ -120,3 +120,9 @@ ul {
   padding-left: 0;
   margin: 0;
 }
+
+a[href^=app], a[href^=ps], a[href^=action], a[href^=prefs] {
+  color: inherit;
+  pointer-events: none;
+  text-decoration: none;
+}
