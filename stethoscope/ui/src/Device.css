@@ -126,3 +126,11 @@ a[href^=app], a[href^=ps], a[href^=action], a[href^=prefs] {
   pointer-events: none;
   text-decoration: none;
 }
+
+.disable-instruction-links a[href^=macappstore],
+.disable-instruction-links a[href^=ms-settings],
+.disable-instruction-links a[href^=x-apple] {
+  color: inherit;
+  pointer-events: none;
+  text-decoration: none;
+}
