@@ -123,9 +123,14 @@ class Device extends Component {
       )
     }
 
+    const disableInstructionLinks =
+      (device.platform.startsWith('Win') && navigator.platform.startsWith('Win')) ||
+      (device.platform.startsWith('Mac') && navigator.platform.startsWith('Mac'))
+      ? '' : 'disable-instruction-links'
+
     return (
       <div className='device-wrapper'>
-        <div className={`panel device ${device.deviceRating}`}>
+        <div className={`panel device ${device.deviceRating} ${disableInstructionLinks}`}>
           <header>
             <div className='device-name'>{device.friendlyName}</div>
             <div className='device-identifier'>{device.identifier}&nbsp;</div>
