@@ -35,7 +35,7 @@ class Device extends Component {
   process (device) {
     let d = Object.assign({}, device)
 
-    d.friendlyName = d.model || d.manufacturer || 'Unknown device'
+    d.friendlyName = d.friendly_name || d.model || d.manufacturer || 'Unknown device'
     d.identifier = d.name || d.identifiers.serial || (d.identifiers.mac_addresses || []).join(' ')
 
     return d
