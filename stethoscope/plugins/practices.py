@@ -111,8 +111,8 @@ class KeyExistencePractice(PracticeBase, PlatformOverrideMixin):
     return self._inject_status(device, status)
 
 
-def check_os_version(os, os_version, required_versions, recommended_versions):
-  """Check the given OS version against the required/recommended versions.
+def check_installed_version(os, installed_version, required_versions, recommended_versions):
+  """Check the given version against the required/recommended versions.
 
   >>> REQUIRED = {
   ...   'Mac OS X': '10.11.0',
@@ -126,27 +126,27 @@ def check_os_version(os, os_version, required_versions, recommended_versions):
   ...   'Android': '6.0.1',
   ... }
 
-  >>> check_os_version("Mac OS X", None, REQUIRED, RECOMMENDED) is None
+  >>> check_installed_version("Mac OS X", None, REQUIRED, RECOMMENDED) is None
   True
-  >>> check_os_version("Mac OS X", "10.11.6", REQUIRED, RECOMMENDED)
+  >>> check_installed_version("Mac OS X", "10.11.6", REQUIRED, RECOMMENDED)
   'ok'
-  >>> check_os_version("Mac OS X", "10.11.5", REQUIRED, RECOMMENDED)
+  >>> check_installed_version("Mac OS X", "10.11.5", REQUIRED, RECOMMENDED)
   'nudge'
-  >>> check_os_version("Mac OS X", "10.10.5", REQUIRED, RECOMMENDED)
+  >>> check_installed_version("Mac OS X", "10.10.5", REQUIRED, RECOMMENDED)
   'warn'
-  >>> check_os_version("Android", "5.0", REQUIRED, RECOMMENDED)
+  >>> check_installed_version("Android", "5.0", REQUIRED, RECOMMENDED)
   'warn'
-  >>> check_os_version("iOS", "9.3.0", REQUIRED, RECOMMENDED)
+  >>> check_installed_version("iOS", "9.3.0", REQUIRED, RECOMMENDED)
   'warn'
 
   """
-  if os_version is None:
+  if installed_version is None:
     return None
 
   try:
-    version = pkg_resources.parse_version(os_version)
+    version = pkg_resources.parse_version(installed_version)
   except Exception:
-    logger.error("failed to parse version string: {!r}", os_version)
+    logger.error("failed to parse version string: {!r}", installed_version)
   else:
     if os in required_versions and version < pkg_resources.parse_version(required_versions[os]):
       return 'warn'
@@ -187,7 +187,7 @@ class UptodatePractice(PracticeBase):
         return 'warn'
 
       os_version = data.get('os_version')
-      status = check_os_version(os, os_version, self.config['REQUIRED_VERSIONS'],
+      status = check_installed_version(os, os_version, self.config['REQUIRED_VERSIONS'],
           self.config['RECOMMENDED_VERSIONS'])
 
       if status is not None:
