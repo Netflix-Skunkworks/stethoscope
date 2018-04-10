@@ -97,6 +97,62 @@ def test_running_service_practice(software_practice, expected_device_practices):
   assert device['practices'] == expected_device_practices
 
 
+@pytest.fixture(scope='function')
+def software_practice_version_required():
+  return stethoscope.plugins.practices.InstalledSoftwarePractice({
+    'KEY': 'foo',
+    'DISPLAY_TITLE': 'The display title',
+    'DESCRIPTION': 'The description',
+    'SOFTWARE_NAMES': ['Foobar.app'],
+    'SERVICE_NAMES': ['com.foo.bar'],
+    'REQUIRED_VERSIONS': {
+      'Mac OS X': '1.0',
+    },
+  })
+
+
+def test_installed_software_practice_version_required(software_practice_version_required,
+                                                      expected_device_practices):
+  expected_device_practices['foo']['status'] = 'warn'
+
+  device = {
+    'os': 'Mac OS X',
+    'software': {
+      'installed': [
+        {
+          'name': 'Foobar.app',
+          'version': '0.0.1',
+        },
+      ],
+    },
+  }
+
+  software_practice_version_required.inject_status(device)
+
+  assert device['practices'] == expected_device_practices
+
+
+def test_running_service_practice_recommended(software_practice_version_required,
+                                              expected_device_practices):
+  expected_device_practices['foo']['status'] = 'warn'
+
+  device = {
+    'os': 'Mac OS X',
+    'software': {
+      'services': [
+        {
+          'name': 'com.foo.bar',
+          'version': '0.0.1',
+        },
+      ],
+    },
+  }
+
+  software_practice_version_required.inject_status(device)
+
+  assert device['practices'] == expected_device_practices
+
+
 def test_software_practice_nudge(software_practice):
   device = {
     'software': {

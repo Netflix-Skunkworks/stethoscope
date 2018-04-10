@@ -4,6 +4,8 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import abc
 import collections
+import itertools
+import operator
 import re
 
 import logbook
@@ -11,6 +13,7 @@ import pkg_resources
 import six
 
 import stethoscope.configurator
+import stethoscope.utils
 
 
 logger = logbook.Logger(__name__)
@@ -207,37 +210,72 @@ class UptodatePractice(PracticeBase):
     return self._inject_status(device, self.check_uptodate(device))
 
 
+def _generate_details_for_names(target_names, installed, os, required_versions,
+                                recommended_versions):
+  for name in target_names:
+    details = installed.get(name)
+    if details is None:
+      continue
+
+    attrs = {}
+    if 'version' in details:
+      attrs.update({
+        'version': details['version'],
+        'details': "Version: {!s}".format(details['version']),
+      })
+
+    if os is None:
+      status = 'ok'
+    else:
+      status = check_installed_version(os, details.get('version'), required_versions,
+                                     recommended_versions)
+    if status is None:
+      status = 'unknown'
+
+    yield status, attrs
+
+
+def _status_priority(match):
+  return operator.indexOf(['unknown', 'nudge', 'warn', 'ok'], match[0])
+
+
 class InstalledSoftwarePractice(PracticeBase, PlatformOverrideMixin):
   """Checks whether a specific software/service is installed/running on the system."""
 
   def inject_status(self, device):
     attrs = dict()
     status = self.override_platform(device.get('platform'))
-    if not status:
-      software = device.get('software', {})
+    if not status and 'software' in device:
+      required_versions = self.config.get('REQUIRED_VERSIONS', {})
+      recommended_versions = self.config.get('RECOMMENDED_VERSIONS', {})
 
-      if 'last_scan_date' in device:
-        attrs['last_updated'] = software['last_scan_date']
+      software = device['software']
 
-      installed = dict((entry['name'], entry) for entry in software.get('installed', []))
-      for name in self.config.get('SOFTWARE_NAMES', []):
-        details = installed.get(name)
-        if details is not None:
-          status = 'ok'
-          if 'version' in details:
-            attrs['version'] = details['version']
-            attrs['details'] = "Version: {!s}".format(details['version'])
+      last_updated = software.get('last_scan_date', device.get('last_sync'))
+      if last_updated is not None:
+        attrs['last_updated'] = last_updated
 
-      services = dict((entry['name'], entry) for entry in software.get('services', []))
-      for name in self.config.get('SERVICE_NAMES', []):
-        details = services.get(name)
-        if details is not None:
-          status = 'ok'
-          if 'version' in details:
-            attrs['version'] = details['version']
-            attrs['details'] = "Version: {!s}".format(details['version'])
+      installed_software = dict((entry['name'], entry) for entry in software.get('installed', []))
+      target_software_names = self.config.get('SOFTWARE_NAMES', [])
+
+      installed_services = dict((entry['name'], entry) for entry in software.get('services', []))
+      target_service_names = self.config.get('SERVICE_NAMES', [])
+
+      matches = list(itertools.chain(
+        _generate_details_for_names(target_software_names, installed_software, device.get('os'),
+                                    required_versions, recommended_versions),
+        _generate_details_for_names(target_service_names, installed_services, device.get('os'),
+                                    required_versions, recommended_versions),
+      ))
+
+      logger.debug("matches:\n{!s}", stethoscope.utils.json_pp(matches))
+
+      if len(matches) > 0:
+        status, _attrs = max(matches, key=_status_priority)
+        attrs.update(_attrs)
 
     if not status:
       status = self.config.get('STATUS_IF_MISSING', 'nudge')
 
+    logger.debug("status: {!r}", status)
     return self._inject_status(device, status, **attrs)
