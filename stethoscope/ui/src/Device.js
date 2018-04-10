@@ -123,9 +123,10 @@ class Device extends Component {
       )
     }
 
+    const platform = device.platform || device.os || 'Unknown'
     const disableInstructionLinks =
-      (device.platform.startsWith('Win') && navigator.platform.startsWith('Win')) ||
-      (device.platform.startsWith('Mac') && navigator.platform.startsWith('Mac'))
+      (platform.startsWith('Win') && navigator.platform.startsWith('Win')) ||
+      (platform.startsWith('Mac') && navigator.platform.startsWith('Mac'))
       ? '' : 'disable-instruction-links'
 
     return (
