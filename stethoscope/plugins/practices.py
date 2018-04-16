@@ -213,24 +213,31 @@ class UptodatePractice(PracticeBase):
 def _generate_details_for_names(target_names, installed, os, required_versions,
                                 recommended_versions):
   for name in target_names:
-    details = installed.get(name)
-    if details is None:
+    installed_details = installed.get(name)
+    if installed_details is None:
       continue
 
-    attrs = {}
-    if 'version' in details:
-      attrs.update({
-        'version': details['version'],
-        'details': "Version: {!s}".format(details['version']),
-      })
+    details = []
 
-    if os is None:
-      status = 'ok'
-    else:
-      status = check_installed_version(os, details.get('version'), required_versions,
+    attrs = {}
+    if 'version' in installed_details:
+      details.append('Your Version: {!s}'.format(installed_details['version']))
+      attrs['version'] = installed_details['version']
+
+    if os is not None:
+      recommendation = recommended_versions.get(os, required_versions.get(os))
+      if recommendation is not None:
+        details.insert(0, 'Suggested Version: {!s}'.format(recommendation))
+      status = check_installed_version(os, installed_details.get('version'), required_versions,
                                      recommended_versions)
+    else:
+      status = 'ok'
+
     if status is None:
       status = 'unknown'
+
+    if len(details) > 0:
+      attrs['details'] = '\n'.join(details)
 
     yield status, attrs
 

@@ -57,7 +57,7 @@ def expected_device_practices():
       'status': 'ok',
       'title': 'The display title',
       'version': '0.0.1',
-      'details': 'Version: 0.0.1',
+      'details': 'Your Version: 0.0.1',
       'description': 'The description',
     },
   }
@@ -114,6 +114,7 @@ def software_practice_version_required():
 def test_installed_software_practice_version_required(software_practice_version_required,
                                                       expected_device_practices):
   expected_device_practices['foo']['status'] = 'warn'
+  expected_device_practices['foo']['details'] = 'Suggested Version: 1.0\nYour Version: 0.0.1'
 
   device = {
     'os': 'Mac OS X',
@@ -135,6 +136,7 @@ def test_installed_software_practice_version_required(software_practice_version_
 def test_running_service_practice_recommended(software_practice_version_required,
                                               expected_device_practices):
   expected_device_practices['foo']['status'] = 'warn'
+  expected_device_practices['foo']['details'] = 'Suggested Version: 1.0\nYour Version: 0.0.1'
 
   device = {
     'os': 'Mac OS X',
