@@ -70,16 +70,23 @@ def parse_os_information(os):
   >>> sorted(six.iteritems(parse_os_information('Android 8.0.0')))
   [('os', 'Android'), ('os_version', '8.0.0'), ('platform', 'Android')]
 
-  NOTE: Google sometimes only provides major/minor versions without patch number; we throw that out
-  since it's not enough information to know if it's up-to-date or not.
+  NOTE: Google provides the version in <major>.<minor> format (i.e., no <patch> number) for many
+  devices; we assume this means the patch number is zero.
   >>> sorted(six.iteritems(parse_os_information('iOS 9.3')))
-  [('os', 'iOS'), ('platform', 'iOS')]
+  [('os', 'iOS'), ('os_version', '9.3.0'), ('platform', 'iOS')]
+
   """
   (os, version) = os.split()
   data = {
     'platform': os,
     'os': os,
   }
+
+  # Hack to zero-pad versions missing non-major numbers; versions of packaging >16.8 (vendored into
+  # some version of setuptools >39.1) should make this superfluous.
+  pieces = version.split('.')
+  if len(pieces) < 3:
+    version = '.'.join(pieces + ['0'] * (3 - len(pieces)))
 
   # Google sometimes only provides minor version without patch number; we ignore that case since
   # that's not enough information to know if the device is up-to-date or not.
@@ -88,10 +95,7 @@ def parse_os_information(os):
   except Exception:
     logger.exception("Failed to parse version string from {!r}; ignoring.".format(version))
   else:
-    # Dirty hack which will probably break some day but there's basically no public API for
-    # `pkg_resources.SetuptoolsVersion`.
-    if len(parsed_version._version.release) >= 3:
-      data['os_version'] = version
+    data['os_version'] = str(parsed_version)
 
   return data
 
