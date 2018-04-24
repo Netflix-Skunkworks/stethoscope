@@ -1,0 +1,43 @@
+{
+  "adbStatus": false,
+  "basebandVersion": "",
+  "bootloaderVersion": "",
+  "brand": "",
+  "buildNumber": "15E216",
+  "defaultLanguage": "",
+  "developerOptionsStatus": false,
+  "deviceCompromisedStatus": "Undetected",
+  "deviceId": "exampleGoogleDeviceId",
+  "devicePasswordStatus": "Unknown",
+  "email": [
+      "user@example.com"
+  ],
+  "encryptionStatus": "",
+  "etag": "...",
+  "firstSync": "2017-12-08T06:02:02:020Z",
+  "hardware": "",
+  "hardwareId": "...",
+  "imei": "...",
+  "kernelVersion": "",
+  "kind": "admin#directory#mobiledevice",
+  "lastSync": "2018-04-24T16:01:01.010Z",
+  "managedAccountIsOnOwnerProfile": false,
+  "manufacturer": "",
+  "meid": "",
+  "model": "iPhone10,6",
+  "name": [
+      "Example User"
+  ],
+  "networkOperator": "",
+  "os": "iOS 11.3",
+  "privilege": "Undetected",
+  "releaseVersion": "",
+  "securityPatchLevel": "0",
+  "serialNumber": "0xDECAFBAD",
+  "status": "APPROVED",
+  "supportsWorkProfile": false,
+  "type": "IOS_SYNC",
+  "unknownSourcesStatus": false,
+  "userAgent": "",
+  "wifiMacAddress": "00:DE:CA:FB:AD:00"
+}

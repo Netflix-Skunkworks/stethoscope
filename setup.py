@@ -65,7 +65,9 @@ install_requires = [
   'PyOpenSSL',
   'six',
   'service-identity',
-  'setuptools',
+  # 39.0.0 removed `SetuptoolsVersion` in favor of `packaging.version.Version`
+  # See: https://github.com/pypa/setuptools/commit/eeeb9b27fa48fccf2b5d52919eff1c75c4ad1718
+  'setuptools>=39.0.0',
   'stevedore',
   'treq',
   'Twisted',
