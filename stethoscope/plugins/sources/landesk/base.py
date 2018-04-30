@@ -12,6 +12,7 @@ import six
 
 import stethoscope.api.exceptions
 import stethoscope.configurator
+import stethoscope.utils
 import stethoscope.validation
 
 
@@ -37,11 +38,15 @@ SELECT DISTINCT A0.DISPLAYNAME AS name,
                 A3.CONVERSIONSTATUS,
                 A3.GENENCRYPT,
                 A3.ENCRYPTIONPERCENTAGE,
+                A4.CURRENTBUILD AS os_build,
+                A4.CURRENTVERSION AS os_version,
+                A4.RELEASEID AS os_release,
                 A5.OSTYPE AS os
 FROM Computer A0 (nolock)
 LEFT OUTER JOIN LDAPUserAttrV A1 (nolock) ON A0.Computer_Idn = A1.Computer_Idn
 LEFT OUTER JOIN CompSystem A2 (nolock) ON A0.Computer_Idn = A2.Computer_Idn
 LEFT OUTER JOIN BitLocker A3 (nolock) ON A0.Computer_Idn = A3.Computer_Idn
+LEFT OUTER JOIN OSNT A4 (nolock) ON A0.Computer_Idn = A4.Computer_Idn
 LEFT OUTER JOIN Operating_System A5 (nolock) ON A0.Computer_Idn = A5.Computer_Idn
 {:s}
 ORDER BY A0.LASTUPDINVSVR DESC
@@ -53,6 +58,9 @@ ATTRIBUTES_TO_COPY = [
     'model',
     'name',
     'os',
+    'os_version',
+    'os_release',
+    'os_build',
     'serial',
     'type',
 ]
@@ -273,7 +281,7 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
 
   def _process_device(self, raw):
     device = {'_raw': raw} if self._debug else {}
-    # logger.debug("raw: {:s}", pprint.pformat(raw))
+    # logger.debug("raw: {:s}", stethoscope.utils.json_pp(raw))
 
     # INFORMATION
     for attr in ATTRIBUTES_TO_COPY:
