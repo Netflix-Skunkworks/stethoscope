@@ -42,6 +42,20 @@ def merge_practices(*args, **kwargs):
   return practices
 
 
+def merge_practices_by_last_updated_time(*args):
+  """Merge two or more dictionaries, preferring values in decreasing order of `last_updated` value.
+
+  Treats practices with no `last_updated` value as the unix epoch time.
+  """
+  practices = dict()
+  for practice in set(itertools.chain.from_iterable(arg.keys() for arg in args)):
+    practices[practice] = max(
+        (arg[practice] for arg in args if practice in arg),
+        key=lambda _practice: _practice.get('last_updated', arrow.get(0)),
+    )
+  return practices
+
+
 def merge_identifiers(identifier_sets):
   canonical = identifier_sets[0]
   for identifier_set in identifier_sets[1:]:

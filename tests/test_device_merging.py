@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+import copy
+
 import arrow
 import pytest
 
@@ -214,15 +216,6 @@ def test_merge_practices():
       {'practice': {'status': 'warn'}}
 
 
-def test_merge_practices_raises_on_extra_kwargs():
-  with pytest.raises(TypeError) as excinfo:
-    stethoscope.api.devices.merge_practices(foo='bar', baz='qux')
-  assert str(excinfo.value) in (
-      "merge_practices() got unexpected keyword argument(s) 'foo', 'baz'",
-      "merge_practices() got unexpected keyword argument(s) 'baz', 'foo'"
-  )
-
-
 def test_merge_multiple_practices():
   alpha = {
     'foo': {'status': 'unknown'},
@@ -246,4 +239,54 @@ def test_merge_multiple_practices():
     'foo': {'status': 'warn'},
     'bar': {'status': 'warn'},
     'baz': {'status': 'nudge'},
+  }
+
+
+def test_merge_practices_raises_on_extra_kwargs():
+  with pytest.raises(TypeError) as excinfo:
+    stethoscope.api.devices.merge_practices(foo='bar', baz='qux')
+  assert str(excinfo.value) in (
+      "merge_practices() got unexpected keyword argument(s) 'foo', 'baz'",
+      "merge_practices() got unexpected keyword argument(s) 'baz', 'foo'"
+  )
+
+
+def _copy_then_merge(*values):
+  return stethoscope.api.devices.merge_practices_by_last_updated_time(*(copy.deepcopy(val) for val
+                                                                        in values))
+
+
+def test_merge_practices_by_last_updated_time():
+  unknown = {'practice': {'status': 'unknown', 'last_updated': arrow.get(1)}}
+  nudge = {'practice': {'status': 'nudge', 'last_updated': arrow.get(2)}}
+  warn = {'practice': {'status': 'warn', 'last_updated': arrow.get(3)}}
+
+  assert _copy_then_merge(unknown, nudge) == nudge
+  assert _copy_then_merge({}, nudge) == nudge
+  assert _copy_then_merge(unknown, nudge, warn) == warn
+
+
+def test_merge_multiple_practices():
+  alpha = {
+    'foo': {'status': 'unknown', 'last_updated': arrow.get(8)},
+    'bar': {'status': 'warn', 'last_updated': arrow.get(10)},
+  }
+  bravo = {
+    'foo': {'status': 'warn', 'last_updated': arrow.get(10)},
+    'bar': {'status': 'nudge', 'last_updated': arrow.get(5)},
+    'baz': {'status': 'unknown'},
+  }
+  assert _copy_then_merge(alpha, bravo) == {
+    'foo': bravo['foo'],
+    'bar': alpha['bar'],
+    'baz': bravo['baz'],
+  }
+
+  charlie = {
+    'baz': {'status': 'nudge', 'last_updated': arrow.get(1)},
+  }
+  assert _copy_then_merge(alpha, bravo, charlie) == {
+    'foo': bravo['foo'],
+    'bar': alpha['bar'],
+    'baz': charlie['baz'],
   }
