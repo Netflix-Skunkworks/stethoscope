@@ -3,6 +3,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import copy
+import unittest
 
 import arrow
 import pytest
@@ -15,6 +16,10 @@ DEADBEEF = '00:DE:AD:BE:EF:00'
 LOCALMAC = '02:00:00:00:00:00'
 GROUPMAC = '01:00:00:00:00:00'
 ZERODMAC = '00:00:00:00:00:00'
+
+
+def _copy_then_apply(fn, *values):
+  return fn(*(copy.deepcopy(val) for val in values))
 
 
 def test_compare_identifiers_by_serial():
@@ -157,27 +162,27 @@ def test_merge_identifiers():
 def test_merge_device_group():
   alpha = {
     'practices': {
-      'foo': {'status': 'unknown'},
-      'bar': {'status': 'warn'},
+      'foo': {'status': 'unknown', 'last_updated': arrow.get(1)},
+      'bar': {'status': 'warn', 'last_updated': arrow.get(5)},
     },
     'source': 'alpha',
     'last_sync': arrow.get(2),
   }
   bravo = {
     'practices': {
-      'foo': {'status': 'warn'},
-      'bar': {'status': 'nudge'},
+      'foo': {'status': 'warn', 'last_updated': arrow.get(5)},
+      'bar': {'status': 'nudge', 'last_updated': arrow.get(1)},
     },
     'source': 'bravo',
     'last_sync': arrow.get(1),
   }
 
-  merged = stethoscope.api.devices.merge_device_group([alpha, bravo])
+  merged = _copy_then_apply(stethoscope.api.devices.merge_device_group, [alpha, bravo])
   assert merged == {
     'sources': ['alpha', 'bravo'],
     'practices': {
-      'foo': {'status': 'warn'},
-      'bar': {'status': 'warn'},
+      'foo': bravo['practices']['foo'],
+      'bar': alpha['practices']['bar'],
     },
     'identifiers': {},
     'last_sync': arrow.get(2),
@@ -190,13 +195,13 @@ def test_merge_device_group():
     'source': 'charlie',
     '_raw': 'the raw data'
   }
-  merged = stethoscope.api.devices.merge_device_group([alpha, bravo, charlie])
+  merged = _copy_then_apply(stethoscope.api.devices.merge_device_group, [alpha, bravo, charlie])
   assert merged == {
     'sources': ['alpha', 'bravo', 'charlie'],
     'practices': {
-      'foo': {'status': 'warn'},
-      'bar': {'status': 'warn'},
-      'baz': {'status': 'nudge'},
+      'foo': bravo['practices']['foo'],
+      'bar': alpha['practices']['bar'],
+      'baz': charlie['practices']['baz'],
     },
     'identifiers': {},
     '_raw': [alpha, bravo, charlie],
@@ -204,89 +209,91 @@ def test_merge_device_group():
   }
 
 
-def test_merge_practices():
-  unknown = {'practice': {'status': 'unknown'}}
-  nudge = {'practice': {'status': 'nudge'}}
-  warn = {'practice': {'status': 'warn'}}
-  assert stethoscope.api.devices.merge_practices(unknown, nudge) == \
-      {'practice': {'status': 'nudge'}}
-  assert stethoscope.api.devices.merge_practices({}, nudge) == \
-      {'practice': {'status': 'nudge'}}
-  assert stethoscope.api.devices.merge_practices(unknown, nudge, warn) == \
-      {'practice': {'status': 'warn'}}
+class MergePracticesByStatusOrder(unittest.TestCase):
+
+  def merge(self, *values):
+    return _copy_then_apply(stethoscope.api.devices.merge_practices, *values)
+
+  def test_merge_practices(self):
+    unknown = {'practice': {'status': 'unknown'}}
+    nudge = {'practice': {'status': 'nudge'}}
+    warn = {'practice': {'status': 'warn'}}
+    assert self.merge(unknown, nudge) == \
+        {'practice': {'status': 'nudge'}}
+    assert self.merge({}, nudge) == \
+        {'practice': {'status': 'nudge'}}
+    assert self.merge(unknown, nudge, warn) == \
+        {'practice': {'status': 'warn'}}
+
+  def test_merge_multiple_practices(self):
+    alpha = {
+      'foo': {'status': 'unknown'},
+      'bar': {'status': 'warn'},
+    }
+    bravo = {
+      'foo': {'status': 'warn'},
+      'bar': {'status': 'nudge'},
+      'baz': {'status': 'unknown'},
+    }
+    assert self.merge(alpha, bravo) == {
+      'foo': {'status': 'warn'},
+      'bar': {'status': 'warn'},
+      'baz': {'status': 'unknown'},
+    }
+
+    charlie = {
+      'baz': {'status': 'nudge'},
+    }
+    assert self.merge(alpha, bravo, charlie) == {
+      'foo': {'status': 'warn'},
+      'bar': {'status': 'warn'},
+      'baz': {'status': 'nudge'},
+    }
+
+  def test_merge_practices_raises_on_extra_kwargs(self):
+    with pytest.raises(TypeError) as excinfo:
+      stethoscope.api.devices.merge_practices(foo='bar', baz='qux')
+    assert str(excinfo.value) in (
+        "merge_practices() got unexpected keyword argument(s) 'foo', 'baz'",
+        "merge_practices() got unexpected keyword argument(s) 'baz', 'foo'"
+    )
 
 
-def test_merge_multiple_practices():
-  alpha = {
-    'foo': {'status': 'unknown'},
-    'bar': {'status': 'warn'},
-  }
-  bravo = {
-    'foo': {'status': 'warn'},
-    'bar': {'status': 'nudge'},
-    'baz': {'status': 'unknown'},
-  }
-  assert stethoscope.api.devices.merge_practices(alpha, bravo) == {
-    'foo': {'status': 'warn'},
-    'bar': {'status': 'warn'},
-    'baz': {'status': 'unknown'},
-  }
+class MergePracticesByLastUpdatedTime(unittest.TestCase):
 
-  charlie = {
-    'baz': {'status': 'nudge'},
-  }
-  assert stethoscope.api.devices.merge_practices(alpha, bravo, charlie) == {
-    'foo': {'status': 'warn'},
-    'bar': {'status': 'warn'},
-    'baz': {'status': 'nudge'},
-  }
+  def merge(self, *values):
+    return _copy_then_apply(stethoscope.api.devices.merge_practices_by_last_updated_time, *values)
 
+  def test_merge_practices_by_last_updated_time(self):
+    unknown = {'practice': {'status': 'unknown', 'last_updated': arrow.get(1)}}
+    nudge = {'practice': {'status': 'nudge', 'last_updated': arrow.get(2)}}
+    warn = {'practice': {'status': 'warn', 'last_updated': arrow.get(3)}}
 
-def test_merge_practices_raises_on_extra_kwargs():
-  with pytest.raises(TypeError) as excinfo:
-    stethoscope.api.devices.merge_practices(foo='bar', baz='qux')
-  assert str(excinfo.value) in (
-      "merge_practices() got unexpected keyword argument(s) 'foo', 'baz'",
-      "merge_practices() got unexpected keyword argument(s) 'baz', 'foo'"
-  )
+    assert self.merge(unknown, nudge) == nudge
+    assert self.merge({}, nudge) == nudge
+    assert self.merge(unknown, nudge, warn) == warn
 
+  def test_merge_multiple_practices(self):
+    alpha = {
+      'foo': {'status': 'unknown', 'last_updated': arrow.get(8)},
+      'bar': {'status': 'warn', 'last_updated': arrow.get(10)},
+    }
+    bravo = {
+      'foo': {'status': 'warn', 'last_updated': arrow.get(10)},
+      'bar': {'status': 'nudge', 'last_updated': arrow.get(5)},
+      'baz': {'status': 'unknown'},
+    }
+    assert self.merge(alpha, bravo) == {
+      'foo': bravo['foo'],
+      'bar': alpha['bar'],
+      'baz': bravo['baz'],
+    }
 
-def _copy_then_merge(*values):
-  return stethoscope.api.devices.merge_practices_by_last_updated_time(*(copy.deepcopy(val) for val
-                                                                        in values))
-
-
-def test_merge_practices_by_last_updated_time():
-  unknown = {'practice': {'status': 'unknown', 'last_updated': arrow.get(1)}}
-  nudge = {'practice': {'status': 'nudge', 'last_updated': arrow.get(2)}}
-  warn = {'practice': {'status': 'warn', 'last_updated': arrow.get(3)}}
-
-  assert _copy_then_merge(unknown, nudge) == nudge
-  assert _copy_then_merge({}, nudge) == nudge
-  assert _copy_then_merge(unknown, nudge, warn) == warn
-
-
-def test_merge_multiple_practices():
-  alpha = {
-    'foo': {'status': 'unknown', 'last_updated': arrow.get(8)},
-    'bar': {'status': 'warn', 'last_updated': arrow.get(10)},
-  }
-  bravo = {
-    'foo': {'status': 'warn', 'last_updated': arrow.get(10)},
-    'bar': {'status': 'nudge', 'last_updated': arrow.get(5)},
-    'baz': {'status': 'unknown'},
-  }
-  assert _copy_then_merge(alpha, bravo) == {
-    'foo': bravo['foo'],
-    'bar': alpha['bar'],
-    'baz': bravo['baz'],
-  }
-
-  charlie = {
-    'baz': {'status': 'nudge', 'last_updated': arrow.get(1)},
-  }
-  assert _copy_then_merge(alpha, bravo, charlie) == {
-    'foo': bravo['foo'],
-    'bar': alpha['bar'],
-    'baz': charlie['baz'],
-  }
+    charlie = {
+      'baz': {'status': 'nudge', 'last_updated': arrow.get(1)},
+    }
+    assert self.merge(alpha, bravo, charlie) == {
+      'foo': bravo['foo'],
+      'bar': alpha['bar'],
+      'baz': charlie['baz'],
+    }

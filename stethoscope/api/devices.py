@@ -162,7 +162,7 @@ def merge_device_group(entries):
     device['_raw'] = entries
 
   device['sources'] = [entry['source'] for entry in entries]
-  device['practices'] = merge_practices(*six.moves.map(copy.deepcopy,
+  device['practices'] = merge_practices_by_last_updated_time(*six.moves.map(copy.deepcopy,
     (entry.get('practices', {}) for entry in entries)))
   device['identifiers'] = merge_identifiers(list(six.moves.map(copy.deepcopy,
     (entry.get('identifiers', {}) for entry in entries))))
