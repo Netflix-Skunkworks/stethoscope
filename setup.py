@@ -87,8 +87,9 @@ if sys.version_info < (2, 7, 9):
 setup_params = dict(
   name='Stethoscope',
   version='0.1.1',
-  author='Andrew M. White',
-  author_email='andreww@netflix.com',
+  author='The Stethoscope Developers',
+  author_email='stethoscope@netflix.com',
+  url='https://github.com/Netflix/stethoscope',
   license='Apache License, Version 2.0',
   description=("""Collection and display of best practice adoption for securing user devices """
                """and accounts."""),
@@ -115,12 +116,10 @@ setup_params = dict(
   zip_safe=False,
   include_package_data=True,
   setup_requires=[
-    'setuptools-git',  # >=0.3
-    'pytest-runner',
   ],
   tests_require=[
     'mock',
-    'pytest-cov',
+    'coverage',
     'pytest-logbook',
     'pytest>=2.8',
     'setuptools>=17.1',
