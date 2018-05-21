@@ -116,7 +116,6 @@ setup_params = dict(
   include_package_data=True,
   setup_requires=[
     'setuptools-git',  # >=0.3
-    'pytest-runner',
   ],
   tests_require=[
     'mock',
