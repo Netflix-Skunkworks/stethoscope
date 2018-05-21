@@ -116,7 +116,6 @@ setup_params = dict(
   zip_safe=False,
   include_package_data=True,
   setup_requires=[
-    'setuptools-git',  # >=0.3
   ],
   tests_require=[
     'mock',
