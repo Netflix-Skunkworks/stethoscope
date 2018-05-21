@@ -119,7 +119,7 @@ setup_params = dict(
   ],
   tests_require=[
     'mock',
-    'pytest-cov',
+    'coverage',
     'pytest-logbook',
     'pytest>=2.8',
     'setuptools>=17.1',
