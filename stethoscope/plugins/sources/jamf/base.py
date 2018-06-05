@@ -119,6 +119,10 @@ class JAMFDataSourceBase(stethoscope.configurator.Configurator):
       'os_version': 'os_version',
     }))
 
+    email = computer.get('location', {}).get('email_address')
+    if email is not None:
+      data['email'] = email
+
     try:
       last_updated = arrow.get(computer['general']['report_date_utc'])
     except arrow.parser.ParserError:

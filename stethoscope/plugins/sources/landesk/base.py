@@ -30,6 +30,7 @@ SELECT DISTINCT A0.DISPLAYNAME AS name,
                 A0.SWLASTSCANDATE AS sw_last_scan_date,
                 A0.Computer_Idn,
                 A0.TYPE AS type,
+                A1.EMAILADDR AS email,
                 A2.MODEL AS model,
                 A2.MANUFACTURER AS manufacturer,
                 A2.SERIALNUM AS serial,
@@ -63,6 +64,7 @@ ATTRIBUTES_TO_COPY = [
     'os_build',
     'serial',
     'type',
+    'email',
 ]
 
 
