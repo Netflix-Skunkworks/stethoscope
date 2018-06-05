@@ -29,6 +29,9 @@ class ElasticSearchBatchLogger(stethoscope.plugins.mixins.es.ElasticSearchMixin)
     doc_type = self.config['ELASTICSEARCH_DOCTYPE']
 
     for device in devices:
+      if hasattr(device, '_asdict'):
+        device = dict(device._asdict())
+
       device_json = json.dumps(device, default=stethoscope.utils.json_serialize_datetime)
       result = self.client.index(index=index, doc_type=doc_type, body=device_json)
       # TODO: implement error-checking
