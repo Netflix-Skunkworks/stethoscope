@@ -205,7 +205,7 @@ class LandeskSQLDataSourceBase(stethoscope.configurator.Configurator):
     data = {'value': True}
 
     for vuln in raw['vulns']:
-      if vuln['Vul_ID'] == 'ST000202':
+      if vuln['Vul_ID'] == self.config.get('LANDESK_SCREENLOCK_VULN_ID', 'ST000202'):
         data['value'] = False
         data['details'] = _reformat_screenlock_reason(vuln['Reason'])
         logger.debug("screenlock reason:\n{!r}", data['details'])
