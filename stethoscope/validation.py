@@ -16,7 +16,7 @@ import stethoscope.exceptions
 
 logger = logbook.Logger(__name__)
 
-MACADDR_PATTERN = re.compile(r'^' + r'\:?'.join([r'([0-9A-F]{1,2})'] * 6) + r'$', re.IGNORECASE)
+MACADDR_PATTERN = re.compile(r'^([0-9A-F]{2}[:-]?){5,7}([0-9A-F]{2})$', re.IGNORECASE)
 
 
 def _is_valid_macaddr(addr):

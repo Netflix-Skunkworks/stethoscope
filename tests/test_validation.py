@@ -84,6 +84,13 @@ class ValidateMACTestCase(HTMLEscapeMixin, ValidationBase):
     self.assertEqual(request.code, 200)
     self.assertEqual(request.getWrittenData(), six.b(json.dumps("00:00:DE:CA:FB:AD")))
 
+  def test_valid_long_macaddr(self):
+    request = requestMock(b"/api/00:00:DE:CA:FB:AD:AB:CD")
+    deferred = _render(KleinResource(self.app), request)
+
+    self.assertEqual(self.successResultOf(deferred), None)
+    self.assertEqual(request.code, 200)
+    self.assertEqual(request.getWrittenData(), six.b(json.dumps("00:00:DE:CA:FB:AD:AB:CD")))
 
 class ValidateEmailTestCase(HTMLEscapeMixin, ValidationBase):
 
