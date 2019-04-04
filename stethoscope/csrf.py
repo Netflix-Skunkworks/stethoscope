@@ -37,7 +37,7 @@ urandom = random.SystemRandom()
 
 def generate_token():
   salt = str(urandom.randrange(0, _MAX_CSRF_KEY)).encode('utf-8')
-  return hashlib.sha1(salt).hexdigest()
+  return hashlib.sha256(salt).hexdigest()
 
 
 def _same_origin(url1, url2):
