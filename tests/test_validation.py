@@ -92,6 +92,7 @@ class ValidateMACTestCase(HTMLEscapeMixin, ValidationBase):
     self.assertEqual(request.code, 200)
     self.assertEqual(request.getWrittenData(), six.b(json.dumps("00:00:DE:CA:FB:AD:AB:CD")))
 
+
 class ValidateEmailTestCase(HTMLEscapeMixin, ValidationBase):
 
   def setUp(self):
