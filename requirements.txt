@@ -17,7 +17,7 @@ Flask==0.12.2
 Flask-Script==2.0.6
 funcsigs==1.0.2
 google-api-python-client==1.6.4
-httplib2==0.10.3
+httplib2==0.19.0
 hyperlink==17.3.1
 idna==2.6
 incremental==17.5.0
