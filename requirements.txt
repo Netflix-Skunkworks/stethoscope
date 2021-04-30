@@ -50,7 +50,7 @@ PyYAML==3.12
 requests==2.18.4
 requests-ntlm==1.0.0
 requests-oauthlib==0.8.0
-rsa==3.4.2
+rsa==4.7
 service-identity==17.0.0
 setuptools==39.0.1
 six==1.11.0
