@@ -55,7 +55,7 @@ service-identity==17.0.0
 setuptools==39.0.1
 six==1.11.0
 stevedore==1.27.0
-treq==17.8.0
+treq==22.1.0
 Twisted==17.9.0
 txretry==1.0.1
 git+https://github.com/wrapp/txwebretry.git#egg=txwebretry
