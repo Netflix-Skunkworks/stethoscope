@@ -56,7 +56,7 @@ setuptools==39.0.1
 six==1.11.0
 stevedore==1.27.0
 treq==17.8.0
-Twisted==17.9.0
+Twisted==22.4.0
 txretry==1.0.1
 git+https://github.com/wrapp/txwebretry.git#egg=txwebretry
 uritemplate==3.0.0
