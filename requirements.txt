@@ -52,7 +52,7 @@ requests-ntlm==1.0.0
 requests-oauthlib==0.8.0
 rsa==3.4.2
 service-identity==17.0.0
-setuptools==39.0.1
+setuptools==65.5.1
 six==1.11.0
 stevedore==1.27.0
 treq==17.8.0
