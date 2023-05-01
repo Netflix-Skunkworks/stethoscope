@@ -13,7 +13,7 @@ duo-client==3.0
 elasticsearch==2.4.1
 elasticsearch-dsl==2.2.0
 enum34==1.1.6
-Flask==0.12.2
+Flask==2.3.2
 Flask-Script==2.0.6
 funcsigs==1.0.2
 google-api-python-client==1.6.4
