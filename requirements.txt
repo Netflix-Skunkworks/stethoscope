@@ -47,7 +47,7 @@ pytest==3.2.2
 pytest-logbook==1.2.0
 python-dateutil==2.6.1
 PyYAML==3.12
-requests==2.18.4
+requests==2.31.0
 requests-ntlm==1.0.0
 requests-oauthlib==0.8.0
 rsa==3.4.2
